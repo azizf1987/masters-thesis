@@ -1,0 +1,248 @@
+# Roadmap
+
+## Key dates
+
+| Milestone | Target | Status |
+|---|---|---|
+| Phase 1 complete (§1 Introduction drafted) | 2026-06-12 | Done |
+| Phase 2 complete (§2 Background drafted) | 2026-06-22 | Done |
+| Phase 3 complete (§3 Methodology argued and drafted) | 2026-06-29 | Done (2026-06-05) |
+| Phase 4 complete (data feasibility confirmed) | 2026-07-06 | Pending |
+| Phase 5 complete (unified feature matrix ready) | 2026-07-13 | Pending |
+| Phase 6 complete (RQ1 and RQ2 answered) | 2026-07-20 | Pending |
+| Phase 7 complete (RQ3 answered; artefact produced) | 2026-07-24 | Pending |
+| Phase 8 complete (full thesis compiled and submitted) | 2026-08-01 | Pending |
+| Defense | TBD | — |
+
+---
+
+## Phase 0: Harness setup
+
+**Status:** Done
+
+- [x] Repo scaffold created
+- [x] CLAUDE.md, AGENTS.md, docs/project.md chain established
+- [x] Roadmap and project brief restructured to follow scientific research progression
+- [x] Council POV files updated to remove predetermined technical assumptions
+- [x] Working method documented in AGENTS.md
+
+---
+
+## Phase 1: Problem grounding and §1 Introduction
+
+**Status:** Done
+
+**Goal:** Establish why the problem is real and consequential, name the gap, and state the research claim in general terms. No method names in §1.
+
+- [x] Write motivation and urban AQ context (public health burden; Swedish cities; PM2.5 and NO2)
+- [x] Describe the SMHI monitoring network and its spatial coverage limitations
+- [x] Articulate the IoT placement problem (why ad hoc deployment is insufficient)
+- [x] State the research aim in general terms
+- [x] State RQ1, RQ2, RQ3
+- [x] Write scope and delimitations (pollutants, time window, geography, out-of-scope)
+- [x] Write thesis structure paragraph with \ref{} cross-references
+
+---
+
+## Phase 2: Literature review and §2 Background and Related Work
+
+**Status:** Done (two VERIFY citations still open — must resolve before submission)
+
+**Goal:** Survey the field; identify what the literature leaves unresolved. End with gap statements that motivate the RQs. Phase 2 describes the landscape; it does not choose methods.
+
+- [x] Write §2.1: Urban AQ monitoring and regulatory networks (SMHI context; spatial coverage problem; Swedish health evidence)
+- [x] Write §2.2: Low-cost IoT sensor networks (capabilities, limitations, placement problem)
+- [x] Write §2.3: Spatial estimation methods (IDW; LUR as European standard; ML approaches; spatial autocorrelation)
+- [x] Write §2.4: Sensor placement optimization (existing approaches; outdoor vs. indoor gap)
+- [x] Write §2.5: Research gaps (three gaps; one per RQ)
+- [x] Add confirmed references to `writing/references.bib`
+- [x] Verify `sweden_dispersion_2024` author list — resolved 2026-06-05
+- [x] Verify `pso_node_deployment_2024` author list — resolved 2026-06-05
+
+---
+
+## Phase 3: Research design and §3 Methodology
+
+**Status:** Done (2026-06-05)
+
+**Full decision record:** `docs/decisions/phase3-methodology.md` — all options, trade-offs, council findings, and conditions
+
+**Goal:** Argue every technical choice from the Phase 2 literature. Nothing assumed; everything earned.
+
+### Prerequisites before writing §3
+
+- [x] Add `valavi_blockcv_2019` to `writing/references.bib` — Valavi, Elith, Lahoz-Monfort, Guillera-Arroita (2019) Methods in Ecology and Evolution 10(2):225-232; doi:10.1111/2041-210X.13107
+- [x] Verify `sweden_dispersion_2024` author list — Kilbo Edlund et al. (14 authors); full entry in references.bib; % VERIFY removed from thesis.tex
+- [x] Verify `pso_node_deployment_2024` author list — Bhargavi, Varma, Hemalatha, Dilli; Sensors 24(19):6238; doi:10.3390/s24196238; % VERIFY removed from thesis.tex
+
+### Phase 3 tasks
+
+- [x] Choose and argue the spatial validation protocol → **Buffered SLOO** (council 2026-06-05)
+- [x] Choose and argue the estimation model(s) for RQ1 → **Random Forest + LUR + IDW** (council 2026-06-05)
+- [x] Choose and argue the decay analysis approach for RQ2 → **error-distance curve fitting; AIC/BIC selection** (council 2026-06-05)
+- [x] Choose and argue the placement optimization approach for RQ3 → **greedy sequential** (council 2026-06-05)
+- [x] Define evaluation metrics → RMSE, MAE, R², decay threshold, real-world DSR criterion (council 2026-06-05)
+- [x] Invoke council before finalizing methodological commitments (done 2026-06-05)
+- [x] Write §3.1 DSR framing: Peffers six-phase mapping as a table
+- [x] Write §3.2 Spatial estimation strategy: RF argument; feature set (~10-15 covariates named); IDW/LUR baselines
+- [x] Write §3.3 Spatial validation: buffered SLOO; why buffer required; why k-fold excluded (Roberts 2017)
+- [x] Write §3.4 Accuracy-distance analysis: method for RQ2; urban/rural confound strategy named
+- [x] Write §3.5 Sensor placement: greedy sequential argued from RQ2 connection; PSO acknowledged and rejected; suboptimality acknowledged
+- [x] Write §3.6 Evaluation metrics: RMSE, MAE, R², decay threshold, real-world criterion
+- [x] Write §3.7 Validity, reliability, and ethical considerations
+
+### §3 conditions checklist (from council — all must be met before §3 is finalised)
+
+- [x] Buffered SLOO stated; buffer radius noted as Phase 4 dependency; Valavi/Meyer cited
+- [x] Standard k-fold explicitly excluded; Roberts (2017) cited
+- [x] Random Forest argued from data environment (sparse spatial locations, mixed features)
+- [x] LUR and IDW benchmarks included; LUR framed as the standard to beat
+- [x] Feature set named and parsimonious design principle stated (~10-15 covariates)
+- [x] PM2.5 and NO2 modelled separately; stated explicitly
+- [x] Decay confound (urban/rural) named and analytical strategy stated
+- [x] Greedy placement argued from RQ2 connection; suboptimality acknowledged
+- [x] At least one real-world DSR evaluation criterion named
+- [x] Peffers six-phase DSR mapping written as a table
+
+### Council decisions summary (2026-06-05)
+
+**Validation: Buffered SLOO.** Pure SLOO produces optimistic errors in clustered networks (Stockholm, Gothenburg, Malmö). Buffer radius from Phase 4 inter-station distance audit. Valavi et al. (2019) or Meyer et al. (2021) as citation. Standard k-fold excluded (Roberts 2017).
+
+**Model: RF + LUR + IDW.** Random Forest as sole primary ML model. LUR (ESCAPE R² 0.54-0.89) and IDW as required benchmarks. No second ML model; the contribution is spatial error behavior, not model comparison. Feature set parsimonious: ~10-15 covariates for ~50-100 training stations.
+
+**Pollutants: fully separate.** PM2.5 and NO2 modelled, validated, and decay-analysed independently. Pooling is a domain error. NO2 gradients are sharp at 500 m-2 km; PM2.5 gradients are smooth at 5-20 km. Thresholds will differ.
+
+**Decay: error-distance curve fitting.** Per-station RMSE vs. distance to nearest training station. Fit log, power, exponential; select by AIC/BIC. Urban/rural confound must be addressed (stratified analysis or named sensitivity test). Distance metric: Euclidean (acknowledged simplification for NO2). Threshold criterion defined in Phase 5 EDA.
+
+**Placement: greedy sequential.** Directly operationalises the RQ2 decay threshold. PSO excluded: requires demonstrating multimodal landscape pre-Phase 6; adds complexity not central to the contribution. Greedy suboptimality acknowledged in §3.
+
+**DSR criterion.** At least one real-world evaluation criterion in §3.5: proportion of Skåne urban area within reliable estimation range, or number of unmonitored municipalities covered.
+
+---
+
+## Phase 4: Data feasibility audit
+
+**Status:** Pending (blocked by Phase 3)
+
+**Goal:** Confirm the Phase 3 methodology is executable with the available data. Can adjust scope; cannot adjust methodology without returning to Phase 3.
+
+- [ ] Pull SMHI Luftwebb station inventory: count PM2.5 and NO2 stations nationally and in Skåne
+- [ ] Check data completeness by station and year (2020-2024); apply 90% threshold
+- [ ] Confirm SMHI metobs API access; test pull of meteorological covariates
+- [ ] Download and verify CORINE Land Cover for Sweden
+- [ ] Identify DEM source (e.g., Lantmäteriet) and confirm coverage for Skåne
+- [ ] Confirm population density grid source and resolution
+- [ ] Establish inter-station distance distribution → set buffered SLOO exclusion radius
+- [ ] **Decision point:** If Skåne PM2.5 coverage is too sparse, expand to southern Sweden
+- [ ] **Decision point:** If national station count is below threshold, revisit Phase 3 model scope
+- [ ] Document audit results in `docs/data-audit.md`
+
+---
+
+## Phase 5: Data engineering
+
+**Status:** Pending (blocked by Phase 4)
+
+- [ ] Ingest SMHI air quality records (2020-2024): PM2.5 and NO2 daily averages per station
+- [ ] Pull and align meteorological covariates from metobs API (temperature, wind, humidity)
+- [ ] Extract CORINE land-use features per station (buffer geometry; categorical classes at 100 m, 500 m, 1 km)
+- [ ] Add DEM topographic features (elevation; terrain roughness within buffer)
+- [ ] Add population density grid values within 1 km radius per station
+- [ ] Compute inter-station distance matrix and bearing vectors
+- [ ] Apply 90% completeness filter; document excluded stations
+- [ ] Flag 2020-2021 COVID-19 period; prepare sensitivity analysis split
+- [ ] Define decay threshold criterion (specific error bound) from EDA distributions
+- [ ] Run EDA: distributions, spatial maps, correlations; save figures to `writing/images/`
+- [ ] Write §4 draft (data sources, feature engineering, completeness decisions)
+
+---
+
+## Phase 6: Empirical work (RQ1 and RQ2)
+
+**Status:** Pending (blocked by Phase 5)
+
+- [ ] Implement buffered SLOO validation protocol (buffer radius from Phase 4)
+- [ ] Train and evaluate Random Forest — PM2.5
+- [ ] Train and evaluate Random Forest — NO2
+- [ ] Compute RMSE, MAE, R² per pollutant
+- [ ] Compare RF against IDW baseline and LUR benchmarks
+- [ ] Run accuracy-distance analysis: per-station error vs. distance to nearest training station
+- [ ] Address urban/rural confound (stratified analysis or sensitivity test per §3.4 strategy)
+- [ ] Fit decay curves (log, power, exponential) per pollutant; select by AIC/BIC
+- [ ] Identify reliable prediction distance threshold per pollutant
+- [ ] Save all result tables and figures
+- [ ] Write §5 (estimation results; RQ1 answer)
+- [ ] Write §6 (decay analysis; RQ2 answer)
+
+---
+
+## Phase 7: Placement artefact (RQ3)
+
+**Status:** Pending (blocked by Phase 6)
+
+- [ ] Construct uncertainty grid for Skåne from Phase 6 decay results
+- [ ] Implement greedy sequential placement algorithm
+- [ ] Run placement optimization; produce prioritized deployment coordinates
+- [ ] Generate coverage uncertainty heatmaps (before and after placement)
+- [ ] Evaluate artefact against real-world criterion named in §3.5
+- [ ] Write §7 (artefact design, case study, placement output; RQ3 answer)
+
+---
+
+## Phase 8: Thesis synthesis and submission
+
+**Status:** Pending (blocked by Phase 7)
+
+- [ ] Write §8 Discussion (explicit RQ answers; comparison with related work; limitations; implications)
+- [ ] Write §9 Conclusion (summary; contributions; future work)
+- [ ] Write Abstract (~200 words: problem, aim, method, contribution)
+- [ ] Write Popular Science Summary (1-2 pages; non-technical)
+- [ ] Write Declaration of AI Usage
+- [ ] Write Acknowledgements
+- [ ] Full formatting check: margins (30 mm), line spacing, figure captions, table titles, reference list
+- [ ] Council review on §8 Discussion and §9 Conclusion
+- [ ] Compile LaTeX; resolve all warnings; confirm bibliography complete and correctly formatted
+- [ ] Resolve all % VERIFY citations before submission
+- [ ] Submit by 2026-08-01
+
+---
+
+## What is decided
+
+| Choice | Decision | Decided in |
+|---|---|---|
+| Spatial validation protocol | Buffered SLOO | Phase 3 council (2026-06-05) |
+| Primary ML model | Random Forest | Phase 3 council (2026-06-05) |
+| Required benchmarks | LUR (ESCAPE) and IDW | Phase 3 council (2026-06-05) |
+| Pollutant handling | Separate models and analyses per pollutant | Phase 3 council (2026-06-05) |
+| Placement optimization | Greedy sequential | Phase 3 council (2026-06-05) |
+| Kriging / geostatistics | Not in scope | Phase 3 council (2026-06-05) |
+
+## What is still open
+
+| Choice | Decided in |
+|---|---|
+| Buffered SLOO exclusion radius | Phase 4 (inter-station distance audit) |
+| Decay threshold criterion (specific error bound) | Phase 5 (EDA) |
+| COVID-19 period treatment | Phase 5 (EDA) |
+| Skåne vs. southern Sweden geographic scope | Phase 4 (station count audit) |
+
+## What is anchored (from approved proposal)
+
+- Pollutants: PM2.5 and NO2
+- Data period: 2020-2024
+- Primary data sources: SMHI Luftwebb, SMHI metobs API, CORINE Land Cover
+- Geographic scope: Sweden nationally; Skåne for case study (subject to Phase 4 audit)
+- DSR framing: required; Peffers (2007) six phases must be mapped in §3
+- Validation principle: spatial CV required; standard k-fold not defensible
+- Submission: 2026-08-01
+
+## Known risks
+
+| Risk | Impact | Mitigation |
+|---|---|---|
+| Buffered SLOO leaves too few training stations per fold | High | Phase 4 distance audit sets the buffer; if too restrictive, use adaptive buffer |
+| Skåne PM2.5 station count too sparse | High | Phase 4 audit; widen to southern Sweden if needed |
+| Urban/rural confound makes decay curve undefensible | High | §3.4 names the strategy; Phase 6 executes it |
+| COVID-19 period contaminates 2020-2021 data | Medium | Flag in Phase 5; sensitivity analysis |
+| Phases 5-6 run over time | High | Phase 7 artefact is most compressible; simplify placement approach if needed |

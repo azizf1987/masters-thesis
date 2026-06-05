@@ -1,0 +1,379 @@
+% =========================
+% MAU Master's Thesis — Abdalazeez Asaad
+% =========================
+\documentclass[11pt,a4paper]{article}
+
+% --- Page / typography ---
+\usepackage[a4paper,margin=30mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{setspace}
+\setstretch{1.0}
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{tocloft}
+\usepackage{float}
+
+\renewcommand{\contentsname}{Contents}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\setcounter{tocdepth}{2}
+
+\pagestyle{plain}
+\justifying
+
+% =========================
+% Metadata
+% =========================
+\newcommand{\ThesisTitle}{Spatial Estimation of Air Quality at Unmonitored Locations Using Machine Learning: Implications for IoT Sensor Network Design in Swedish Cities}
+\newcommand{\StudentName}{Abdalazeez Asaad}
+\newcommand{\ProgrammeName}{MSc Internet of Things}
+\newcommand{\SupervisorName}{Fisseha Mekuria}
+\newcommand{\Department}{Department of Technology and Society}
+\newcommand{\Credits}{30 credits}
+\newcommand{\TermLabel}{Autumn 2026}
+% Add writing/images/logo.jpg before compiling
+\newcommand{\MauBannerFile}{images/logo.jpg}
+
+\begin{document}
+
+% =====================================================
+% Front Page
+% =====================================================
+\begin{titlepage}
+  \thispagestyle{empty}
+
+  \noindent\includegraphics[width=0.50\textwidth]{\MauBannerFile}
+
+  \vspace*{35mm}
+
+  \begin{center}
+    {\LARGE \bfseries \ThesisTitle \par}
+    \vspace{14mm}
+    {\Large \StudentName \par}
+  \end{center}
+
+  \vfill
+
+  \noindent
+  {Master programme \par}
+  {\ProgrammeName \par}
+  {\Credits \par}
+  {\Department \par}
+  {\TermLabel \par}
+  {Main academic supervisor: \SupervisorName \par}
+\end{titlepage}
+
+% =====================================================
+% Front Matter (unnumbered)
+% =====================================================
+\pagenumbering{gobble}
+\clearpage
+
+% =====================================================
+% Popular Science Summary
+% =====================================================
+\section*{Popular Science Summary}
+\addcontentsline{toc}{section}{Popular Science Summary}
+
+% TODO: non-technical summary of urban air pollution, SMHI monitoring gaps, ML spatial estimation, IoT placement contribution
+
+\clearpage
+
+% =====================================================
+% Abstract
+% =====================================================
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+% TODO: problem, aim, method (DSR + SLOOCV + PSO), contribution (~150--250 words)
+
+\clearpage
+
+% =====================================================
+% Declaration of AI Usage
+% =====================================================
+\section*{Declaration of AI Usage}
+\addcontentsline{toc}{section}{Declaration of AI Usage}
+
+% TODO: name tools used, purposes, confirm academic responsibility remains with author
+
+\clearpage
+
+% =====================================================
+% Acknowledgements (optional)
+% =====================================================
+\section*{Acknowledgements}
+\addcontentsline{toc}{section}{Acknowledgements}
+
+% TODO: supervisor, data providers, reviewers
+
+\clearpage
+
+% =====================================================
+% Contents
+% =====================================================
+\tableofcontents
+\clearpage
+
+% =====================================================
+% Main body (page 1)
+% =====================================================
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section{Introduction}
+\label{sec:intro}
+
+Urban air quality is a measurable public health concern across European cities. Ground-level concentrations of fine particulate matter (PM2.5) and nitrogen dioxide (NO2) are among the most well-documented contributors to respiratory and cardiovascular morbidity, with exposure linked to premature mortality, reduced lung function, and elevated rates of hospital admission. Swedish cities are not exempt from this burden: studies of Stockholm, Gothenburg, and Umeå have demonstrated that traffic-related PM2.5 and NO2 exposure contributes significantly to attributable mortality and disease burden even under a comparatively strict national regulatory environment \cite{molnar_sweden_health_2017}.
+
+The fundamental challenge in monitoring these pollutants is spatial. Both PM2.5 and NO2 exhibit strong sub-kilometre heterogeneity: concentrations vary significantly across street canyons, near traffic junctions, and between urban cores and suburban residential areas, driven by localised emission sources, prevailing wind patterns, and urban morphology. Characterising this spatial variability requires monitoring infrastructure at commensurate resolution. The Swedish Meteorological and Hydrological Institute (SMHI) operates the national network of regulatory-grade reference monitoring stations that constitutes the primary empirical record of air quality across Sweden. These stations produce high-fidelity measurements conforming to EU reference methods, but they are sparse by design: positioned to characterise regional background concentrations and to satisfy national reporting obligations, they are separated by margins that can span tens of kilometres. The areas between reference stations remain, by definition, unmonitored.
+
+This spatial gap has practical consequences that extend beyond research. For environmental agencies and municipalities seeking to understand exposure at street or neighbourhood scale, the sparse reference network provides insufficient spatial resolution. For engineers and planners seeking to deploy supplementary monitoring infrastructure, the gap raises a more specific and largely unresolved question: where should sensors be placed to contribute information that is not already available from existing infrastructure? Recent years have seen rapid growth in Internet-of-Things (IoT) sensor networks based on low-cost electrochemical and optical instruments, which can be deployed at a fraction of the cost of regulatory-grade stations \cite{karinthi_sustainable_aqm_2022, popescu_iot_aq_2024}. Yet despite this technological availability, the placement of such networks is frequently driven by property access, convenience, or local intuition rather than any systematic analysis of where monitoring is genuinely needed. Without a principled basis for distinguishing locations where spatial estimation from existing infrastructure is adequate from locations where a physical sensor is warranted, IoT deployments risk duplicating coverage in accessible but already-monitored areas while leaving genuine blind spots unaddressed.
+
+The problem this thesis addresses therefore sits at the intersection of spatial estimation and deployment decision-making. If the accuracy of model-based estimation from a reference station network can be quantified as a function of distance from the nearest station, that relationship provides an empirically grounded criterion for IoT deployment decisions. Translating this criterion into an actionable placement tool constitutes the research artefact developed here, positioned within a Design Science Research methodology \cite{peffers_dsr_2007, hevner_design_science_2004}.
+
+\subsection{Research Aim and Research Questions}
+
+This thesis investigates how accurately air quality can be estimated at unmonitored locations using the SMHI reference station network and associated spatial covariates, how estimation accuracy varies with distance from the nearest reference station, and how the resulting empirical relationship can inform the systematic placement of IoT sensor nodes in a Swedish metropolitan case study. The research is structured around three questions:
+
+\begin{enumerate}
+    \item \textbf{RQ1:} How accurately can machine learning models estimate daily PM2.5 and NO2 concentrations at spatially withheld SMHI reference stations using land-use, topography, and meteorological covariates?
+    \item \textbf{RQ2:} How does spatial estimation accuracy degrade as a function of distance from the nearest active reference station, and what is the maximum reliable prediction distance threshold before physical sensor deployment becomes necessary?
+    \item \textbf{RQ3:} Based on the accuracy-distance relationship modelled from the national network, how can optimization heuristics be applied to guide the placement of an urban IoT sensor network within a selected Swedish metropolitan area case study?
+\end{enumerate}
+
+\subsection{Scope and Delimitations}
+
+This thesis focuses on two pollutants: PM2.5 and NO2. These were selected for their distinct physical and chemical dispersion behaviours, their status as primary regulatory targets under EU Ambient Air Quality Directive thresholds and Swedish national standards, and their availability in the SMHI monitoring record. The temporal scope covers 2020 to 2024, a five-year window that encompasses variation in meteorological conditions and includes the COVID-19 period of reduced traffic activity in 2020 and 2021, which will be acknowledged and addressed in the data analysis.
+
+The spatial scope for model training encompasses the full Swedish SMHI reference station network. The case study for the placement analysis (RQ3) is Skåne, Sweden's southernmost region, which includes a range of urban typologies from dense city centres to mid-size towns and rural zones, providing meaningful spatial diversity for a placement analysis. No real-world sensor deployment is conducted as part of this study; the placement output is a data-driven research artefact and recommendation, not an operational infrastructure plan.
+
+This study does not aim to produce a real-time or operational air quality forecasting system. The modelling framework operates on daily average concentrations and is designed to characterise long-run spatial exposure patterns rather than short-term pollution episodes. Indoor air quality, occupational exposure assessment, and atmospheric chemistry modelling are outside scope.
+
+\subsection{Thesis Structure}
+
+The remainder of this thesis is organised as follows. Section~\ref{sec:background} reviews the relevant literature across urban air quality monitoring, spatial estimation methods, IoT sensor networks, and sensor placement optimization, and identifies the research gaps this work addresses. Section~\ref{sec:methodology} presents the research methodology, including the Design Science Research framing, the data and validation design, and the justification for all methodological choices. Section~\ref{sec:data} describes the data sources and feature engineering process. Sections~\ref{sec:models} and~\ref{sec:decay} present the spatial estimation results and the accuracy-distance analysis, addressing RQ1 and RQ2 respectively. Section~\ref{sec:placement} describes the IoT placement artefact and Skåne case study, addressing RQ3. Section~\ref{sec:discussion} discusses findings in relation to existing work, limitations, and implications for urban IoT planning. Section~\ref{sec:conclusion} concludes with a summary of contributions and directions for future research.
+
+\section{Background and Related Work}
+\label{sec:background}
+
+\subsection{Urban Air Quality Monitoring and Regulatory Networks}
+
+Air quality monitoring in Europe operates through a hierarchy of infrastructure. At the highest level sit regulatory reference stations, operated by national meteorological and environmental agencies, which produce measurements conforming to EU reference methods and form the basis for national reporting under the Ambient Air Quality Directive (2008/50/EC). In Sweden, this function is fulfilled by SMHI, which operates the Luftwebb network of fixed monitoring stations measuring PM2.5, NO2, and other regulated pollutants at locations distributed across the country.
+
+The health rationale for monitoring these pollutants is well established in the Swedish context. Molnar et al. \cite{molnar_sweden_health_2017} demonstrate that PM2.5 and NO2 from traffic and combustion sources contribute substantially to attributable cardiovascular and respiratory mortality in Stockholm, Gothenburg, and Umeå, at concentrations that may remain formally below EU limit values. Research on high-resolution pollutant dispersion in Swedish metropolitan areas has further shown that intra-urban exposure gradients are substantial, with marked differences between urban cores, near-road zones, and suburban residential areas \cite{sweden_dispersion_2024}.
+
+These findings highlight a fundamental limitation of sparse reference networks. Regulatory stations are sited to represent broad background zones rather than local exposure conditions, and the spatial resolution they provide is insufficient for street-level or neighbourhood-level characterisation. Large areas between reference stations have no direct measurement record; concentrations at those locations must be estimated from the network, and the uncertainty in those estimates grows as the distance to the nearest station increases. Quantifying and managing this uncertainty is a central challenge for both public health assessment and supplementary infrastructure planning.
+
+\subsection{Low-Cost IoT Sensor Networks for Urban Monitoring}
+
+The emergence of low-cost air quality sensors based on electrochemical, optical, and metal-oxide technologies has opened the possibility of monitoring at spatial resolutions that are infeasible for regulatory-grade infrastructure. Karinthi et al. \cite{karinthi_sustainable_aqm_2022} provide a comprehensive review of low-cost sensor deployments, documenting capabilities across hardware platforms, deployment configurations, and calibration strategies. Laha et al. \cite{laha_iot_env_monitoring_2022} further document how IoT architectures enable real-time environmental monitoring in outdoor urban settings, demonstrating that distributed microsensor networks can capture spatial variability that sparse reference networks cannot resolve. Popescu and Ionescu \cite{popescu_iot_aq_2024} demonstrate this capability in practice, showing that IoT deployments in urban environments yield spatially rich records of PM and gaseous pollutant patterns that complement the regulatory station baseline.
+
+A consistent finding across this literature is that low-cost sensor networks face a placement problem that technology alone does not resolve. The technical feasibility of dense monitoring does not determine where monitoring is needed. In the absence of an analytical basis for identifying which locations benefit most from physical measurement, deployments remain subject to practical constraints such as property access, power availability, and the preferences of hosting institutions, rather than the spatial structure of pollution exposure. The literature confirms that IoT networks can provide valuable supplementary data, but offers limited guidance on the criteria by which placement decisions should be made.
+
+\subsection{Spatial Estimation of Air Quality at Unmonitored Locations}
+
+Estimating air quality at locations without physical measurements is a long-standing problem in environmental research. Approaches span a range of complexity and theoretical assumptions, from deterministic interpolation to regression modelling to machine learning, and each carries distinct implications for accuracy, interpretability, and data requirements.
+
+The simplest interpolation approach, inverse distance weighting (IDW), estimates concentrations at unmonitored locations as a distance-weighted average of observations at nearby reference stations. IDW makes no assumptions about the mechanisms driving spatial variation and performs poorly in environments where pollution is structured by land-use patterns, topography, or meteorological conditions rather than simple proximity. It nonetheless remains a standard deterministic baseline against which more sophisticated methods are evaluated.
+
+Land-use regression (LUR) represents the established peer-reviewed standard for predicting long-run outdoor pollutant concentrations at unmonitored locations in European contexts. LUR models relate observed concentrations at reference stations to predictor variables derived from geographic data: road density, traffic volume, land cover classification, population density, and similar covariates measured within buffer zones around each station. The resulting regression equation is then applied to unmonitored locations where the predictor variables are available. Hoek et al. \cite{hoek_lur_review_2008} review 25 LUR studies and establish the approach as the dominant framework for intra-urban exposure modelling in Europe. The ESCAPE project subsequently validated LUR across 20 European study areas: Eeftens et al. \cite{eeftens_escape_pm_2012} reported cross-validation R$^{2}$ values of approximately 0.71 for PM2.5 models, while Beelen et al. \cite{beelen_escape_no2_2013} reported leave-one-out cross-validation R$^{2}$ of 0.83 for NO2 models across the same areas. These benchmarks represent the standard against which any alternative spatial estimation approach operating in a comparable European data environment must be evaluated.
+
+LUR has known limitations. Model performance can degrade outside the range of predictor values observed during training, which is a constraint when applying a nationally-trained model to locations with unusual land-use configurations. The linear regression framework may also fail to capture non-linear interactions between predictors present in complex urban environments.
+
+Machine learning (ML) methods have been increasingly applied to spatial air quality estimation, motivated by their capacity to model non-linear relationships between predictor variables and pollutant concentrations. Agbehadji and Obagbuwa \cite{agbehadji_ml_aq_review_2024} provide a systematic review of ML and deep learning applications to spatiotemporal air quality prediction, documenting a consistent pattern of ML models outperforming traditional regression baselines on RMSE and MAE metrics across diverse geographic contexts. Chen and Lin \cite{chen_pm25_interpolation_2021} demonstrate ML-based spatial interpolation for PM2.5 estimation, integrating microsensor cluster data with a regulatory station baseline to achieve high spatial resolution estimates across an urban area. Hybrid approaches combining ML feature extraction with geostatistical variance modelling have also been proposed: Xie et al. \cite{xie_swinlstm_kriging_2025} integrate a deep learning temporal encoder with Kriging spatial covariance estimation, demonstrating accuracy improvements in data-sparse regions. The applicability of such hybrid approaches in the present study is conditional on the national station count confirmed in the data feasibility phase.
+
+A methodological concern that runs throughout the spatial ML literature is spatial autocorrelation. When training data are spatially autocorrelated, standard random cross-validation systematically over-estimates out-of-sample accuracy: nearby stations share similar predictor environments and similar concentration values, so a model trained on a station's neighbours has, in effect, partial knowledge of the target station's behaviour. Roberts et al. \cite{roberts_spatial_cv_2017} demonstrate formally that standard cross-validation strategies underestimate prediction error in spatially structured data, and recommend block-based or location-withholding strategies as more honest evaluations of predictive performance. This concern is directly relevant to the validation design for any estimation framework trained on a reference station network, and is addressed in the methodology presented in Section~\ref{sec:methodology}.
+
+\subsection{Sensor Placement Optimization}
+
+Given a model of spatial estimation uncertainty across an area, the problem of where to place physical sensors can be framed as an optimization problem: locate a fixed number of sensors to minimise residual uncertainty or to maximise spatial coverage across the target domain. Several algorithmic families have been applied to this problem.
+
+Particle Swarm Optimization (PSO) is a population-based metaheuristic that maintains a set of candidate solutions, or particles, which move through the solution space guided by each particle's individual best position and the globally best position found across the swarm. Gupta and Thakur \cite{gupta_pso_placement_2023} apply PSO to outdoor air quality sensor placement, treating the monitoring area as a grid and optimizing node positions to reduce network-wide estimation variance. Their study demonstrates the applicability of the approach to combinatorial outdoor placement problems. Enhanced PSO formulations that improve convergence and spatial coverage for wireless sensor network deployment have been proposed in related work \cite{pso_node_deployment_2024}.
+
+The majority of data-driven sensor placement studies in the literature operate in indoor environments or small-scale controlled experimental settings. Outdoor urban sensor network design at the scale of a metropolitan region, grounded in an empirically derived model of estimation error as a function of distance from existing reference infrastructure, remains relatively unexplored. This gap motivates the placement artefact developed in this thesis.
+
+\subsection{Research Gaps and Positioning}
+
+The literature reviewed in this section reveals three interconnected gaps that this thesis addresses.
+
+First, while ML methods for spatial air quality estimation have been studied extensively, most evaluations use standard random cross-validation that does not adequately account for spatial autocorrelation. The accuracy achievable at genuinely unmonitored locations, assessed using a spatially honest validation protocol, is therefore less certain than headline performance figures suggest. RQ1 addresses this gap by evaluating spatial estimation accuracy under a geographically rigorous validation design.
+
+Second, the relationship between spatial estimation accuracy and the distance from the nearest reference station has not been systematically quantified across a national-scale monitoring network. Aggregate cross-validation performance figures do not characterise how performance varies with the spatial configuration of the network relative to a prediction target. Understanding this distance-accuracy relationship is a prerequisite for any principled deployment criterion. RQ2 addresses this gap by characterising the decay in estimation accuracy as a function of distance.
+
+Third, while PSO-based sensor placement has been demonstrated in controlled settings, its application to outdoor IoT network design grounded in an empirically derived estimation error model has not been demonstrated for a Swedish urban context. The body of work on systematic outdoor placement in environments with well-characterised reference networks is limited. RQ3 addresses this gap by developing a placement artefact anchored in the empirical results of RQ1 and RQ2 and applied to a Swedish metropolitan case study.
+
+Section~\ref{sec:methodology} presents the methodological approach taken to address each of these gaps.
+
+\section{Research Methodology}
+\label{sec:methodology}
+
+\subsection{Research Design and Paradigm}
+\label{sec:dsr-paradigm}
+
+This thesis adopts a Design Science Research (DSR) paradigm, following the methodology proposed by Peffers et al.\ \cite{peffers_dsr_2007} and grounded in the principles for rigorous design science articulated by Hevner et al.\ \cite{hevner_design_science_2004}. DSR is appropriate for research whose primary contribution is a designed artefact: a method, model, or tool that addresses a real-world problem and is evaluated against real-world criteria. The choice of DSR is not merely a framing convenience. The three research questions of this thesis collectively produce outputs of two distinct types: empirical findings (the estimation accuracy characterisation for RQ1 and RQ2) and a designed object (the sensor placement procedure for RQ3). DSR provides the methodological vocabulary that accommodates both within a single coherent inquiry, and requires that the artefact be evaluated not only by internal model metrics but by how well it addresses the real-world problem that motivated the research.
+
+The Peffers et al.\ \cite{peffers_dsr_2007} framework prescribes six phases of design science inquiry. Table~\ref{tab:dsr-mapping} maps each phase to this thesis.
+
+\begin{table}[H]
+\centering
+\caption{Mapping of the Peffers et al.\ (2007) DSR phases to this thesis.}
+\label{tab:dsr-mapping}
+\begin{tabular}{p{0.26\textwidth} p{0.64\textwidth}}
+\toprule
+\textbf{DSR phase} & \textbf{This thesis} \\
+\midrule
+1. Problem identification and motivation &
+  The SMHI Luftwebb network leaves large intra-urban areas without direct air quality measurement. IoT deployments lack analytical criteria for placement decisions. The health burden of PM2.5 and NO2 exposure in Swedish cities motivates better spatial characterisation of pollutant concentrations. \\
+\addlinespace
+2. Define objectives of a solution &
+  RQ1 specifies the target: an ML estimation model whose out-of-sample accuracy at withheld stations is characterised under a spatially honest validation protocol. RQ2 specifies the distance-accuracy decay relationship and the reliable prediction distance threshold. RQ3 specifies the placement artefact: a prioritised set of IoT sensor deployment coordinates for a Swedish metropolitan case study, grounded in the empirical results of RQ1 and RQ2. \\
+\addlinespace
+3. Design and development &
+  A spatial estimation framework is constructed using a Random Forest model with land-use, topographic, and meteorological covariates, evaluated against IDW and land-use regression (LUR) benchmarks under a buffered spatial leave-one-out cross-validation protocol. The per-station error-distance relationship is modelled to produce a decay curve and a threshold. A greedy sequential placement algorithm operationalises the threshold as a spatial coverage objective over the Skåne study area. \\
+\addlinespace
+4. Demonstration &
+  The placement artefact is applied to the Skåne administrative region as a case study, producing a prioritised list of IoT sensor deployment coordinates alongside before-and-after coverage uncertainty maps. \\
+\addlinespace
+5. Evaluation &
+  The estimation model is evaluated by RMSE, MAE, and R\textsuperscript{2} per pollutant, benchmarked against IDW and LUR. The placement artefact is evaluated by the proportion of the Skåne urban area brought within reliable prediction distance of at least one sensor (existing or newly placed) as the primary real-world criterion. \\
+\addlinespace
+6. Communication &
+  Findings are presented in this thesis, with methodology, empirical results, and artefact design reported in sufficient detail for replication and extension. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Spatial Estimation Strategy}
+\label{sec:estimation-strategy}
+
+\subsubsection{Pollutant Separation}
+
+PM2.5 and NO2 exhibit physically distinct spatial behaviours that preclude joint modelling. NO2 is primarily a traffic-sourced pollutant whose concentration gradients are sharp in the vicinity of road infrastructure, decaying rapidly with distance from source; the spatial range of strong autocorrelation is typically on the order of 500 metres to 2 kilometres in European urban areas. PM2.5 has a larger spatial footprint resulting from mixed source contributions including regional transport, secondary formation, and diffuse combustion; concentration gradients are smoother and the spatial range of autocorrelation typically extends to 5--20 kilometres. Accordingly, separate models are constructed, validated, and analysed for each pollutant throughout this study. Separate decay thresholds are expected from the accuracy-distance analysis (Section~\ref{sec:decay-method}), and all results tables in Sections~\ref{sec:models} and~\ref{sec:decay} present PM2.5 and NO2 independently.
+
+\subsubsection{Feature Set}
+
+The feature set draws on three classes of spatial predictor. Land-use covariates are derived from the CORINE Land Cover dataset, expressed as proportions of land-use classes within buffer radii of 100 m, 500 m, and 1 km around each station, following the buffer geometry established as standard in European land-use regression studies \cite{hoek_lur_review_2008}. Road proximity covariates are expressed as total road length within 100 m and 500 m buffers, providing a proxy for traffic-related emission intensity. Topographic covariates include elevation from the national digital elevation model and terrain roughness computed within a 1 km radius. Population density within 1 km is included as a proxy for area-wide anthropogenic activity. Meteorological covariates include daily wind speed, prevailing wind direction, air temperature, and precipitation from the SMHI meteorological observation API, aligned temporally to the air quality records.
+
+The total number of covariates is constrained to approximately 10--15. With an estimated 50--100 usable station records nationally after completeness filtering, a larger feature set risks overfitting the spatial structure of the training network rather than learning the predictor-to-concentration relationship. Features exhibiting high collinearity or low marginal contribution in initial variable importance analysis are excluded before final model training, following the parsimony principle established in the LUR literature \cite{hoek_lur_review_2008}.
+
+\subsubsection{Model Selection}
+
+Three estimation approaches are implemented for each pollutant. Inverse distance weighting (IDW) serves as the deterministic spatial baseline, requiring no covariates and relying solely on proximity to observed stations. It provides a lower performance bound against which the contribution of predictor information can be assessed.
+
+Land-use regression (LUR), calibrated on the SMHI station data using the predictors described above, serves as the established European peer-reviewed benchmark. The ESCAPE cross-validation R\textsuperscript{2} values reported in Section~\ref{sec:background}, approximately 0.71 for PM2.5 \cite{eeftens_escape_pm_2012} and 0.83 for NO2 \cite{beelen_escape_no2_2013}, represent the standard that any ML approach operating in a comparable European data environment must meet or exceed to demonstrate added value over the existing methodological baseline.
+
+Random Forest (RF) is selected as the primary machine learning model. This selection is supported by four considerations. First, RF is well-established in the spatial air quality estimation literature, demonstrating consistent accuracy improvements over LUR across diverse geographic and data environments \cite{agbehadji_ml_aq_review_2024, chen_pm25_interpolation_2021}. Second, RF handles mixed feature types natively, combining categorical land-use proportions, continuous meteorological variables, and topographic covariates without requiring distributional assumptions about the response. Third, with a sparse training network of approximately 50--100 unique spatial locations, a model that makes no distributional assumption about the joint feature-concentration relationship and is robust to irrelevant predictors is preferable to approaches that impose stronger structure. Fourth, the bootstrap ensemble mechanism of RF reduces variance without requiring explicit regularisation, which is advantageous when training locations are too few to support extensive hyperparameter tuning. Deep learning architectures and hybrid geostatistical approaches such as those reviewed in Section~\ref{sec:background} are excluded from this study: such models require substantially more unique spatial training locations than the SMHI network is expected to provide, and their additional complexity is not warranted for the contribution claimed here.
+
+\subsection{Spatial Validation Protocol}
+\label{sec:validation-protocol}
+
+Roberts et al.\ \cite{roberts_spatial_cv_2017} demonstrate that standard random cross-validation produces optimistically biased error estimates for spatially autocorrelated data. When training and test observations are spatially proximate, nearby training stations share similar predictor environments and concentration levels with the withheld station; the model therefore has partial information about the test target via its training data, and the resulting performance estimate does not reflect true out-of-sample generalisation to unmonitored locations.
+
+This study addresses the spatial autocorrelation problem through a buffered spatial leave-one-out cross-validation (SLOO) protocol \cite{valavi_blockcv_2019}. In each fold, a single reference station is withheld as the test location. In addition, all stations within a minimum distance $d_{\text{buffer}}$ of the withheld station are excluded from the training set, preventing the model from leveraging the spatial proximity of near neighbours to the test point. The remaining stations are used for training, and a prediction is made at the withheld location. The procedure is repeated for every station, producing a complete set of spatially honest out-of-sample prediction errors.
+
+The exclusion buffer radius $d_{\text{buffer}}$ is determined after the Phase 4 station inventory. The minimum buffer is set to at least the median nearest-neighbour distance of the SMHI network, ensuring that at least half the training stations lie outside the exclusion zone for any withheld location. If the inter-station distance distribution reveals a bimodal structure corresponding to urban clusters and rural isolates, the buffer is set to address the urban cluster effect. The buffered SLOO protocol is applied separately for PM2.5 and NO2.
+
+Standard random $k$-fold cross-validation is explicitly excluded. Random partitioning does not guarantee spatial independence between training and test sets in a geographically distributed station network, and any performance figure derived from such a protocol cannot be interpreted as an estimate of accuracy at genuinely unmonitored locations \cite{roberts_spatial_cv_2017}.
+
+\subsection{Accuracy-Distance Analysis}
+\label{sec:decay-method}
+
+The per-station prediction errors produced by the buffered SLOO procedure serve as the primary input to the accuracy-distance analysis for RQ2. For each withheld station, the root mean squared error (RMSE) is recorded alongside the distance from the withheld station to its nearest retained training station at the time of prediction, that is, the nearest station lying outside the exclusion buffer. This distance quantifies the minimum spatial gap the model must bridge from observed data.
+
+The resulting set of (distance, error) pairs is used to fit three candidate functional forms: logarithmic, power-law, and exponential decay. Form selection is performed by the Akaike Information Criterion (AIC). The selected function provides a continuous mapping from distance to expected prediction error. A reliable prediction distance threshold is defined as the distance at which expected RMSE reaches a criterion bound; the specific bound is determined from the EDA phase (Section~\ref{sec:data}), informed by the empirical pollutant concentration distributions and the tolerances implied by the WHO Air Quality Guidelines for PM2.5 and NO2 respectively. The analysis is conducted separately for each pollutant, and separate thresholds are reported.
+
+A potential confound must be acknowledged: stations with small inter-station distances are predominantly sited in urban areas with high land-use heterogeneity, while stations with large inter-station distances are predominantly located in rural or periurban contexts. The observed error-distance relationship may consequently reflect both genuine distance-based accuracy degradation and differences in the feature-concentration environment between urban and rural settings. To assess this confound, a stratified sensitivity analysis is conducted: stations are classified as urban or rural based on their predominant CORINE land-use context, and separate decay curves are fitted for each stratum. Where the stratum-specific curves are consistent with the pooled result, the pooled analysis is considered robust; where they diverge materially, stratum-specific thresholds are reported and the implications for deployment guidance are discussed.
+
+\subsection{Sensor Placement Optimisation}
+\label{sec:placement-method}
+
+The placement optimisation addresses RQ3 by identifying candidate IoT sensor locations that would most efficiently extend the reliable coverage of the existing reference network within the Skåne study area. An uncertainty surface is first constructed over the Skåne administrative region by computing, for each cell of a regular spatial grid, the distance to the nearest existing reference station. Grid cells whose nearest-station distance exceeds the reliable prediction distance threshold derived in Section~\ref{sec:decay-method} are classified as underserved by the current network.
+
+The placement procedure is a greedy sequential algorithm. At each step, the candidate location whose addition to the sensor set would maximally reduce the total underserved area is selected. The procedure produces a ranked list of deployment coordinates, with each successive location providing the greatest marginal coverage gain over what preceding placements have already achieved. Placement continues until a specified number of sensors has been added or until the residual underserved area falls below a defined tolerance.
+
+Greedy sequential placement is preferred over population-based metaheuristic approaches such as Particle Swarm Optimization for three reasons. First, the spatial coverage objective defined here is a well-studied combinatorial problem for which greedy search is known to perform within a constant factor of the global optimum for coverage-type objectives; the approximation quality is adequate for the practical planning purpose of this artefact. Second, the DSR evaluation phase \cite{peffers_dsr_2007} requires that the artefact be evaluable by practitioners: a placement procedure whose decisions are transparent and reproducible step by step is more useful as a planning tool than one derived from a population-based search whose convergence and parameter sensitivity require specialist interpretation. Third, confirming that the coverage landscape is sufficiently multimodal to warrant PSO, a prerequisite for any metaheuristic advantage over greedy search \cite{gupta_pso_placement_2023, pso_node_deployment_2024}, is not possible prior to the construction of the uncertainty surface in Phase 6. The greedy approach is locally rather than globally optimal: early placements constrain subsequent ones. This limitation is acknowledged, and the resulting placement recommendations are presented as an evidence-based starting point for municipal planning, not as a provably optimal sensor configuration.
+
+\subsection{Evaluation Metrics}
+\label{sec:eval-metrics}
+
+Table~\ref{tab:eval-metrics} summarises the evaluation metrics applied at each stage of the study.
+
+\begin{table}[H]
+\centering
+\caption{Evaluation metrics by research question and phase.}
+\label{tab:eval-metrics}
+\begin{tabular}{p{0.22\textwidth} p{0.20\textwidth} p{0.46\textwidth}}
+\toprule
+\textbf{Metric} & \textbf{Applies to} & \textbf{Rationale} \\
+\midrule
+RMSE (µg/m\textsuperscript{3}) & RQ1 (primary) & Penalises large errors more heavily; interpretable in concentration units; standard in spatial estimation literature \\
+MAE (µg/m\textsuperscript{3}) & RQ1 (secondary) & Robust to outliers; complements RMSE; reported for completeness \\
+R\textsuperscript{2} & RQ1 & Required for comparison with ESCAPE LUR benchmarks reported in R\textsuperscript{2} form \cite{eeftens_escape_pm_2012, beelen_escape_no2_2013} \\
+Reliable prediction distance threshold (km) & RQ2 & Distance at which expected RMSE reaches the criterion bound; derived separately per pollutant \\
+Proportion of urban area within threshold (\%) & RQ3 & Primary real-world DSR evaluation criterion; percentage of Skåne urban area within reliable prediction distance of at least one sensor, before and after placement \\
+Municipalities transitioning to served (\#) & RQ3 (secondary) & Number of Skåne municipalities with no existing station within threshold that would be served by the proposed placements \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All metrics are computed separately for PM2.5 and NO2. Model performance is assessed against the IDW baseline, the LUR benchmark, and the ESCAPE R\textsuperscript{2} standard values. A model that does not exceed the LUR benchmark under the buffered SLOO protocol does not demonstrate added value over the established European methodology.
+
+\subsection{Validity, Reliability, and Ethical Considerations}
+\label{sec:ethics}
+
+\textbf{Validity.} The internal validity of the estimation results rests on the spatial honesty of the validation protocol. The buffered SLOO design \cite{valavi_blockcv_2019, roberts_spatial_cv_2017} is specifically intended to prevent spatial leakage between training and test data, ensuring that reported error estimates reflect performance at genuinely unmonitored locations rather than at sites whose predictor environments are represented in the training set. The stratified sensitivity analysis for the decay curve provides a check on the confound between distance and network density. External validity is limited to the Swedish national station network and its geographic and meteorological context; generalisation to other national networks would require replication in those data environments.
+
+\textbf{Reliability.} All data sources are publicly accessible and documented: SMHI Luftwebb, the SMHI meteorological observation API, CORINE Land Cover, and the national digital elevation model. The estimation, validation, decay analysis, and placement procedures are implemented in code with fixed random seeds for reproducibility. The full feature matrix, model configurations, and validation fold assignments are documented and retained for inspection.
+
+\textbf{Ethical considerations.} All data sources used in this study are open-data products carrying no personal information. No individual-level records are processed at any stage. The study does not involve human participants and does not require ethical review under Swedish research ethics legislation. The use of AI-assisted tools in the preparation of this thesis is disclosed in the Declaration of AI Usage.
+
+\section{Data and Feature Engineering}
+\label{sec:data}
+% TODO (Phase 5): SMHI Luftwebb; metobs API; CORINE land cover; DEM; population density; feature matrix construction; 90\% completeness filter; COVID-19 period flag; missing-data handling.
+
+\section{Spatial Estimation Models}
+\label{sec:models}
+% TODO (Phase 6): Model architectures per Phase 3 choices; spatial validation results; RMSE and MAE per pollutant; benchmark comparison against IDW and LUR. Addresses RQ1.
+
+\section{Accuracy-Distance Analysis}
+\label{sec:decay}
+% TODO (Phase 6): Estimation error as a function of distance to nearest reference station; decay curve fitting; reliable prediction distance threshold identified. Addresses RQ2.
+
+\section{IoT Placement Optimization}
+\label{sec:placement}
+% TODO (Phase 7): DSR artefact design; placement approach per Phase 3 choices; Skåne case study; coverage uncertainty heatmap; prioritized deployment coordinates. Addresses RQ3.
+
+\section{Analysis and Discussion}
+\label{sec:discussion}
+% TODO (Phase 8): Explicit answers to RQ1, RQ2, RQ3; comparison with LUR benchmarks from §2 and related work; implications for municipal IoT planning; limitations; risks.
+
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO (Phase 8): Summary of findings; explicit RQ answers; contributions to knowledge; future work.
+
+\clearpage
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\clearpage
+\appendix
+
+\section{Station Inventory and Completeness}
+% TODO: extended tables
+
+\section{Model Hyperparameters}
+% TODO: RF, XGBoost, Kriging configuration details
+
+\section{PSO Placement Parameters}
+% TODO: algorithm settings, grid resolution, convergence criteria
+
+\end{document}

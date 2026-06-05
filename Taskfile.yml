@@ -1,0 +1,28 @@
+version: '3'
+
+tasks:
+
+  install:
+    desc: Install Python dependencies
+    cmds:
+      - pip install -r requirements.txt
+
+  compile:
+    desc: Compile thesis.tex to PDF (requires pdflatex + bibtex + logo at writing/images/logo.jpg)
+    dir: writing
+    cmds:
+      - pdflatex -interaction=nonstopmode thesis.tex
+      - bibtex thesis
+      - pdflatex -interaction=nonstopmode thesis.tex
+      - pdflatex -interaction=nonstopmode thesis.tex
+
+  status:
+    desc: Show thesis roadmap and current phase
+    cmds:
+      - cat docs/roadmap.md
+
+  # Phase 2+ tasks (not yet implemented):
+  # ingest:   SMHI Luftwebb + metobs download
+  # sloocv:   run spatial leave-one-out cross-validation
+  # decay:    accuracy-distance decay analysis
+  # pso:      PSO placement case study

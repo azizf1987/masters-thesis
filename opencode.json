@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "council": {
+      "description": "Council deliberation — pressure-tests decisions using the 4 active seats (Skeptic, Editor, The Researcher, The Domain Expert). Reads agents/council.md and runs the deliberation flow.",
+      "mode": "all",
+      "temperature": 0.1,
+      "permission": {
+        "edit": "deny",
+        "bash": "ask",
+        "webfetch": "allow"
+      },
+      "prompt": "{file:./agents/council.md}"
+    }
+  }
+}
