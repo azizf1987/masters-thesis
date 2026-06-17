@@ -116,25 +116,25 @@
 
 **Placement: greedy sequential.** Directly operationalises the RQ2 decay threshold. PSO excluded: requires demonstrating multimodal landscape pre-Phase 6; adds complexity not central to the contribution. Greedy suboptimality acknowledged in §3.
 
-**DSR criterion.** At least one real-world evaluation criterion in §3.5: proportion of Skåne urban area within reliable estimation range, or number of unmonitored municipalities covered.
+**DSR criterion.** At least one real-world evaluation criterion in §3.5: proportion of Swedish urban area within reliable estimation range, and number of currently unmonitored regions transitioning to served. (Updated from Skåne to national scope 2026-06-18.)
 
 ---
 
 ## Phase 4: Data feasibility audit
 
-**Status:** Pending (blocked by Phase 3)
+**Status:** In Progress (started 2026-06-17)
 
 **Goal:** Confirm the Phase 3 methodology is executable with the available data. Can adjust scope; cannot adjust methodology without returning to Phase 3.
 
-- [ ] Pull SMHI Luftwebb station inventory: count PM2.5 and NO2 stations nationally and in Skåne
-- [ ] Check data completeness by station and year (2020-2024); apply 90% threshold
-- [ ] Confirm SMHI metobs API access; test pull of meteorological covariates
+- [x] Pull SMHI Luftwebb station inventory: count PM2.5 and NO2 stations nationally (2026-06-17)
+- [x] Check data completeness by station and year (2020-2024); apply 90% threshold (2026-06-17)
+- [ ] Confirm SMHI metobs API access; write and run meteorological covariates download script
 - [ ] Download and verify CORINE Land Cover for Sweden
-- [ ] Identify DEM source (e.g., Lantmäteriet) and confirm coverage for Skåne
-- [ ] Confirm population density grid source and resolution
+- [ ] Identify DEM source (Lantmäteriet Höjddata) and confirm national coverage
+- [ ] Confirm population density grid source and resolution (Eurostat GEOSTAT)
 - [ ] Establish inter-station distance distribution → set buffered SLOO exclusion radius
-- [ ] **Decision point:** If Skåne PM2.5 coverage is too sparse, expand to southern Sweden
-- [ ] **Decision point:** If national station count is below threshold, revisit Phase 3 model scope
+- [x] **Decision point:** Skåne PM2.5 coverage too sparse (1 passing station) → case study expanded to all Sweden (2026-06-18)
+- [x] **Decision point:** National station count below 40-50 threshold (13 passing, 34 raw) → §3 updated; supervisor discussion required before any time period extension
 - [ ] Document audit results in `docs/data-audit.md`
 
 ---
@@ -180,7 +180,7 @@
 
 **Status:** Pending (blocked by Phase 6)
 
-- [ ] Construct uncertainty grid for Skåne from Phase 6 decay results
+- [ ] Construct national uncertainty grid from Phase 6 decay results (all Sweden, 10 km grid)
 - [ ] Implement greedy sequential placement algorithm
 - [ ] Run placement optimization; produce prioritized deployment coordinates
 - [ ] Generate coverage uncertainty heatmaps (before and after placement)
@@ -217,6 +217,8 @@
 | Pollutant handling | Separate models and analyses per pollutant | Phase 3 council (2026-06-05) |
 | Placement optimization | Greedy sequential | Phase 3 council (2026-06-05) |
 | Kriging / geostatistics | Not in scope | Phase 3 council (2026-06-05) |
+| Case study geographic scope | All Sweden (national) | Phase 4 data audit (2026-06-18) |
+| Station count (final) | 34 raw, 13 passing quality filters | Phase 4 data audit (2026-06-17) |
 
 ## What is still open
 
@@ -225,14 +227,16 @@
 | Buffered SLOO exclusion radius | Phase 4 (inter-station distance audit) |
 | Decay threshold criterion (specific error bound) | Phase 5 (EDA) |
 | COVID-19 period treatment | Phase 5 (EDA) |
-| Skåne vs. southern Sweden geographic scope | Phase 4 (station count audit) |
+| Time period extension (2017-2018) | Requires supervisor discussion; station count (13 passing) is below the 40-50 threshold agreed in 2026-06-15 session |
+| §3.2 station count text (still says "50-100") | Fix before next draft |
+| §3.4 urban/rural stratification — rural n=1 | Replace with traffic vs. background contrast; fix before next draft |
 
 ## What is anchored (from approved proposal)
 
 - Pollutants: PM2.5 and NO2
 - Data period: 2020-2024
 - Primary data sources: SMHI Luftwebb, SMHI metobs API, CORINE Land Cover
-- Geographic scope: Sweden nationally; Skåne for case study (subject to Phase 4 audit)
+- Geographic scope: Sweden nationally for both model training and case study (Skåne-only scope ruled out in Phase 4 audit 2026-06-18)
 - DSR framing: required; Peffers (2007) six phases must be mapped in §3
 - Validation principle: spatial CV required; standard k-fold not defensible
 - Submission: 2026-08-01
@@ -242,7 +246,7 @@
 | Risk | Impact | Mitigation |
 |---|---|---|
 | Buffered SLOO leaves too few training stations per fold | High | Phase 4 distance audit sets the buffer; if too restrictive, use adaptive buffer |
-| Skåne PM2.5 station count too sparse | High | Phase 4 audit; widen to southern Sweden if needed |
+| Station count very low (13 passing) | High | §3.2 updated; buffered SLOO adaptive fallback added; supervisor discussion on time period extension pending |
 | Urban/rural confound makes decay curve undefensible | High | §3.4 names the strategy; Phase 6 executes it |
 | COVID-19 period contaminates 2020-2021 data | Medium | Flag in Phase 5; sensitivity analysis |
 | Phases 5-6 run over time | High | Phase 7 artefact is most compressible; simplify placement approach if needed |

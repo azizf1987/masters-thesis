@@ -10,7 +10,7 @@ Phases 1, 2, and 3 complete. §§1, 2, and 3 drafted in `writing/thesis.tex`.
 - The IoT placement problem: why ad hoc deployment is insufficient
 - Research aim in general terms; no method commitments
 - RQ1, RQ2, RQ3 as numbered list
-- Scope and delimitations (PM2.5/NO2, 2020-2024, Sweden nationally, Skåne case study, out-of-scope)
+- Scope and delimitations (PM2.5/NO2, 2020-2024, Sweden nationally for both training and case study, out-of-scope)
 - Thesis structure paragraph with \ref{} cross-references to all sections
 
 **§2 covers:**
@@ -129,34 +129,39 @@ Decision framework agreed:
 
 ## Immediate next step
 
-**Write and run the Python API script to download meteorological covariates from SMHI metobs for all 34 stations.**
+**Write and run the Python script to download meteorological covariates from SMHI metobs API for all 34 stations.**
 
-The script should:
-1. Query the Datavärdskap Luft API or portal bulk endpoint for all stations with PM2.5 data
-2. Query the same for all stations with NO2 data
-3. Filter to 2020-2024 daily averages
-4. Save one CSV per station (matching the format already seen in the portal files)
-5. Count stations and apply 90% completeness filter
-6. Report: how many PM2.5 stations pass? How many NO2 stations pass? How many have both?
+The script queries the SMHI Open Data API for temperature, wind speed, wind direction, humidity, and precipitation. For each of the 34 AQ stations, it finds the nearest met station for each parameter and downloads 2020-2024 hourly data. Output: one merged CSV per AQ station in `data/raw/metobs/`.
 
-After the count: make the time period decision and the Skåne vs. southern Sweden scope decision.
+After that, three more data sources needed before Phase 5 can start:
+- CORINE Land Cover (EU Copernicus)
+- DEM — Lantmäteriet Höjddata
+- Population density — Eurostat GEOSTAT grid
 
 ## Open threads
 
-- **Appendix C** — PSO contradiction must be fixed immediately
-- **§3.4 COVID strategy** — write the paragraph with the sensitivity analysis approach
-- **§3.2 sample size** — add ESCAPE precedent sentence
-- **§3.4 distance metric** — add Euclidean + justification explicitly
-- **§2.3 benchmarks** — find 1-2 post-2018 northern European LUR studies
-- **§3.5 and §8** — add infrastructure scope boundary and PSO future work sentences
-- **§1 and §8** — add daily averages scope delimitation
-- Buffered SLOO exclusion radius: set in Phase 4 from inter-station distance distribution
-- Decay threshold criterion: set in Phase 5 after EDA
-- Logo file needed before first LaTeX compile: `writing/images/logo.jpg`
-- Time period decision: pending full station count from API download
-- Seasonal decay curves: add to Phase 6 task list
+### Already resolved
+- Appendix C PSO contradiction — fixed (renamed to "Placement Algorithm Parameters") 2026-06-18
+- Case study scope — resolved: all Sweden 2026-06-18
 
-## Decisions made (all sessions to date)
+### Still open (thesis text edits — before next draft)
+- **§3.2 station count** — replace "50-100" with "13-20"; restate parsimony argument
+- **§3.4 COVID strategy** — write paragraph: binary covariate + 2020-2024 vs 2022-2024 sensitivity
+- **§3.4 distance metric** — add "Euclidean distance" explicitly + justification sentence
+- **§3.4 urban/rural stratification** — replace with traffic vs. background contrast (only 1 rural station passes)
+- **§2.3 benchmarks** — add 1-2 post-2018 northern European LUR studies
+- **§3.5 and future §8** — add infrastructure scope boundary sentence; PSO as future work
+- **§1 and future §8** — add daily averages delimitation sentence
+- **§3.2** — add ESCAPE precedent sentence for sample size justification
+
+### Still open (data and decisions)
+- Buffered SLOO exclusion radius: set after inter-station distance matrix computed (Phase 4 remaining)
+- Decay threshold criterion: set in Phase 5 EDA
+- Time period extension (2017-2018): station count (13 passing) is below 40-50 threshold — needs supervisor discussion before deciding
+- Seasonal decay curves: add to Phase 6 task list
+- Logo file needed before first LaTeX compile: `writing/images/logo.jpg`
+
+## Decisions made (all sessions to date, chronological)
 
 - Phases 1 and 2 complete; §1 and §2 drafted without method commitments
 - LUR established as the baseline benchmark in §2.3 (ESCAPE R² values documented)
@@ -170,3 +175,6 @@ After the count: make the time period decision and the Skåne vs. southern Swede
 - **Portal download filter decisions (2026-06-15):** all Län (national), all Kommun (unfiltered), all stations (Alla), Dygn resolution, all Områdesklassificering, all Klassificering
 - **Time period rationale confirmed (2026-06-15):** 2020-2024; extension only if station count below threshold after full API download
 - **COVID strategy agreed (2026-06-15):** binary covariate + sensitivity analysis (2020-2024 vs 2022-2024 models)
+- **Air quality data audit complete (2026-06-17):** 34 unique stations with both PM2.5 and NO2; 13 pass quality filters (≥90% completeness, ≥80% period coverage); distributed across 14 of 21 Swedish regions; 7 regions unmonitored (Södermanland, Jönköping, Gotland, Blekinge, Örebro, Dalarna, Norrbotten)
+- **Case study scope changed to all Sweden (2026-06-18):** Skåne ruled out (1 passing station); national scope more defensible and impactful given 7 unmonitored regions; all §§1 and 3 updated accordingly
+- **Appendix C renamed (2026-06-18):** "PSO Placement Parameters" → "Placement Algorithm Parameters"
