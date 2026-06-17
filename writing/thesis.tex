@@ -147,20 +147,20 @@ This thesis investigates how accurately air quality can be estimated at unmonito
 \begin{enumerate}
     \item \textbf{RQ1:} How accurately can machine learning models estimate daily PM2.5 and NO2 concentrations at spatially withheld SMHI reference stations using land-use, topography, and meteorological covariates?
     \item \textbf{RQ2:} How does spatial estimation accuracy degrade as a function of distance from the nearest active reference station, and what is the maximum reliable prediction distance threshold before physical sensor deployment becomes necessary?
-    \item \textbf{RQ3:} Based on the accuracy-distance relationship modelled from the national network, how can optimization heuristics be applied to guide the placement of an urban IoT sensor network within a selected Swedish metropolitan area case study?
+    \item \textbf{RQ3:} Based on the accuracy-distance relationship modelled from the national network, how can optimization heuristics be applied to guide the placement of IoT sensor nodes across Sweden, prioritising regions where estimation uncertainty is highest?
 \end{enumerate}
 
 \subsection{Scope and Delimitations}
 
 This thesis focuses on two pollutants: PM2.5 and NO2. These were selected for their distinct physical and chemical dispersion behaviours, their status as primary regulatory targets under EU Ambient Air Quality Directive thresholds and Swedish national standards, and their availability in the SMHI monitoring record. The temporal scope covers 2020 to 2024, a five-year window that encompasses variation in meteorological conditions and includes the COVID-19 period of reduced traffic activity in 2020 and 2021, which will be acknowledged and addressed in the data analysis.
 
-The spatial scope for model training encompasses the full Swedish SMHI reference station network. The case study for the placement analysis (RQ3) is Skåne, Sweden's southernmost region, which includes a range of urban typologies from dense city centres to mid-size towns and rural zones, providing meaningful spatial diversity for a placement analysis. No real-world sensor deployment is conducted as part of this study; the placement output is a data-driven research artefact and recommendation, not an operational infrastructure plan.
+The spatial scope for both model training and the placement analysis (RQ3) encompasses the full Swedish SMHI reference station network. The placement artefact is applied nationally: the data feasibility audit identified that 7 of Sweden's 21 administrative regions currently lack any reference station measuring both PM2.5 and NO2, making the national coverage area the natural domain for identifying where supplementary monitoring is most needed. No real-world sensor deployment is conducted as part of this study; the placement output is a data-driven research artefact and recommendation, not an operational infrastructure plan.
 
 This study does not aim to produce a real-time or operational air quality forecasting system. The modelling framework operates on daily average concentrations and is designed to characterise long-run spatial exposure patterns rather than short-term pollution episodes. Indoor air quality, occupational exposure assessment, and atmospheric chemistry modelling are outside scope.
 
 \subsection{Thesis Structure}
 
-The remainder of this thesis is organised as follows. Section~\ref{sec:background} reviews the relevant literature across urban air quality monitoring, spatial estimation methods, IoT sensor networks, and sensor placement optimization, and identifies the research gaps this work addresses. Section~\ref{sec:methodology} presents the research methodology, including the Design Science Research framing, the data and validation design, and the justification for all methodological choices. Section~\ref{sec:data} describes the data sources and feature engineering process. Sections~\ref{sec:models} and~\ref{sec:decay} present the spatial estimation results and the accuracy-distance analysis, addressing RQ1 and RQ2 respectively. Section~\ref{sec:placement} describes the IoT placement artefact and Skåne case study, addressing RQ3. Section~\ref{sec:discussion} discusses findings in relation to existing work, limitations, and implications for urban IoT planning. Section~\ref{sec:conclusion} concludes with a summary of contributions and directions for future research.
+The remainder of this thesis is organised as follows. Section~\ref{sec:background} reviews the relevant literature across urban air quality monitoring, spatial estimation methods, IoT sensor networks, and sensor placement optimization, and identifies the research gaps this work addresses. Section~\ref{sec:methodology} presents the research methodology, including the Design Science Research framing, the data and validation design, and the justification for all methodological choices. Section~\ref{sec:data} describes the data sources and feature engineering process. Sections~\ref{sec:models} and~\ref{sec:decay} present the spatial estimation results and the accuracy-distance analysis, addressing RQ1 and RQ2 respectively. Section~\ref{sec:placement} describes the IoT placement artefact and the national case study, addressing RQ3. Section~\ref{sec:discussion} discusses findings in relation to existing work, limitations, and implications for urban IoT planning. Section~\ref{sec:conclusion} concludes with a summary of contributions and directions for future research.
 
 \section{Background and Related Work}
 \label{sec:background}
@@ -238,13 +238,13 @@ The Peffers et al.\ \cite{peffers_dsr_2007} framework prescribes six phases of d
   RQ1 specifies the target: an ML estimation model whose out-of-sample accuracy at withheld stations is characterised under a spatially honest validation protocol. RQ2 specifies the distance-accuracy decay relationship and the reliable prediction distance threshold. RQ3 specifies the placement artefact: a prioritised set of IoT sensor deployment coordinates for a Swedish metropolitan case study, grounded in the empirical results of RQ1 and RQ2. \\
 \addlinespace
 3. Design and development &
-  A spatial estimation framework is constructed using a Random Forest model with land-use, topographic, and meteorological covariates, evaluated against IDW and land-use regression (LUR) benchmarks under a buffered spatial leave-one-out cross-validation protocol. The per-station error-distance relationship is modelled to produce a decay curve and a threshold. A greedy sequential placement algorithm operationalises the threshold as a spatial coverage objective over the Skåne study area. \\
+  A spatial estimation framework is constructed using a Random Forest model with land-use, topographic, and meteorological covariates, evaluated against IDW and land-use regression (LUR) benchmarks under a buffered spatial leave-one-out cross-validation protocol. The per-station error-distance relationship is modelled to produce a decay curve and a threshold. A greedy sequential placement algorithm operationalises the threshold as a spatial coverage objective over the national territory. \\
 \addlinespace
 4. Demonstration &
-  The placement artefact is applied to the Skåne administrative region as a case study, producing a prioritised list of IoT sensor deployment coordinates alongside before-and-after coverage uncertainty maps. \\
+  The placement artefact is applied to Sweden nationally as the case study, producing a prioritised list of IoT sensor deployment coordinates across all regions alongside before-and-after coverage uncertainty maps. \\
 \addlinespace
 5. Evaluation &
-  The estimation model is evaluated by RMSE, MAE, and R\textsuperscript{2} per pollutant, benchmarked against IDW and LUR. The placement artefact is evaluated by the proportion of the Skåne urban area brought within reliable prediction distance of at least one sensor (existing or newly placed) as the primary real-world criterion. \\
+  The estimation model is evaluated by RMSE, MAE, and R\textsuperscript{2} per pollutant, benchmarked against IDW and LUR. The placement artefact is evaluated by the proportion of Swedish urban area brought within reliable prediction distance of at least one sensor (existing or newly placed), and by the number of currently unmonitored regions transitioning to served, as the primary real-world criteria. \\
 \addlinespace
 6. Communication &
   Findings are presented in this thesis, with methodology, empirical results, and artefact design reported in sufficient detail for replication and extension. \\
@@ -296,7 +296,7 @@ A potential confound must be acknowledged: stations with small inter-station dis
 \subsection{Sensor Placement Optimisation}
 \label{sec:placement-method}
 
-The placement optimisation addresses RQ3 by identifying candidate IoT sensor locations that would most efficiently extend the reliable coverage of the existing reference network within the Skåne study area. An uncertainty surface is first constructed over the Skåne administrative region by computing, for each cell of a regular spatial grid, the distance to the nearest existing reference station. Grid cells whose nearest-station distance exceeds the reliable prediction distance threshold derived in Section~\ref{sec:decay-method} are classified as underserved by the current network.
+The placement optimisation addresses RQ3 by identifying candidate IoT sensor locations that would most efficiently extend the reliable coverage of the existing reference network across Sweden. An uncertainty surface is constructed over the national territory by computing, for each cell of a regular spatial grid, the distance to the nearest existing reference station. Grid cells whose nearest-station distance exceeds the reliable prediction distance threshold derived in Section~\ref{sec:decay-method} are classified as underserved by the current network.
 
 The placement procedure is a greedy sequential algorithm. At each step, the candidate location whose addition to the sensor set would maximally reduce the total underserved area is selected. The procedure produces a ranked list of deployment coordinates, with each successive location providing the greatest marginal coverage gain over what preceding placements have already achieved. Placement continues until a specified number of sensors has been added or until the residual underserved area falls below a defined tolerance.
 
@@ -319,8 +319,8 @@ RMSE (µg/m\textsuperscript{3}) & RQ1 (primary) & Penalises large errors more he
 MAE (µg/m\textsuperscript{3}) & RQ1 (secondary) & Robust to outliers; complements RMSE; reported for completeness \\
 R\textsuperscript{2} & RQ1 & Required for comparison with ESCAPE LUR benchmarks reported in R\textsuperscript{2} form \cite{eeftens_escape_pm_2012, beelen_escape_no2_2013} \\
 Reliable prediction distance threshold (km) & RQ2 & Distance at which expected RMSE reaches the criterion bound; derived separately per pollutant \\
-Proportion of urban area within threshold (\%) & RQ3 & Primary real-world DSR evaluation criterion; percentage of Skåne urban area within reliable prediction distance of at least one sensor, before and after placement \\
-Municipalities transitioning to served (\#) & RQ3 (secondary) & Number of Skåne municipalities with no existing station within threshold that would be served by the proposed placements \\
+Proportion of urban area within threshold (\%) & RQ3 & Primary real-world DSR evaluation criterion; percentage of Swedish urban area within reliable prediction distance of at least one sensor, before and after placement \\
+Regions transitioning to served (\#) & RQ3 (secondary) & Number of Swedish regions currently without any station within threshold that would be served by the proposed placements \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -350,7 +350,7 @@ All metrics are computed separately for PM2.5 and NO2. Model performance is asse
 
 \section{IoT Placement Optimization}
 \label{sec:placement}
-% TODO (Phase 7): DSR artefact design; placement approach per Phase 3 choices; Skåne case study; coverage uncertainty heatmap; prioritized deployment coordinates. Addresses RQ3.
+% TODO (Phase 7): DSR artefact design; placement approach per Phase 3 choices; national case study (all Sweden); coverage uncertainty heatmap; prioritized deployment coordinates by region. Addresses RQ3.
 
 \section{Analysis and Discussion}
 \label{sec:discussion}
@@ -373,7 +373,7 @@ All metrics are computed separately for PM2.5 and NO2. Model performance is asse
 \section{Model Hyperparameters}
 % TODO: RF, XGBoost, Kriging configuration details
 
-\section{PSO Placement Parameters}
-% TODO: algorithm settings, grid resolution, convergence criteria
+\section{Placement Algorithm Parameters}
+% TODO: greedy sequential algorithm settings, grid resolution, stopping criteria
 
 \end{document}

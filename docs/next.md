@@ -1,6 +1,6 @@
 # next.md -- current state and what's next
 
-## Where we are (as of 2026-06-05)
+## Where we are (as of 2026-06-18)
 
 Phases 1, 2, and 3 complete. §§1, 2, and 3 drafted in `writing/thesis.tex`.
 
@@ -32,32 +32,129 @@ Phases 1, 2, and 3 complete. §§1, 2, and 3 drafted in `writing/thesis.tex`.
 **References: no unverified citations remain in the thesis.**
 All % VERIFY flags resolved this session: sweden_dispersion_2024 (Kilbo Edlund et al. 2024) and pso_node_deployment_2024 (Bhargavi et al. 2024). valavi_blockcv_2019 added (Valavi et al. 2019, Methods in Ecology and Evolution).
 
+## Session summary (2026-06-15)
+
+This session covered four areas: supervisor preparation, expert feedback responses, data source mapping, and the first data download attempt.
+
+### Thesis written sections status
+Phases 1, 2, and 3 complete. §§1, 2, and 3 drafted. No unverified citations remain.
+
+### Expert feedback received and actioned (2026-06-15)
+
+Two rounds of expert critique were received. The following actions were identified:
+
+| Issue | Action | Status |
+|---|---|---|
+| Appendix C still titled "PSO Placement Parameters" | Delete or rewrite as greedy parameters | **Must fix immediately — contradiction in document** |
+| Distance metric not named in §3.4 | Add "Euclidean distance" + justification sentence | Before next draft |
+| COVID-19 strategy vague | Add sensitivity analysis strategy to §3.4: binary COVID indicator covariate + two-model comparison (2020-2024 vs 2022-2024) | Before next draft |
+| Seasonality not addressed in decay model | Add seasonal stratification (winter/summer) to Phase 6 plan; acknowledge in §3.4 | Phase 6 |
+| ESCAPE benchmarks outdated (2012-2013) | Add 1-2 recent northern European LUR studies (post-2018) to §2.3 | Before next draft |
+| IoT infrastructure constraints ignored | Add scope boundary sentence to §3.5 and §8: output is candidate locations, not deployment specs | Before next draft |
+| Sample size justification implicit | Add ESCAPE precedent sentence to §3.2 explicitly | Before next draft |
+| Daily averages scope not stated | Add delimitation sentence to §1 and §8 | Before next draft |
+| PSO not acknowledged as future work | Add one sentence to §3.5 | Before next draft |
+
+**Most urgent:** Fix Appendix C PSO contradiction before sharing with anyone.
+
+### COVID-19 strategy (agreed in session)
+
+Concrete approach for §3.4:
+1. Add binary covariate: COVID_period = 1 for 2020-2021, 0 for 2022-2024. RF model learns the anomaly rather than treating those years as normal.
+2. Sensitivity analysis: run full model on 2020-2024, then re-run on 2022-2024 only. Compare decay curves. If similar, COVID period is not distorting results. If divergent, 2022-2024 model becomes primary.
+
+### Data source mapping (confirmed in session)
+
+| Data | Source | URL | Status |
+|---|---|---|---|
+| PM2.5 + NO2 daily readings | SMHI Datavärdskap Luft | datavardluft.smhi.se/portal/concentrations-in-air | Partially downloaded — see below |
+| Weather covariates | SMHI metobs API | opendata-download-metobs.smhi.se/api | Confirmed accessible; script needed |
+| CORINE Land Cover | EU Copernicus | land.copernicus.eu/pan-european/corine-land-cover | Not yet downloaded |
+| Terrain height (DEM) | Lantmäteriet | lantmateriet.se (Höjddata product) | Not yet downloaded |
+| Population density | Eurostat GEOSTAT | ec.europa.eu/eurostat GEOSTAT grid | Not yet downloaded |
+
+### Air quality data download — first attempt (2026-06-15)
+
+Two ZIP files uploaded and inspected. Both contained the same 11 stations. Assessment:
+
+| Station | Type | Pollutants | Completeness | Verdict |
+|---|---|---|---|---|
+| Bredkälen | Rural Background | NO2 + PM2.5 | 93.7% | PASS |
+| Norunda Stenen | Rural-Regional | NO2 | 97.5% | PASS |
+| Hallahus | Rural-Regional | NO2 | 98.5% | PASS |
+| Burlöv Församlingshemmet | Urban Background | PM2.5 | 92.8% | PASS |
+| Umeå Förskolan Uven | Urban Background | PM2.5 | 91.8% | PASS |
+| Stockholm Olaus Petri | Urban Background | PM2.5 | 63.5% | FAIL — below 90% |
+| Piteå Prästgårdsgatan | Urban Traffic | NO2 | 81.2% | FAIL — short + incomplete |
+| Köping Glasgatan | Urban Traffic | NO2 | 96.5% | FAIL — 2020 only |
+| Stockholm Valhallavägen 81 | Urban Background | PM2.5 | 93.3% | FAIL — ends Sep 2022 |
+| Kramfors Limstagatan | Urban Traffic | NO2 | 97.8% | FAIL — only 6 months |
+| Råö | Rural Background | NO2 + PM2.5 | 22.8% | FAIL — almost no data |
+
+**Problem:** 11 stations is far too few. The portal exported a subset, not the full national network. The thesis needs 50-100 stations.
+
+**Solution agreed:** Use the SMHI metobs-style API (or the Datavärdskap Luft bulk download) to pull all stations programmatically. A Python script needs to be written to do this.
+
+### Time period discussion (2026-06-15)
+
+Question raised: should the study period be extended beyond 2020-2024 to capture more stations (including those that stopped before 2020)?
+
+Decision framework agreed:
+1. First: run the full API download for 2020-2024 and count actual stations
+2. If 60+ stations nationally → keep 2020-2024, no change
+3. If fewer than 40-50 stations → consider modest extension to 2017-2018 to bring in closed stations that add spatial coverage
+4. Extension is only justified if it adds new station LOCATIONS, not just more years of the same locations
+5. NO2 extension carries higher risk (emission regime changed pre/post Euro 6); PM2.5 extension is lower risk
+6. Any extension requires supervisor discussion before implementing
+
+## Data status (as of 2026-06-18)
+
+### Air quality data: collected
+- 34 unique stations with both PM2.5 and NO2 (hourly, 2020-2024)
+- 13 pass quality filters (≥90% completeness, ≥80% period coverage)
+- Regional breakdown: Stockholm (11 raw / 6 pass), Uppsala (2/2), Östergötland (3/1), Västernorrland (3/1), Skåne (3/1), Kalmar (1/1), Jämtland (2/1), plus 7 regions with 0-1 raw stations passing
+- 7 of 21 Swedish regions have zero stations: Södermanland, Jönköping, Gotland, Blekinge, Örebro, Dalarna, Norrbotten
+- Files: Desktop "Data NO2& PM2.5" folder (32 hourly) + Downloads Bredkälen (daily) + Råö (daily, PM2.5 unusable)
+
+### Case study scope: changed to all Sweden (2026-06-18)
+- RQ3 now covers Sweden nationally, not Skåne only
+- Rationale: only 1 passing station in Skåne; 7 unmonitored regions nationally make Sweden the more defensible and impactful scope
+- All Skåne references removed from §§1 and 3; Appendix C renamed from "PSO Placement Parameters" to "Placement Algorithm Parameters"
+
+### Still needed
+- Meteorological covariates: Python script to download from SMHI metobs API (34 stations)
+- CORINE Land Cover for Sweden
+- DEM (Lantmäteriet Höjddata)
+- Population density (Eurostat GEOSTAT)
+
 ## Immediate next step
 
-**Phase 4: Data feasibility audit.** This must be done before any code is written.
+**Write and run the Python API script to download meteorological covariates from SMHI metobs for all 34 stations.**
 
-Phase 4 confirms whether the Phase 3 methodology is executable with the available data. Two scope decision points:
-1. If Skåne PM2.5 coverage is too sparse, expand geographic scope to southern Sweden
-2. If national station count falls below a viable RF training threshold, return to Phase 3 to revisit model scope
+The script should:
+1. Query the Datavärdskap Luft API or portal bulk endpoint for all stations with PM2.5 data
+2. Query the same for all stations with NO2 data
+3. Filter to 2020-2024 daily averages
+4. Save one CSV per station (matching the format already seen in the portal files)
+5. Count stations and apply 90% completeness filter
+6. Report: how many PM2.5 stations pass? How many NO2 stations pass? How many have both?
 
-Phase 4 also resolves the one open dependency from §3: the buffered SLOO exclusion buffer radius, which §3.3 defers to the inter-station distance distribution established here.
-
-**Work sequence for Phase 4:**
-1. Pull SMHI Luftwebb station inventory: count PM2.5 and NO2 stations nationally and in Skåne
-2. Check data completeness by station and year (2020-2024); apply 90% threshold
-3. Confirm SMHI metobs API access; test pull of meteorological covariates
-4. Download and verify CORINE Land Cover for Sweden
-5. Identify DEM source (Lantmäteriet) and confirm coverage for Skåne
-6. Confirm population density grid source and resolution
-7. Establish inter-station distance distribution; set buffered SLOO exclusion radius
-8. Make the two geographic scope decisions
-9. Document audit results in `docs/data-audit.md`
+After the count: make the time period decision and the Skåne vs. southern Sweden scope decision.
 
 ## Open threads
 
+- **Appendix C** — PSO contradiction must be fixed immediately
+- **§3.4 COVID strategy** — write the paragraph with the sensitivity analysis approach
+- **§3.2 sample size** — add ESCAPE precedent sentence
+- **§3.4 distance metric** — add Euclidean + justification explicitly
+- **§2.3 benchmarks** — find 1-2 post-2018 northern European LUR studies
+- **§3.5 and §8** — add infrastructure scope boundary and PSO future work sentences
+- **§1 and §8** — add daily averages scope delimitation
 - Buffered SLOO exclusion radius: set in Phase 4 from inter-station distance distribution
-- Decay threshold criterion (specific error bound): set in Phase 5 after EDA
+- Decay threshold criterion: set in Phase 5 after EDA
 - Logo file needed before first LaTeX compile: `writing/images/logo.jpg`
+- Time period decision: pending full station count from API download
+- Seasonal decay curves: add to Phase 6 task list
 
 ## Decisions made (all sessions to date)
 
@@ -68,4 +165,8 @@ Phase 4 also resolves the one open dependency from §3: the buffered SLOO exclus
 - All \label{} commands added to sections for cross-referencing
 - **Phase 3 council complete (2026-06-05):** buffered SLOO; RF + LUR + IDW; PM2.5 and NO2 modelled separately; greedy sequential placement; real-world DSR criterion in §3.6; full record in `docs/decisions/phase3-methodology.md`
 - **Phase 3 §3 drafted (2026-06-05):** all seven subsections written; all ten council conditions met; no assumed choices remain
-- All % VERIFY citations resolved (2026-06-05); references.bib clean
+- **All % VERIFY citations resolved (2026-06-05)**
+- **Data source locations confirmed (2026-06-15):** Datavärdskap Luft portal, metobs API, CORINE, Lantmäteriet, Eurostat GEOSTAT
+- **Portal download filter decisions (2026-06-15):** all Län (national), all Kommun (unfiltered), all stations (Alla), Dygn resolution, all Områdesklassificering, all Klassificering
+- **Time period rationale confirmed (2026-06-15):** 2020-2024; extension only if station count below threshold after full API download
+- **COVID strategy agreed (2026-06-15):** binary covariate + sensitivity analysis (2020-2024 vs 2022-2024 models)
