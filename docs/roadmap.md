@@ -7,7 +7,7 @@
 | Phase 1 complete (§1 Introduction drafted) | 2026-06-12 | Done |
 | Phase 2 complete (§2 Background drafted) | 2026-06-22 | Done |
 | Phase 3 complete (§3 Methodology argued and drafted) | 2026-06-29 | Done (2026-06-05) |
-| Phase 4 complete (data feasibility confirmed) | 2026-07-06 | Pending |
+| Phase 4 complete (data feasibility confirmed) | 2026-07-06 | Done (2026-06-18) |
 | Phase 5 complete (unified feature matrix ready) | 2026-07-13 | Pending |
 | Phase 6 complete (RQ1 and RQ2 answered) | 2026-07-20 | Pending |
 | Phase 7 complete (RQ3 answered; artefact produced) | 2026-07-24 | Pending |
@@ -122,20 +122,20 @@
 
 ## Phase 4: Data feasibility audit
 
-**Status:** In Progress (started 2026-06-17)
+**Status:** Done (2026-06-18)
 
 **Goal:** Confirm the Phase 3 methodology is executable with the available data. Can adjust scope; cannot adjust methodology without returning to Phase 3.
 
 - [x] Pull SMHI Luftwebb station inventory: count PM2.5 and NO2 stations nationally (2026-06-17)
 - [x] Check data completeness by station and year (2020-2024); apply 90% threshold (2026-06-17)
-- [ ] Confirm SMHI metobs API access; write and run meteorological covariates download script
-- [ ] Download and verify CORINE Land Cover for Sweden
-- [ ] Identify DEM source (Lantmäteriet Höjddata) and confirm national coverage
-- [ ] Confirm population density grid source and resolution (Eurostat GEOSTAT)
-- [ ] Establish inter-station distance distribution → set buffered SLOO exclusion radius
+- [x] Confirm SMHI metobs API access; write and run meteorological covariates download script (2026-06-18)
+- [x] Download and verify CORINE Land Cover for Sweden (2026-06-18)
+- [x] Download EU-DEM, clip to Sweden at 100m (2026-06-18)
+- [x] Confirm population density grid source and resolution (Eurostat GEOSTAT JRC 2018) (2026-06-18)
+- [x] Establish inter-station distance distribution → set buffered SLOO exclusion radius (preliminary: 5 km) (2026-06-18)
 - [x] **Decision point:** Skåne PM2.5 coverage too sparse (1 passing station) → case study expanded to all Sweden (2026-06-18)
 - [x] **Decision point:** National station count below 40-50 threshold (13 passing, 34 raw) → §3 updated; supervisor discussion required before any time period extension
-- [ ] Document audit results in `docs/data-audit.md`
+- [x] Document audit results in `docs/data-audit.md` (2026-06-18)
 
 ---
 
@@ -224,7 +224,7 @@
 
 | Choice | Decided in |
 |---|---|
-| Buffered SLOO exclusion radius | Phase 4 (inter-station distance audit) |
+| Buffered SLOO exclusion radius | **Preliminary: 5 km** (set Phase 4, 2026-06-18); finalize in Phase 5 after variogram |
 | Decay threshold criterion (specific error bound) | Phase 5 (EDA) |
 | COVID-19 period treatment | Phase 5 (EDA) |
 | Time period extension (2017-2018) | Requires supervisor discussion; station count (13 passing) is below the 40-50 threshold agreed in 2026-06-15 session |

@@ -176,17 +176,70 @@ Precipitation (19/34 stations with full 1,827 daily rows):
 
 Final output: `data/raw/metobs/<aq_code>_metobs.csv` (34 files) + `download_log.csv`.
 
+## Session summary (2026-06-18 continued — Phase 4 completion)
+
+### Data downloads completed this session
+
+All three remaining ancillary data sources for Phase 4 have been downloaded and verified.
+
+**CORINE Land Cover 2018:**
+- File: `data/raw/corine/CLC2018.tif`
+- Source: EU Copernicus (land.copernicus.eu), product CLC2018 raster 100m v2020_20u1
+- Format: BigTIFF, EPSG:3035, 100m resolution, 65,000 × 46,000 px, 196.6 MB
+- Contains 44 land-use classes covering all of Europe
+
+**Population density (GEOSTAT JRC 2018):**
+- File: `data/raw/population/JRC_1K_POP_2018.tif`
+- Source: Eurostat GEOSTAT (JRC 1 km² population grid)
+- Format: GeoTIFF, EPSG:3035, 1000m resolution, 4,472 × 5,561 px, 4.0 MB
+
+**EU-DEM v1.1 (Sweden clip):**
+- File: `data/raw/dem/sweden_dem_100m.tif`
+- Source: EU-DEM mosaic (GISCO/Copernicus), original 23 GB uncompressed
+- Clipped via rasterio `/vsizip/` without full extraction; resampled from 25m to 100m (average)
+- Format: GeoTIFF (deflate), EPSG:3035, 100m resolution, 13,000 × 15,700 px, 281.6 MB
+- Elevation range: −58 m to 2415 m (bbox includes SW Norway margin)
+
+### Dependency: rasterio v1.4.4
+
+rasterio (with `/vsizip/` support) installed this session: `pip install rasterio`. Required to read the 23 GB EU-DEM ZIP without full extraction.
+
+### Inter-station distance matrix
+
+- File: `data/raw/metobs/distance_matrix.csv` (34 × 34, Haversine km)
+- File: `data/raw/metobs/stations.csv` (code, name, lat, lon, nn_km)
+
+Key statistics:
+- Min nearest-neighbour: 0.5 km (Stockholm Hornsgatan / Torkel Knutssongatan)
+- Median nearest-neighbour: 10.9 km
+- Max nearest-neighbour: 176.9 km (Bredkälen, isolated Jämtland rural station)
+
+Urban clusters (within-city pairs < 5 km): Stockholm 5 inner-city stations, plus 2-station clusters in Solna, Uppsala, Norrköping, Västerås, Malmö.
+
+### SLOO buffer decision: preliminary 5 km
+
+A 5 km buffer excludes all 24 within-city station pairs from training when any of them is held out. For isolated rural stations (14 of 34 have nearest-neighbour > 5 km), the buffer has no effect.
+
+This is a preliminary value. The final buffer will be set in Phase 5 after computing empirical variograms of PM2.5 and NO2 residuals (Roberts et al. 2017 recommends setting the buffer to the variogram range). Preliminary 5 km is documented in §3.3 as "buffer radius determined in Phase 4."
+
+### Phase 4 complete
+
+All tasks in roadmap.md Phase 4 are now checked. `docs/data-audit.md` written with full documentation of all five data sources.
+
 ## Immediate next step
 
-**Download the three remaining data sources for Phase 4:**
+**Begin Phase 5: Data engineering and EDA.**
 
-1. CORINE Land Cover (EU Copernicus) — land-use features per station buffer
-2. DEM (Lantmäteriet Höjddata) — elevation and terrain features
-3. Population density (Eurostat GEOSTAT grid) — 1 km gridded population
-
-After those are in place, the final Phase 4 task is to compute the inter-station distance matrix and set the SLOO buffer radius.
-
-Then document everything in `docs/data-audit.md` to complete Phase 4.
+Phase 5 entry point:
+1. Ingest the 34 AQ station CSV files from the SMHI Datavärdskap Luft download (Desktop "Data NO2& PM2.5" folder + Downloads)
+2. Parse and align daily PM2.5 and NO2 values per station for 2020-2024
+3. Aggregate metobs hourly data to daily (mean temp/wind/humidity; total or max precip)
+4. Extract CORINE land-use proportions within 500m and 1km buffers per station
+5. Extract DEM elevation and terrain roughness per station
+6. Extract population density within 1km per station
+7. Build unified feature matrix (34 stations × ~1,827 days × ~15 covariates)
+8. Run EDA: missing data audit, spatial distribution maps, correlation heatmap, variogram to finalize SLOO buffer
+9. Write §4 (Data Sources and Feature Engineering)
 
 ## Open threads
 

@@ -4,6 +4,9 @@ __pycache__/
 *.pyc
 .env
 
+# Raw data (large binary files — tracked outside git)
+data/raw/
+
 # LaTeX build artifacts
 *.aux
 *.log
