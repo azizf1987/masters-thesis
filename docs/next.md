@@ -142,21 +142,35 @@ Round 2 -- nearest-station preference too aggressive:
 - `started_early` filter (prefer stations starting before 2020) was applied to ALL parameters. For temperature/wind/humidity near Linköping and Västerås, this selected old sparse stations (Härsnäs: 3,595 rows; Gävle: partial) over nearby active ones.
 - Fixed: `_PREFER_EARLY = {5}` -- only precipitation uses the early-station preference. All other parameters prefer currently active stations (which reliably cover 2020-2024), falling back to period-overlap inactive stations only if no active station exists.
 
-Round 3 -- 5 stations re-downloaded with fix:
-- 338685 (Linköping Hamngatan): temp was 9.9% complete
-- 369485 (Varberg Västra Vallgatan): temp was 7.9% complete
-- 155530 (Västerås Melkertorget): temp was 31.5% complete
-- 344172 (Västerås Stora Gatan): temp was 31.5% complete
-- 338683 (Gävle Staketgatan): temp was 54.4% complete
-- All 5 re-downloaded; second pass running as background job.
+Round 3 -- active-station false positive:
+- Active stations (to = current date) were incorrectly scoring `early=True` via the to-date proxy. Fixed: proxy only applies to inactive stations.
+- Root cause confirmed by debug: active Västerås station (from=invalid, active=True) had to=2026 → early=True → selected over the inactive station at 4.1km.
 
-**Known remaining limitation -- precipitation partial coverage:**
-- Stockholm (10 stations): 367 rows each (via Stockholm-Observatoriekullen A); only ~1 year of data
-- Sundsvall (Heffners): 527 rows
-- Timrå (Fillan): 664 rows
-- Östersund (Litsnäset): 1,767 rows
-- Root cause: no traditional SMHI precipitation gauge started before 2020 near these cities; fallback returns the nearest post-2020 gauge. This is documented in download_log.csv. Phase 5 must handle missing precipitation via imputation or treat it as a known gap.
-- All other stations: full 1,827 rows (5 years daily).
+Round 4 -- final re-download of 3 stations:
+- 155530 (Västerås Melkertorget): temp=14,378 rows (31.5%) — best available; inactive met station operated 2020-02 to 2021-11
+- 344172 (Västerås Stora Gatan): temp=14,378 rows (31.5%) — same met station
+- 369485 (Varberg Västra Vallgatan): temp=5,481 rows (12.0%) — best available; nearest station with unknown start, to=2026-06
+- These 3 are genuine SMHI network gaps; nearest alternative active stations are 25-30km away
+
+**Final audit results (34 station files):**
+
+Temperature (31/34 stations >= 80% coverage):
+- 31 stations: 95-99% hourly coverage (typically 43,000-45,000 rows)
+- 3 stations with genuine SMHI network gaps:
+  - 155530 Västerås Melkertorget: 14,378 rows (31.5%) — inactive station, operated Feb 2020 to Nov 2021 only
+  - 344172 Västerås Stora Gatan: 14,378 rows (31.5%) — same station
+  - 369485 Varberg Västra Vallgatan: 5,481 rows (12.0%) — nearest active early station is Källsjö (30.7km, also sparse)
+  - Nearest full-coverage alternative for both: Eskilstuna A (25.6km) and Nidingen A (30.3km) respectively
+
+Precipitation (19/34 stations with full 1,827 daily rows):
+- Stockholm (10 stations): 367 rows via Stockholm-Observatoriekullen A (post-2023 corrected archive only)
+- Göteborg Haga: 1,032 rows (Barlastplatsen)
+- Sundsvall: 527 rows (Heffners)
+- Timrå: 664 rows (Fillan)
+- Östersund: 1,767 rows (Litsnäset)
+- Kalmar: 141 rows (Lindolundgatan, PST gauge 2023+)
+- Root cause: SMHI transitioned from traditional precipitation gauges to PST network ~2023. No traditional gauge started before 2020 exists within city proximity for these areas.
+- Phase 5 implication: precipitation will have systematic NaN for 2020-2022 at these 15 stations.
 
 **Output format note:** hourly parameters (temp, wind, rh) use datetime key "YYYY-MM-DD HH:MM:SS"; precipitation uses date key "YYYY-MM-DD". Phase 5 must join on date when building the daily feature matrix.
 
@@ -164,12 +178,15 @@ Final output: `data/raw/metobs/<aq_code>_metobs.csv` (34 files) + `download_log.
 
 ## Immediate next step
 
-**Verify the full metobs download completed cleanly** (check download_log.csv for failed stations).
+**Download the three remaining data sources for Phase 4:**
 
-Then three more data sources needed before Phase 5:
-- CORINE Land Cover (EU Copernicus)
-- DEM (Lantmäteriet Höjddata)
-- Population density (Eurostat GEOSTAT grid)
+1. CORINE Land Cover (EU Copernicus) — land-use features per station buffer
+2. DEM (Lantmäteriet Höjddata) — elevation and terrain features
+3. Population density (Eurostat GEOSTAT grid) — 1 km gridded population
+
+After those are in place, the final Phase 4 task is to compute the inter-station distance matrix and set the SLOO buffer radius.
+
+Then document everything in `docs/data-audit.md` to complete Phase 4.
 
 ## Open threads
 
