@@ -1,6 +1,6 @@
 # next.md -- current state and what's next
 
-## Where we are (as of 2026-06-18)
+## Where we are (as of 2026-06-18, session 2)
 
 Phases 1, 2, and 3 complete. §§1, 2, and 3 drafted in `writing/thesis.tex`.
 
@@ -127,16 +127,49 @@ Decision framework agreed:
 - DEM (Lantmäteriet Höjddata)
 - Population density (Eurostat GEOSTAT)
 
+## Metobs download script: status (2026-06-18)
+
+Script `data/download_metobs.py` written, debugged, and running.
+
+**Bugs found and fixed this session (3 rounds of debugging):**
+
+Round 1 -- wrong parameter IDs and station coverage:
+- Parameter 17 is precipitation (Nederbördsmängd), NOT wind direction. Wind direction is parameter **3** (Vindriktning, 185 active stations).
+- Active PST precipitation gauges near AQ stations all started 2023. Fixed: include stations whose period overlaps 2020-2024 (not just `active: true`).
+- Precipitation CSV uses different column layout ("Från Datum...") vs hourly ("Datum;Tid..."). Fixed: parser detects header type and reads correct columns.
+
+Round 2 -- nearest-station preference too aggressive:
+- `started_early` filter (prefer stations starting before 2020) was applied to ALL parameters. For temperature/wind/humidity near Linköping and Västerås, this selected old sparse stations (Härsnäs: 3,595 rows; Gävle: partial) over nearby active ones.
+- Fixed: `_PREFER_EARLY = {5}` -- only precipitation uses the early-station preference. All other parameters prefer currently active stations (which reliably cover 2020-2024), falling back to period-overlap inactive stations only if no active station exists.
+
+Round 3 -- 5 stations re-downloaded with fix:
+- 338685 (Linköping Hamngatan): temp was 9.9% complete
+- 369485 (Varberg Västra Vallgatan): temp was 7.9% complete
+- 155530 (Västerås Melkertorget): temp was 31.5% complete
+- 344172 (Västerås Stora Gatan): temp was 31.5% complete
+- 338683 (Gävle Staketgatan): temp was 54.4% complete
+- All 5 re-downloaded; second pass running as background job.
+
+**Known remaining limitation -- precipitation partial coverage:**
+- Stockholm (10 stations): 367 rows each (via Stockholm-Observatoriekullen A); only ~1 year of data
+- Sundsvall (Heffners): 527 rows
+- Timrå (Fillan): 664 rows
+- Östersund (Litsnäset): 1,767 rows
+- Root cause: no traditional SMHI precipitation gauge started before 2020 near these cities; fallback returns the nearest post-2020 gauge. This is documented in download_log.csv. Phase 5 must handle missing precipitation via imputation or treat it as a known gap.
+- All other stations: full 1,827 rows (5 years daily).
+
+**Output format note:** hourly parameters (temp, wind, rh) use datetime key "YYYY-MM-DD HH:MM:SS"; precipitation uses date key "YYYY-MM-DD". Phase 5 must join on date when building the daily feature matrix.
+
+Final output: `data/raw/metobs/<aq_code>_metobs.csv` (34 files) + `download_log.csv`.
+
 ## Immediate next step
 
-**Write and run the Python script to download meteorological covariates from SMHI metobs API for all 34 stations.**
+**Verify the full metobs download completed cleanly** (check download_log.csv for failed stations).
 
-The script queries the SMHI Open Data API for temperature, wind speed, wind direction, humidity, and precipitation. For each of the 34 AQ stations, it finds the nearest met station for each parameter and downloads 2020-2024 hourly data. Output: one merged CSV per AQ station in `data/raw/metobs/`.
-
-After that, three more data sources needed before Phase 5 can start:
+Then three more data sources needed before Phase 5:
 - CORINE Land Cover (EU Copernicus)
-- DEM — Lantmäteriet Höjddata
-- Population density — Eurostat GEOSTAT grid
+- DEM (Lantmäteriet Höjddata)
+- Population density (Eurostat GEOSTAT grid)
 
 ## Open threads
 
