@@ -226,9 +226,60 @@ This is a preliminary value. The final buffer will be set in Phase 5 after compu
 
 All tasks in roadmap.md Phase 4 are now checked. `docs/data-audit.md` written with full documentation of all five data sources.
 
+## Session summary (2026-06-22 — Phase 5 started)
+
+### Feature matrix built
+
+Script: `data/build_feature_matrix.py`
+Output: `data/processed/feature_matrix.csv`
+
+**Shape:** 48,283 rows × 36 columns
+**Study period:** 2020-01-01 to 2024-12-31 (1,827 days)
+**Stations:** 34
+
+**Columns:** date, station_code, station_name, station_type, lat, lon, covid_period, temp_C, wind_speed_ms, wind_dir_deg, rh_pct, precip_mm, [18 CORINE features at 500m and 1km], elevation_m, terrain_rough_m, pop_1km, pop_5km, NO2_ugm3, PM25_ugm3
+
+### EDA findings
+
+**Station completeness (revised):** 11 stations pass ≥90% for BOTH NO2 and PM2.5 (previously documented as 13 — revised down after counting against the full 1,827-day period with actual downloaded files).
+
+Passing stations:
+- Bredkälen (Rural Background)
+- Malmö Rådhuset (Urban Background)
+- Stockholm Hornsgatan (Urban Traffic)
+- Stockholm Torkel Knutssongatan (Urban Background)
+- Norr Malma (Rural-Regional Background)
+- Sollentuna E4 Häggvik (Urban Traffic)
+- Sundsvall Köpmangatan (Urban Traffic)
+- Uppsala Kungsgatan (Urban Traffic)
+- Stockholm St Eriksgatan (Urban Traffic)
+- Uppsala Dragarbrunnsgatan (Urban Background)
+- Kalmar Södra Vägen (Urban Traffic)
+
+**Target variable statistics:**
+- NO2: mean 12.85 ± 9.61 µg/m³, range −0.47 to 108.9 (1 negative = instrument artefact, clip to 0)
+- PM2.5: mean 5.26 ± 4.28 µg/m³, range −0.86 to 86.25 (11 negative = instrument artefact, clip to 0)
+- Both distributions right-skewed (P95 = 30.89 and 12.92 respectively)
+
+**Weather covariate completeness:**
+- Temperature: 97.4% (3 stations with poor met coverage reduce this)
+- Wind speed/direction/humidity: 99.4–99.8% (excellent)
+- Precipitation: 68.4% (known limitation: SMHI PST network rollout ~2023)
+
+**COVID signal:**
+- Mean NO2 2020–2021: 13.82 µg/m³ vs 2022–2024: 12.34 µg/m³ (12% higher in COVID period)
+- This is counterintuitive (lockdowns should lower NO2) — likely a station composition effect (more active stations in 2022–2024 include lower-traffic areas). The covid_period binary flag is in the matrix; Phase 6 sensitivity analysis will address this.
+
+### Phase 5 remaining tasks
+
+- [ ] Clip negative values to 0 (12 instrument artefact readings)
+- [ ] Decide precipitation imputation strategy (31.6% missing)
+- [ ] Write §4 (Data Sources and Feature Engineering)
+- [ ] Variogram analysis to finalise SLOO buffer radius
+
 ## Immediate next step
 
-**Begin Phase 5: Data engineering and EDA.**
+**Continue Phase 5:**
 
 Phase 5 entry point:
 1. Ingest the 34 AQ station CSV files from the SMHI Datavärdskap Luft download (Desktop "Data NO2& PM2.5" folder + Downloads)
