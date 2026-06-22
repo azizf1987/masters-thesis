@@ -1,6 +1,31 @@
 # next.md -- current state and what's next
 
-## Where we are (as of 2026-06-18, session 2)
+## Where we are (as of 2026-06-22, session 3)
+
+Phases 1-5 complete. §§1, 2, 3, and 4 drafted in `writing/thesis.tex`. Analytical dataset ready. Next phase is Phase 6 (empirical modelling).
+
+**§4 covers (written this session):**
+- §4.1 Air Quality Observations: SMHI Datavärdskap Luft; 34 stations, 13 pass 90% filter; 2020-2024; station type distribution
+- §4.2 Meteorological Covariates: SMHI metobs API; 5 parameters; aggregation to daily; circular mean wind direction; known gaps (temperature: 3 stations; precipitation: 15 stations)
+- §4.3 Land-Use Features: CORINE CLC 2018 at 100m; 9 class groups; 500m and 1km buffers; 18 features; ESCAPE comparability stated
+- §4.4 Topographic Features: EU-DEM v1.1 at 100m; elevation and terrain roughness (1km buffer SD)
+- §4.5 Population Density: JRC GEOSTAT 2018; pop_1km and pop_5km
+- §4.6 Feature Matrix Construction: 48,283 rows × 37 columns; Table 1 with full column inventory; covid_period flag
+- §4.7 Data Quality: 12 negative values clipped; precipitation imputation (15,236 values, 31.6%); station-level completeness filter confirmed (Göteborg Haga 69%, Östersund 79% fail)
+
+**Five new bibliography entries added to `writing/references.bib`:** smhi_luftwebb, smhi_metobs, corine_clc_2018, eudem_v11, jrc_geostat\_2018 (all marked % VERIFY in thesis.tex)
+
+**Variogram findings (Phase 5 EDA):**
+- Raw variogram range: 150-200 km for NO2; similar for PM2.5
+- This range is operationally impossible given Bredkälen's nearest neighbour is 177 km
+- SLOO buffer confirmed at 5 km: justified by network structure (excludes 24 within-city pairs); sensitivity analysis (10km, 20km) planned in Phase 6
+- Minimum training set per fold: 29 stations (5-station Stockholm cluster held out)
+
+**Cleaned feature matrix:** `data/processed/feature_matrix_clean.csv` (48,283 rows × 37 columns, 10.3 MB)
+
+---
+
+## Where we were (as of 2026-06-18, session 2)
 
 Phases 1, 2, and 3 complete. §§1, 2, and 3 drafted in `writing/thesis.tex`.
 

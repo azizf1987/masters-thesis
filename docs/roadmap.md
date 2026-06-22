@@ -8,7 +8,7 @@
 | Phase 2 complete (§2 Background drafted) | 2026-06-22 | Done |
 | Phase 3 complete (§3 Methodology argued and drafted) | 2026-06-29 | Done (2026-06-05) |
 | Phase 4 complete (data feasibility confirmed) | 2026-07-06 | Done (2026-06-18) |
-| Phase 5 complete (unified feature matrix ready) | 2026-07-13 | Pending |
+| Phase 5 complete (unified feature matrix ready) | 2026-07-13 | Done (2026-06-22) |
 | Phase 6 complete (RQ1 and RQ2 answered) | 2026-07-20 | Pending |
 | Phase 7 complete (RQ3 answered; artefact produced) | 2026-07-24 | Pending |
 | Phase 8 complete (full thesis compiled and submitted) | 2026-08-01 | Pending |
@@ -141,19 +141,29 @@
 
 ## Phase 5: Data engineering
 
-**Status:** Pending (blocked by Phase 4)
+**Status:** Done (2026-06-22)
 
-- [ ] Ingest SMHI air quality records (2020-2024): PM2.5 and NO2 daily averages per station
-- [ ] Pull and align meteorological covariates from metobs API (temperature, wind, humidity)
-- [ ] Extract CORINE land-use features per station (buffer geometry; categorical classes at 100 m, 500 m, 1 km)
-- [ ] Add DEM topographic features (elevation; terrain roughness within buffer)
-- [ ] Add population density grid values within 1 km radius per station
-- [ ] Compute inter-station distance matrix and bearing vectors
-- [ ] Apply 90% completeness filter; document excluded stations
-- [ ] Flag 2020-2021 COVID-19 period; prepare sensitivity analysis split
-- [ ] Define decay threshold criterion (specific error bound) from EDA distributions
-- [ ] Run EDA: distributions, spatial maps, correlations; save figures to `writing/images/`
-- [ ] Write §4 draft (data sources, feature engineering, completeness decisions)
+- [x] Ingest SMHI air quality records (2020-2024): PM2.5 and NO2 daily averages per station
+- [x] Pull and align meteorological covariates from metobs API (temperature, wind, humidity)
+- [x] Extract CORINE land-use features per station (500 m and 1 km buffers; 9 class groups; 18 features)
+- [x] Add DEM topographic features (elevation_m; terrain_rough_m within 1 km buffer)
+- [x] Add population density grid values (pop_1km, pop_5km)
+- [x] Compute inter-station distance matrix (34 × 34 Haversine; done in Phase 4)
+- [x] Apply 90% completeness filter: 13 stations pass (11 for both pollutants; 2 pass only NO2)
+- [x] Flag 2020-2021 COVID-19 period (covid_period binary column; sensitivity analysis planned Phase 6)
+- [x] Run EDA: distributions, negative clipping (12 values), precipitation imputation (15,236 values, 31.6%), empirical variogram
+- [x] Finalise SLOO buffer: 5 km confirmed (variogram raw range 150-200 km is operationally impossible; buffer justified by network structure)
+- [x] Write §4 (Data Sources and Feature Engineering) — all 7 subsections drafted in `writing/thesis.tex`
+- [ ] Decay threshold criterion (specific error bound): deferred to Phase 6 after decay curve fitting
+
+**Output:** `data/processed/feature_matrix_clean.csv` — 48,283 rows × 37 columns (10.3 MB)
+
+**Key findings:**
+- Station count: 13 passing 90% threshold nationally; 7 Swedish regions unmonitored
+- SLOO buffer: 5 km final (excludes 24 within-city pairs; minimum training set 29 stations)
+- Precipitation: 31.6% missing, imputed with monthly station climatological mean; precip\_observed flag added
+- Negative AQ values: 12 clipped to 0
+- COVID signal: mean NO2 13.82 µg/m³ (2020-2021) vs 12.34 µg/m³ (2022-2024); likely station composition effect
 
 ---
 

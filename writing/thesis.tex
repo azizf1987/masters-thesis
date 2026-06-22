@@ -338,7 +338,93 @@ All metrics are computed separately for PM2.5 and NO2. Model performance is asse
 
 \section{Data and Feature Engineering}
 \label{sec:data}
-% TODO (Phase 5): SMHI Luftwebb; metobs API; CORINE land cover; DEM; population density; feature matrix construction; 90\% completeness filter; COVID-19 period flag; missing-data handling.
+
+This study draws on five open-access data sources to construct the unified feature matrix used in the spatial estimation and placement analyses: SMHI air quality observations, SMHI meteorological covariates, CORINE Land Cover 2018, the EU Digital Elevation Model, and the Eurostat GEOSTAT 2018 population grid. All sources use the ETRS89 Lambert Azimuthal Equal-Area projection (EPSG:3035) as the common coordinate reference system, which preserves area measurements consistently across the Swedish study extent. The remainder of this section describes each source, the feature extraction procedures applied, and the data quality decisions made prior to modelling.
+
+\subsection{Air Quality Observations}
+\label{sec:data-aq}
+
+Air quality measurements were obtained from SMHI Datavärdskap Luft, Sweden's national air quality data repository~\cite{smhi_luftwebb}.% VERIFY
+The data consist of daily mean surface concentrations of NO$_2$ and PM$_{2.5}$ at reference monitoring stations across Sweden. The study period spans 1 January 2020 to 31 December 2024, corresponding to 1,827 calendar days. Observations were downloaded in semicolon-delimited CSV format from the Luftwebb portal for all stations reporting at least one of the two target pollutants during this period.
+
+A total of 34 stations were identified with PM$_{2.5}$ or NO$_2$ records in the study period. To ensure that spatial estimation models are trained on reliable time series, a completeness threshold of 90 per cent of daily records was applied per station and per pollutant. Thirteen of the 34 stations meet this threshold and form the analytical sample for model development and validation. These 13 stations span seven Swedish regions: Stockholm (six stations), Uppsala (two stations), Östergötland, Västernorrland, Skåne, Kalmar, and Jämtland (one station each). The majority are classified as urban traffic or urban background stations. One station, Norr Malma in Norrtälje, is classified as rural background; it is the sole non-urban station in the analytical sample, a constraint of the Swedish national monitoring network that is addressed in the accuracy-distance analysis (Section~\ref{sec:decay}).
+
+All 34 stations are retained in the feature matrix with their static covariate records. The 13 high-completeness stations serve as the training and validation set; the remaining 21 stations provide supplementary covariate observations. PM$_{2.5}$ and NO$_2$ are modelled and analysed separately throughout, reflecting their different spatial gradient characteristics and emission source profiles.
+
+\subsection{Meteorological Covariates}
+\label{sec:data-metobs}
+
+Meteorological covariates were retrieved from the SMHI Open Data meteorological observation API~\cite{smhi_metobs}.% VERIFY
+For each of the 34 AQ stations, the nearest available SMHI surface observation station was identified for each of five parameters: air temperature (degrees Celsius), wind speed (m$\cdot$s$^{-1}$), wind direction (degrees), relative humidity (per cent), and precipitation (mm/day). Parameters were downloaded at hourly resolution and aggregated to daily values. Wind direction was aggregated using the circular mean of the sine and cosine components to handle the 0\textdegree/360\textdegree{} discontinuity. Precipitation was stored as daily totals in the source files and was carried forward without aggregation.
+
+These five parameters capture the principal atmospheric drivers of near-surface pollutant transport and accumulation. Wind speed and direction govern advective dispersal and local plume dilution. Air temperature influences boundary layer mixing height and photochemical NO$_2$ formation. Relative humidity affects PM$_{2.5}$ hygroscopic growth and secondary aerosol partitioning. Precipitation is associated with wet deposition and pollutant scavenging.
+
+Coverage varies across parameters. Wind speed, wind direction, and relative humidity were available at all 34 stations with greater than 95 per cent daily completeness. Air temperature was available at 31 stations with adequate coverage; the three remaining stations, two in Västerås and one in Varberg, are affected by the operational closure or inactivity of their nearest meteorological observation station during parts of the study period. Precipitation coverage was substantially lower: only 19 of 34 stations have complete daily records, with the remaining 15 stations affected by SMHI's phased transition from traditional precipitation gauges to the PST sensor network, which resulted in systematic gaps for 2020 to 2022 at many urban stations. The handling of missing precipitation values is described in Section~\ref{sec:data-quality}.
+
+\subsection{Land-Use Features}
+\label{sec:data-corine}
+
+Land-use composition around each station was characterised using the CORINE Land Cover 2018 raster product (version 2020\_20u1) from the EU Copernicus Land Monitoring Service~\cite{corine_clc_2018}.% VERIFY
+The raster is provided at 100 m spatial resolution in EPSG:3035 and covers the full extent of Sweden. Land-use buffer features at circular radii of 500 m and 1 km around each station are a standard input in European LUR modelling~\cite{hoek_lur_review_2008, eeftens_escape_pm_2012, beelen_escape_no2_2013}; the same buffer scales are adopted here to maintain comparability with the ESCAPE benchmarks.
+
+The 44 CORINE classes were aggregated into nine functionally meaningful groups: continuous urban fabric (class 111), discontinuous urban fabric (class 112), industrial and commercial areas (class 121), road and rail networks (class 122), ports and airports (classes 123 and 124), green urban areas (classes 141--142), agricultural land (classes 211--244), forest (classes 311--324), and water bodies and wetlands (classes 411--523). The proportion of each group within a circular buffer was computed for both the 500 m and 1 km radii, yielding 18 land-use proportion features per station. All proportions within each buffer radius sum to 1.0.
+
+\subsection{Topographic Features}
+\label{sec:data-dem}
+
+Elevation data were derived from the EU-DEM version 1.1 mosaic produced by the European Environment Agency under the Copernicus programme~\cite{eudem_v11}.% VERIFY
+The original mosaic covers Europe at 25 m resolution in EPSG:3035. To reduce storage requirements while retaining sufficient spatial detail for station-level extraction, the raster was resampled to 100 m resolution using spatial averaging and clipped to the Swedish national extent. The resulting file covers an elevation range of $-58$ m to 2,415 m, with the upper range attributable to Norwegian mountain areas near the western border.
+
+Two topographic features were extracted per station: (1) elevation at the station location in metres, obtained by bilinear interpolation from the resampled DEM, and (2) terrain roughness within a 1 km buffer, defined as the standard deviation of elevation values within the buffer. Terrain roughness serves as a proxy for local topographic complexity that may influence near-surface wind flow and pollutant dispersal patterns.
+
+\subsection{Population Density}
+\label{sec:data-population}
+
+Gridded population data were taken from the Eurostat GEOSTAT 2018 population grid, produced by the Joint Research Centre~\cite{jrc_geostat_2018}.% VERIFY
+The grid provides population counts at 1 km$^2$ resolution in EPSG:3035. Two features were extracted per station: total population within a 1 km radius and total population within a 5 km radius. These two scales capture the immediate residential density around the station and the broader urban agglomeration, respectively. Population density is an established predictor in LUR models, reflecting the aggregate contribution of residential heating, traffic, and economic activity to local pollution concentrations~\cite{hoek_lur_review_2008}.
+
+\subsection{Feature Matrix Construction}
+\label{sec:data-matrix}
+
+The five data sources were joined on station code and calendar date to produce a unified daily feature matrix covering all 34 stations and the full 2020--2024 study period. Date-station rows for which both NO$_2$ and PM$_{2.5}$ were simultaneously absent were excluded; all other combinations were retained to preserve as many training observations as possible. The resulting matrix contains 48,283 rows and 37 columns, as listed in Table~\ref{tab:feature-matrix}.
+
+A binary indicator variable \texttt{covid\_period} was added: observations from 2020 and 2021 were assigned the value 1, and observations from 2022 to 2024 were assigned the value 0. This flag enables sensitivity analyses that exclude or stratify the COVID-19 period, during which reduced traffic volumes and industrial activity in Sweden are expected to have altered the feature-target relationships that models are trained to capture.
+
+\begin{table}[ht]
+\caption{Feature matrix column inventory (48,283 rows, 37 columns). CORINE proportions sum to 1.0 within each buffer radius.}
+\label{tab:feature-matrix}
+\small
+\begin{tabular}{llr}
+\hline
+\textbf{Feature group} & \textbf{Description} & \textbf{n} \\
+\hline
+Identification & date, station code, name, type, latitude, longitude & 6 \\
+Period indicator & covid\_period (1 = 2020--2021, 0 = 2022--2024) & 1 \\
+Meteorological & temp\_C, wind\_speed\_ms, wind\_dir\_deg, rh\_pct, & \\
+ & precip\_mm, precip\_observed & 6 \\
+Land use (500 m) & 9 CORINE groups at 500 m buffer & 9 \\
+Land use (1 km) & 9 CORINE groups at 1 km buffer & 9 \\
+Topography & elevation\_m, terrain\_rough\_m & 2 \\
+Population density & pop\_1km, pop\_5km & 2 \\
+Target variables & NO2\_ugm3, PM25\_ugm3 & 2 \\
+\hline
+\textbf{Total} & & \textbf{37} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Data Quality and Missing-Data Handling}
+\label{sec:data-quality}
+
+Three data quality procedures were applied to the raw feature matrix before it was used in model development.
+
+\textbf{Negative concentration clipping.} A small number of daily records contain negative concentration values arising from instrument drift and calibration adjustments in the SMHI reporting pipeline. Twelve such values were identified across the NO$_2$ and PM$_{2.5}$ columns. These values are physically impossible and were clipped to zero. Clipping rather than deletion was chosen to preserve the otherwise complete date-station record.
+
+\textbf{Precipitation imputation.} As noted in Section~\ref{sec:data-metobs}, 15 of the 34 stations have systematic precipitation gaps for 2020--2022 attributable to the phased PST network rollout. Across the full matrix, 15,236 daily precipitation values (31.6 per cent) were absent. These gaps were imputed using a monthly climatological mean: for each station, the mean observed precipitation was computed separately for each calendar month across all available years, and missing values were replaced with the corresponding station-month mean. Where no observed values existed for a given station-month combination, the national monthly median across all stations was used as a fallback. The binary column \texttt{precip\_observed} indicates original measurements (1) versus imputed values (0), enabling downstream sensitivity assessment.
+
+\textbf{Station-level completeness filtering.} The 13 stations used in model training and validation were confirmed by checking completeness against the full 1,827-day study period. Two additional stations, Göteborg Haga (PM$_{2.5}$ completeness: 69 per cent) and Östersund (PM$_{2.5}$ completeness: 79 per cent), were excluded after this verification. Both stations approach the 90 per cent threshold over shorter reference windows but fail it over the full study period.
+
+The cleaned feature matrix, containing 48,283 daily station observations with 37 columns, constitutes the analytical dataset for all subsequent modelling and analysis phases.
 
 \section{Spatial Estimation Models}
 \label{sec:models}
