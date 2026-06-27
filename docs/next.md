@@ -324,14 +324,18 @@ Phase 5 entry point:
 - Case study scope — resolved: all Sweden 2026-06-18
 
 ### Still open (thesis text edits — before next draft)
-- **§3.2 station count** — replace "50-100" with "13-20"; restate parsimony argument
-- **§3.4 COVID strategy** — write paragraph: binary covariate + 2020-2024 vs 2022-2024 sensitivity
-- **§3.4 distance metric** — add "Euclidean distance" explicitly + justification sentence
-- **§3.4 urban/rural stratification** — replace with traffic vs. background contrast (only 1 rural station passes)
-- **§2.3 benchmarks** — add 1-2 post-2018 northern European LUR studies
-- **§3.5 and future §8** — add infrastructure scope boundary sentence; PSO as future work
-- **§1 and future §8** — add daily averages delimitation sentence
-- **§3.2** — add ESCAPE precedent sentence for sample size justification
+- **§8 Discussion** — when written: add daily averages delimitation sentence; add infrastructure scope boundary; note PSO as future work
+
+### Fixed (thesis text edits — 2026-06-27)
+- ~~**§3.2 station count**~~ — updated: "50-100" replaced with actual count (13 stations, 11 concurrent); parsimony argument restated
+- ~~**§3.4 COVID strategy**~~ — paragraph added: binary covariate + 2022-2024 sensitivity run
+- ~~**§3.4 distance metric**~~ — "Euclidean distance" named explicitly + NO2 road-network justification sentence added
+- ~~**§3.4 urban/rural stratification**~~ — replaced with traffic vs. background contrast; 13 stations named explicitly
+- ~~**Appendix B TODO**~~ — "RF, XGBoost, Kriging" replaced with "RF, LUR, and IDW"
+- ~~**§2.3 benchmarks**~~ — sentence added citing sweden_dispersion_2024 as modern Swedish evidence; ESCAPE benchmarks reaffirmed as the standard
+- ~~**§3.5 scope boundary**~~ — paragraph added: output is candidate coordinates not deployment specs; infrastructure constraints out of scope; PSO noted as future work
+- ~~**§1 daily averages delimitation**~~ — rewritten as explicit delimitation: sub-daily dynamics and real-time forecasting stated as outside scope
+- ~~**§3.2 ESCAPE precedent**~~ — sentence added: 13 stations consistent with individual ESCAPE study areas (20--40 sites); parsimony principle justified by precedent
 
 ### Still open (data and decisions)
 - Buffered SLOO exclusion radius: set after inter-station distance matrix computed (Phase 4 remaining)
