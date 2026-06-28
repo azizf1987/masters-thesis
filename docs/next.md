@@ -1,5 +1,45 @@
 # next.md -- current state and what's next
 
+## Where we are (as of 2026-06-28, session 4)
+
+Phases 1-6 complete. §§1, 2, 3, 4, 5, and 6 drafted in `writing/thesis.tex`. Phase 7 (placement artefact) is next.
+
+**Phase 6 results (computed in `data/phase6_modelling.py`):**
+
+Output files in `data/results/`:
+- `station_metrics.csv` — per-station RMSE/MAE/R² for RF, LUR, IDW (both pollutants)
+- `decay_curves.csv` — fitted decay curve parameters and AIC/BIC
+- `sloo_predictions_no2.csv` / `sloo_predictions_pm25.csv` — full SLOO prediction arrays
+- `covid_sensitivity.csv` — 2022-2024 vs 2020-2024 comparison
+- `stratification_summary.csv` — traffic/background and seasonal breakdowns
+
+Figures in `writing/images/`:
+- `fig_metrics_comparison.png` — per-station RMSE bar chart (used in §5)
+- `fig_decay_no2.png` / `fig_decay_pm25.png` — decay curves (used in §6)
+- `fig_scatter_no2.png` / `fig_scatter_pm25.png` — predicted vs. actual (not yet in thesis)
+
+**Key findings for §5 (RQ1):**
+- NO2 RF mean RMSE: 7.36 µg/m³; LUR: 15.33; IDW: 8.90
+- PM2.5 RF mean RMSE: 3.56 µg/m³; LUR: 5.87; IDW: 2.33
+- RF beats LUR for both pollutants; IDW beats RF for PM2.5 (smooth spatial gradients)
+
+**Key findings for §6 (RQ2):**
+- NO2: distance-error relationship confounded by rural/urban station type; RF shows inverted pattern
+- PM2.5: exponential decay (IDW: RMSE = 1.40·exp(0.0099·d)); reliable threshold ~64 km
+- NO2 IDW: log decay; reliable threshold ~6 km (traffic stations; interpreted with caution)
+- COVID sensitivity: results consistent between 2020-2024 and 2022-2024 (< 1 µg/m³ difference at most stations)
+- Winter errors higher than summer for both pollutants (heating season inversion effect)
+
+**§5 and §6 written this session. No unverified citations added.**
+
+**Immediate next step: Phase 7 (placement artefact)**
+- Build national uncertainty grid from Phase 6 decay results (all Sweden, 10 km grid)
+- Implement greedy sequential placement algorithm
+- Evaluate against DSR coverage criterion (proportion of Swedish urban area within reliable estimation range)
+- Write §7
+
+---
+
 ## Where we are (as of 2026-06-22, session 3)
 
 Phases 1-5 complete. §§1, 2, 3, and 4 drafted in `writing/thesis.tex`. Analytical dataset ready. Next phase is Phase 6 (empirical modelling).

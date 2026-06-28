@@ -1,0 +1,9 @@
+pollutant,group,n,RF_RMSE_mean,LUR_RMSE_mean,IDW_RMSE_mean,RF_R2_mean
+NO2,Traffic,6,8.299,7.99,7.437,-0.028
+NO2,Background,5,6.028,24.13,10.662,-26.155
+PM25,Traffic,6,3.411,5.646,1.867,0.216
+PM25,Background,5,3.734,6.139,2.88,-0.564
+NO2,Summer (May-Oct),9966,7.134,16.852,8.319,0.279
+NO2,Winter (Nov-Apr),9820,8.735,18.71,11.062,0.363
+PM25,Summer (May-Oct),9972,3.363,6.222,2.057,0.165
+PM25,Winter (Nov-Apr),9837,3.904,6.884,3.217,0.221

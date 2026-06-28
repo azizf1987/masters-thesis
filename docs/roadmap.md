@@ -9,7 +9,7 @@
 | Phase 3 complete (§3 Methodology argued and drafted) | 2026-06-29 | Done (2026-06-05) |
 | Phase 4 complete (data feasibility confirmed) | 2026-07-06 | Done (2026-06-18) |
 | Phase 5 complete (unified feature matrix ready) | 2026-07-13 | Done (2026-06-22) |
-| Phase 6 complete (RQ1 and RQ2 answered) | 2026-07-20 | Pending |
+| Phase 6 complete (RQ1 and RQ2 answered) | 2026-07-20 | Done (2026-06-28) |
 | Phase 7 complete (RQ3 answered; artefact produced) | 2026-07-24 | Pending |
 | Phase 8 complete (full thesis compiled and submitted) | 2026-08-01 | Pending |
 | Defense | TBD | — |
@@ -169,20 +169,22 @@
 
 ## Phase 6: Empirical work (RQ1 and RQ2)
 
-**Status:** Pending (blocked by Phase 5)
+**Status:** Done (2026-06-28)
 
-- [ ] Implement buffered SLOO validation protocol (buffer radius from Phase 4)
-- [ ] Train and evaluate Random Forest — PM2.5
-- [ ] Train and evaluate Random Forest — NO2
-- [ ] Compute RMSE, MAE, R² per pollutant
-- [ ] Compare RF against IDW baseline and LUR benchmarks
-- [ ] Run accuracy-distance analysis: per-station error vs. distance to nearest training station
-- [ ] Address urban/rural confound (stratified analysis or sensitivity test per §3.4 strategy)
-- [ ] Fit decay curves (log, power, exponential) per pollutant; select by AIC/BIC
-- [ ] Identify reliable prediction distance threshold per pollutant
-- [ ] Save all result tables and figures
-- [ ] Write §5 (estimation results; RQ1 answer)
-- [ ] Write §6 (decay analysis; RQ2 answer)
+- [x] Implement buffered SLOO validation protocol (buffer radius from Phase 4)
+- [x] Train and evaluate Random Forest — PM2.5
+- [x] Train and evaluate Random Forest — NO2
+- [x] Compute RMSE, MAE, R² per pollutant
+- [x] Compare RF against IDW baseline and LUR benchmarks
+- [x] Run accuracy-distance analysis: per-station error vs. distance to nearest training station
+- [x] Address urban/rural confound (traffic vs. background stratification)
+- [x] Fit decay curves (log, power, exponential) per pollutant; select by AIC/BIC
+- [x] Identify reliable prediction distance threshold per pollutant (PM2.5: ~64 km; NO2: ~6 km)
+- [x] COVID sensitivity run (2022-2024 vs 2020-2024; results consistent)
+- [x] Seasonal stratification (winter higher than summer for both pollutants)
+- [x] Save all result tables and figures (data/results/ and writing/images/)
+- [x] Write §5 (estimation results; RQ1 answer)
+- [x] Write §6 (decay analysis; RQ2 answer)
 
 ---
 

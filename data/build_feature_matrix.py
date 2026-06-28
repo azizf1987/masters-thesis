@@ -331,4 +331,3 @@ with open(OUT_PATH, "w", newline="", encoding="utf-8") as f:
 print(f"\nTotal rows written  : {rows_written:,}")
 print(f"Rows skipped (no AQ): {rows_missing_aq:,}")
 print(f"Output: {OUT_PATH}")
-EOF

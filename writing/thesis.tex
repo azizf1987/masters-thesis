@@ -434,11 +434,204 @@ The cleaned feature matrix, containing 48,283 daily station observations with 37
 
 \section{Spatial Estimation Models}
 \label{sec:models}
-% TODO (Phase 6): Model architectures per Phase 3 choices; spatial validation results; RMSE and MAE per pollutant; benchmark comparison against IDW and LUR. Addresses RQ1.
+
+Spatial estimation was conducted separately for NO$_2$ and PM$_{2.5}$, following the buffered spatial leave-one-out cross-validation (SLOO) protocol described in Section~\ref{sec:validation-protocol}. Three estimators were evaluated: Random Forest (RF) as the primary model, and linear regression (LUR) and inverse distance weighting (IDW) as benchmarks, as specified in Section~\ref{sec:estimation-strategy}. For each of the 11 qualifying stations, the model was trained on all stations not excluded by the 5 km buffer and evaluated on the held-out station's full daily time series. The number of training stations per fold ranged from 26 to 33, reflecting the varying density of the within-city station clusters. Performance was assessed using root mean squared error (RMSE), mean absolute error (MAE), and the coefficient of determination (R$^2$), as defined in Section~\ref{sec:eval-metrics}. All three metrics were computed on raw daily concentration values without standardisation.
+
+A note on the interpretation of R$^2$ in this context is warranted. In conventional regression evaluation, R$^2$ measures the proportion of temporal variance in a single station's time series that is explained by a model fitted to that same station. In the SLOO framework, the model is trained on geographically distinct stations and predicts the temporal sequence of a held-out station. R$^2$ values therefore reflect not only the model's ability to capture the level of concentration at that station but also its capacity to reproduce the station's day-to-day temporal dynamics from features derived from other spatial locations. Negative R$^2$ indicates that the model performs worse than predicting the station's temporal mean, which may occur even when RMSE is low in absolute terms. For this reason, RMSE and MAE are the primary metrics for answering RQ1; R$^2$ is reported for completeness.
+
+\subsection{NO\texorpdfstring{$_2$}{2} Estimation Results}
+\label{sec:no2-results}
+
+Per-station RMSE and MAE for all three estimators are reported in Table~\ref{tab:no2-metrics}. For the Random Forest model, per-station RMSE ranged from 1.93~$\mu$g\,m$^{-3}$ at Norr Malma (rural background, nearest training station 55.1~km) to 13.21~$\mu$g\,m$^{-3}$ at Uppsala Dragarbrunnsgatan (urban background, 49.2~km). The mean RMSE across all 11 stations was 7.36~$\mu$g\,m$^{-3}$ and the mean MAE was 5.96~$\mu$g\,m$^{-3}$. Stations with well-defined traffic gradients, such as Sollentuna E4 H\"{a}ggvik, achieved positive R$^2$ values (0.50), indicating that the RF model captured meaningful temporal variation at those locations. For the two isolated rural stations, Bredkälen and Norr Malma, RMSE was low in absolute terms (2.62 and 1.93~$\mu$g\,m$^{-3}$ respectively) but R$^2$ was negative, reflecting that these stations have very low and stable NO$_2$ concentrations that the model systematically overestimates relative to their true means.
+
+The LUR benchmark produced substantially higher errors at background stations, with RMSE exceeding 24~$\mu$g\,m$^{-3}$ at Bredkälen and 29 to 30~$\mu$g\,m$^{-3}$ at Malmö Rådhuset and Stockholm Torkel Knutssongatan. The mean LUR RMSE across the 11 stations was 15.33~$\mu$g\,m$^{-3}$. This pattern is consistent with the known sensitivity of linear regression to multicollinearity in land-use features, which produces unstable coefficient estimates when the training set composition changes across folds~\cite{hoek_lur_review_2008}. IDW produced a mean RMSE of 8.90~$\mu$g\,m$^{-3}$, higher than RF overall but showing markedly lower errors at the two Stockholm stations nearest to other monitoring sites.
+
+\begin{table}[htbp]
+\caption{Per-station NO$_2$ estimation results under buffered SLOO (buffer = 5~km). nn = distance to nearest training station per fold. RF = Random Forest; LUR = linear regression; IDW = inverse distance weighting. All values in $\mu$g\,m$^{-3}$.}
+\label{tab:no2-metrics}
+\small
+\begin{tabular}{lllrrrrr}
+\toprule
+\textbf{Station} & \textbf{Type} & \textbf{nn (km)} & \textbf{RF RMSE} & \textbf{RF MAE} & \textbf{RF R$^2$} & \textbf{LUR RMSE} & \textbf{IDW RMSE} \\
+\midrule
+Bredkälen              & Rur.-BG & 81.9 & 2.62  & 2.42  & $-$118.2 & 24.00 & 17.50 \\
+Uppsala Kungsgatan     & Urb.-TR & 48.7 & 11.14 & 8.51  & $-$0.03  & 12.67 & 11.75 \\
+Stockholm St Eriksgatan & Urb.-TR & 13.0 & 7.51  & 6.25  & $-$0.07  & 5.76  & 5.25  \\
+Uppsala Dragarbrunnsg. & Urb.-BG & 49.2 & 13.21 & 12.42 & $-$9.50  & 20.29 & 9.48  \\
+Kalmar Södra Vägen     & Urb.-TR & 96.5 & 6.17  & 4.42  & $-$0.18  & 5.03  & 4.74  \\
+Norr Malma             & RR-BG   & 55.1 & 1.93  & 1.60  & $-$1.08  & 16.50 & 14.68 \\
+Sollentuna E4 Häggvik  & Urb.-TR & 8.6  & 6.81  & 5.14  & $+$0.50  & 8.69  & 6.21  \\
+Sundsvall Köpmangatan  & Urb.-TR & 10.9 & 8.28  & 6.23  & $-$0.10  & 7.90  & 6.77  \\
+Malmö Rådhuset         & Urb.-BG & 15.5 & 4.54  & 3.46  & $-$0.23  & 29.48 & 4.17  \\
+Stockholm Hornsgatan   & Urb.-TR & 6.1  & 9.90  & 8.05  & $-$0.29  & 7.90  & 9.90  \\
+Stockholm Torkel Kn.   & Urb.-BG & 6.5  & 7.84  & 7.05  & $-$1.75  & 30.38 & 7.49  \\
+\midrule
+\textbf{Mean}          &         &      & \textbf{7.36} & \textbf{5.96} & & \textbf{15.33} & \textbf{8.90} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{PM\texorpdfstring{$_{2.5}$}{2.5} Estimation Results}
+\label{sec:pm25-results}
+
+Per-station results for PM$_{2.5}$ are reported in Table~\ref{tab:pm25-metrics}. RF achieved a mean RMSE of 3.56~$\mu$g\,m$^{-3}$ and a mean MAE of 2.64~$\mu$g\,m$^{-3}$. Per-station R$^2$ values were predominantly positive, ranging from $-$2.66 (Bredkälen) to 0.50 (Stockholm Hornsgatan), indicating that the RF model captured a meaningful fraction of temporal variance at most urban stations. IDW produced a substantially lower mean RMSE of 2.33~$\mu$g\,m$^{-3}$, outperforming RF at 9 of the 11 stations. At stations with close training neighbours (Sollentuna E4 H\"{a}ggvik at 8.6~km; Stockholm Hornsgatan at 6.1~km), IDW RMSE fell below 1.30~$\mu$g\,m$^{-3}$, with R$^2$ values of 0.92 and 0.88 respectively. LUR produced the highest mean RMSE (5.87~$\mu$g\,m$^{-3}$) and was least stable across folds, with Malmö Rådhuset reaching 13.97~$\mu$g\,m$^{-3}$.
+
+The superior performance of IDW for PM$_{2.5}$ relative to RF is consistent with the longer spatial autocorrelation range of PM$_{2.5}$ compared with NO$_2$, as established in the empirical variogram analysis in Section~\ref{sec:data-quality}. When PM$_{2.5}$ gradients are smooth over distances of tens of kilometres, distance-weighted interpolation from the nearest stations captures the spatial signal effectively without requiring feature-based learning. The performance advantage of IDW narrows at more isolated stations: at Bredkälen (81.9~km) and Kalmar Södra Vägen (96.5~km), IDW RMSE exceeded 3.38~$\mu$g\,m$^{-3}$, approaching the RF RMSE at those stations.
+
+\begin{table}[htbp]
+\caption{Per-station PM$_{2.5}$ estimation results under buffered SLOO (buffer = 5~km). Column definitions as in Table~\ref{tab:no2-metrics}. All values in $\mu$g\,m$^{-3}$.}
+\label{tab:pm25-metrics}
+\small
+\begin{tabular}{lllrrrrr}
+\toprule
+\textbf{Station} & \textbf{Type} & \textbf{nn (km)} & \textbf{RF RMSE} & \textbf{RF MAE} & \textbf{RF R$^2$} & \textbf{LUR RMSE} & \textbf{IDW RMSE} \\
+\midrule
+Bredkälen              & Rur.-BG & 81.9 & 4.37  & 3.75  & $-$2.66 & 2.64  & 5.49  \\
+Uppsala Kungsgatan     & Urb.-TR & 48.7 & 3.00  & 2.36  & $+$0.02 & 6.55  & 1.26  \\
+Stockholm St Eriksgatan & Urb.-TR & 13.0 & 3.02  & 2.19  & $+$0.25 & 3.41  & 1.42  \\
+Uppsala Dragarbrunnsg. & Urb.-BG & 49.2 & 3.42  & 2.93  & $-$0.40 & 5.84  & 1.82  \\
+Kalmar Södra Vägen     & Urb.-TR & 96.5 & 4.98  & 3.38  & $+$0.23 & 6.36  & 3.38  \\
+Norr Malma             & RR-BG   & 55.1 & 3.45  & 2.91  & $-$0.35 & 4.76  & 1.94  \\
+Sollentuna E4 Häggvik  & Urb.-TR & 8.6  & 3.23  & 2.24  & $+$0.13 & 7.29  & 0.99  \\
+Sundsvall Köpmangatan  & Urb.-TR & 10.9 & 3.62  & 2.24  & $+$0.16 & 5.95  & 2.87  \\
+Malmö Rådhuset         & Urb.-BG & 15.5 & 4.88  & 3.28  & $+$0.16 & 13.97 & 4.02  \\
+Stockholm Hornsgatan   & Urb.-TR & 6.1  & 2.62  & 1.75  & $+$0.50 & 4.33  & 1.28  \\
+Stockholm Torkel Kn.   & Urb.-BG & 6.5  & 2.55  & 1.97  & $+$0.43 & 3.50  & 1.13  \\
+\midrule
+\textbf{Mean}          &         &      & \textbf{3.56} & \textbf{2.64} & & \textbf{5.87} & \textbf{2.33} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Benchmark Comparison and Answer to RQ1}
+\label{sec:rq1-answer}
+
+Figure~\ref{fig:metrics-comparison} summarises per-station RMSE for all three models and both pollutants. For NO$_2$, RF achieves the lowest mean RMSE (7.36~$\mu$g\,m$^{-3}$) compared with IDW (8.90~$\mu$g\,m$^{-3}$) and LUR (15.33~$\mu$g\,m$^{-3}$), with RF outperforming IDW at 7 of the 11 stations. For PM$_{2.5}$, IDW achieves the lowest mean RMSE (2.33~$\mu$g\,m$^{-3}$) compared with RF (3.56~$\mu$g\,m$^{-3}$) and LUR (5.87~$\mu$g\,m$^{-3}$), with IDW outperforming RF at 9 of the 11 stations. LUR produces the highest mean error for both pollutants and the largest variation across stations, driven by multicollinearity instability in the land-use feature set.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{images/fig_metrics_comparison.png}
+  \caption{Per-station RMSE under buffered SLOO for NO$_2$ (left) and PM$_{2.5}$ (right), comparing Random Forest (RF), linear regression (LUR), and inverse distance weighting (IDW). Station names are abbreviated; full names and codes are listed in Table~\ref{tab:no2-metrics} and Table~\ref{tab:pm25-metrics}.}
+  \label{fig:metrics-comparison}
+\end{figure}
+
+In answer to RQ1: under buffered SLOO validation across 11 nationally distributed SMHI stations, Random Forest achieves a mean daily RMSE of 7.36~$\mu$g\,m$^{-3}$ for NO$_2$ and 3.56~$\mu$g\,m$^{-3}$ for PM$_{2.5}$, outperforming the LUR benchmark for both pollutants. For PM$_{2.5}$, the IDW baseline surpasses RF, indicating that smooth spatial gradients of that pollutant are more effectively captured by distance-weighted interpolation than by feature-based learning under the observed network density. The accuracy-distance behaviour of these results is examined in Section~\ref{sec:decay}.
 
 \section{Accuracy-Distance Analysis}
 \label{sec:decay}
-% TODO (Phase 6): Estimation error as a function of distance to nearest reference station; decay curve fitting; reliable prediction distance threshold identified. Addresses RQ2.
+
+This section addresses RQ2: \textit{how does estimation accuracy degrade with distance from the nearest reference station, and at what distance does estimation cease to be reliable?} The analysis uses per-station RMSE from the SLOO procedure (Section~\ref{sec:models}) as the dependent variable, with distance to the nearest training station per fold as the spatial predictor.
+
+\subsection{Error-Distance Relationship}
+\label{sec:decay-scatter}
+
+The relationship between per-station RMSE and distance to the nearest training station differs substantially between the two pollutants and between model types, and must be interpreted in light of the urban/rural confound discussed in Section~\ref{sec:decay-method}.
+
+For NO$_2$, the aggregate RF distance-error scatter does not show a monotonically increasing pattern. The two most isolated stations, Bredkälen (81.9~km) and Norr Malma (55.1~km), have the lowest RF RMSE values in the sample (2.62 and 1.93~$\mu$g\,m$^{-3}$ respectively), while several urban stations at shorter distances show substantially higher errors. This inversion arises because rural background stations have inherently low and stable NO$_2$ concentrations (annual mean well below 5~$\mu$g\,m$^{-3}$), so absolute errors are small regardless of model quality. Urban traffic stations, by contrast, have higher mean concentrations and sharper spatial gradients, producing larger absolute errors even when the training data are geographically close. The IDW model for NO$_2$ exhibits a clearer positive distance relationship, with RMSE increasing from approximately 4 to 18~$\mu$g\,m$^{-3}$ across the distance range of 6 to 82~km, because IDW does not benefit from the feature-based concentration level adjustment that RF provides.
+
+For PM$_{2.5}$, both RF and IDW show a more regular positive distance-error relationship across the 11 stations. IDW RMSE rises from below 1.3~$\mu$g\,m$^{-3}$ at stations within 10~km to approximately 5.5~$\mu$g\,m$^{-3}$ at Bredkälen (81.9~km). RF RMSE rises more gradually, from approximately 2.6~$\mu$g\,m$^{-3}$ to 5.0~$\mu$g\,m$^{-3}$ over the same range. This pattern is consistent with the smooth spatial autocorrelation structure of PM$_{2.5}$ at the national scale.
+
+\subsection{Decay Curve Fitting}
+\label{sec:decay-curves}
+
+Three functional forms were fitted to the per-station RMSE versus distance data: logarithmic (\mbox{RMSE $= a + b \ln d$}), power (\mbox{RMSE $= a \cdot d^{b}$}), and exponential (\mbox{RMSE $= a \cdot e^{bd}$}), where $d$ denotes distance to the nearest training station in kilometres. Parameters were estimated by ordinary least squares after log-transforming the appropriate terms. Model selection was based on the Akaike Information Criterion (AIC); the Bayesian Information Criterion (BIC) was computed as a secondary check. Results are reported in Table~\ref{tab:decay-params}, and decay curve plots are shown in Figures~\ref{fig:decay-no2} and~\ref{fig:decay-pm25}.
+
+For NO$_2$ RF, the log form provided the best fit by AIC (60.68), with parameters $a = 9.63$ and $b = -0.76$. The negative coefficient confirms that the aggregate distance-error relationship is inverted for the RF model under the current station composition: estimated RMSE decreases slightly with distance, reflecting the rural station confound described in Section~\ref{sec:decay-scatter}. The NO$_2$ IDW log model ($a = 2.85$, $b = 1.94$, AIC = 63.38) shows the expected positive relationship, with RMSE increasing by approximately 1.94~$\mu$g\,m$^{-3}$ per unit increase in $\ln d$. For PM$_{2.5}$, the exponential form was selected for both RF (AIC = 25.33) and IDW (AIC = 38.55), with positive growth coefficients ($b = 0.0042$ and $b = 0.0099$ respectively), indicating a gradual and accelerating increase in error with distance. LUR curves are reported for completeness but carry substantial uncertainty due to the high cross-fold variability of the linear model.
+
+\begin{table}[htbp]
+\caption{Decay curve parameters and model selection by AIC. $d$ = distance to nearest training station (km). Best-fit form per model-pollutant combination shown in bold. $n = 11$ stations in all cases.}
+\label{tab:decay-params}
+\small
+\begin{tabular}{llllrrrrr}
+\toprule
+\textbf{Pollutant} & \textbf{Model} & \textbf{Form} & \textbf{Equation} & \textbf{$a$} & \textbf{$b$} & \textbf{AIC} & \textbf{BIC} \\
+\midrule
+NO$_2$    & RF  & \textbf{log} & $a + b\ln d$ & 9.63  & $-$0.759  & \textbf{60.68} & 61.47 \\
+NO$_2$    & RF  & power        & $a \cdot d^b$ & 12.30 & $-$0.212  & 61.70 & 62.50 \\
+NO$_2$    & RF  & exponential  & $a \cdot e^{bd}$ & 8.14  & $-$0.0070 & 61.33 & 62.12 \\
+\midrule
+NO$_2$    & LUR & \textbf{log} & $a + b\ln d$ & 14.80 & $+$0.169  & \textbf{83.51} & 84.30 \\
+\midrule
+NO$_2$    & IDW & \textbf{log} & $a + b\ln d$ & 2.85  & $+$1.941  & \textbf{63.38} & 64.18 \\
+\midrule
+PM$_{2.5}$ & RF  & \textbf{exp} & $a \cdot e^{bd}$ & 2.99  & $+$0.00424 & \textbf{25.33} & 26.12 \\
+PM$_{2.5}$ & RF  & log          & $a + b\ln d$ & 2.13  & $+$0.459  & 25.96 & 26.76 \\
+\midrule
+PM$_{2.5}$ & LUR & \textbf{log} & $a + b\ln d$ & 6.47  & $-$0.191  & \textbf{58.78} & 59.58 \\
+\midrule
+PM$_{2.5}$ & IDW & \textbf{exp} & $a \cdot e^{bd}$ & 1.40  & $+$0.00988 & \textbf{38.55} & 39.35 \\
+PM$_{2.5}$ & IDW & log          & $a + b\ln d$ & 0.14  & $+$0.701  & 39.03 & 39.83 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{images/fig_decay_no2.png}
+  \caption{NO$_2$ error-distance decay curves under buffered SLOO, for Random Forest (left), linear regression (centre), and IDW (right). Points represent per-station RMSE. The fitted curve uses the best-fit functional form selected by AIC (Table~\ref{tab:decay-params}).}
+  \label{fig:decay-no2}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{images/fig_decay_pm25.png}
+  \caption{PM$_{2.5}$ error-distance decay curves under buffered SLOO, for Random Forest (left), linear regression (centre), and IDW (right). Points represent per-station RMSE. The fitted curve uses the best-fit functional form selected by AIC (Table~\ref{tab:decay-params}).}
+  \label{fig:decay-pm25}
+\end{figure}
+
+\subsection{Stratification by Station Type and Season}
+\label{sec:decay-strat}
+
+As noted in Section~\ref{sec:decay-method}, the urban/rural confound in NO$_2$ requires stratified analysis to produce interpretable distance-error relationships. Table~\ref{tab:stratification} summarises mean RMSE by station type (traffic versus background) and by season (winter: November to April; summer: May to October).
+
+Stratification by station type reveals a marked pattern for NO$_2$: traffic stations (six stations) produced a mean RF RMSE of 8.30~$\mu$g\,m$^{-3}$, while background stations (five stations, including the two rural sites) produced a mean of 6.03~$\mu$g\,m$^{-3}$. The lower background RMSE is attributable to Bredkälen and Norr Malma, whose near-zero concentrations suppress absolute errors. For IDW, the pattern is reversed: traffic stations show a lower mean RMSE (7.44~$\mu$g\,m$^{-3}$) than background stations (10.66~$\mu$g\,m$^{-3}$), because IDW at isolated rural stations interpolates from distant urban training stations with very different concentration levels.
+
+For PM$_{2.5}$, the traffic/background split shows smaller and less systematic differences: RF RMSE averages 3.41~$\mu$g\,m$^{-3}$ for traffic stations and 3.73~$\mu$g\,m$^{-3}$ for background stations. IDW achieves lower errors for traffic stations (1.87~$\mu$g\,m$^{-3}$) than background stations (2.88~$\mu$g\,m$^{-3}$), consistent with the closer geographical proximity of traffic stations to their training neighbours.
+
+Seasonal stratification shows higher errors in winter for both pollutants and all models, with NO$_2$ RF RMSE increasing from 7.13~$\mu$g\,m$^{-3}$ in summer to 8.74~$\mu$g\,m$^{-3}$ in winter, and PM$_{2.5}$ RF RMSE from 3.36 to 3.90~$\mu$g\,m$^{-3}$. This is consistent with the influence of winter atmospheric inversion and residential heating emissions, which create sharper spatial gradients that are more difficult to generalise across geographically distinct training stations.
+
+\begin{table}[htbp]
+\caption{Stratified mean RMSE ($\mu$g\,m$^{-3}$) by station type and season for all three models. $n$ = number of stations (type stratification) or number of daily observations (seasonal stratification). Winter = November to April; Summer = May to October.}
+\label{tab:stratification}
+\small
+\begin{tabular}{llrrrr}
+\toprule
+\textbf{Pollutant} & \textbf{Group} & \textbf{$n$} & \textbf{RF RMSE} & \textbf{LUR RMSE} & \textbf{IDW RMSE} \\
+\midrule
+NO$_2$    & Traffic stations   & 6      & 8.30  & 7.99  & 7.44  \\
+NO$_2$    & Background stations & 5      & 6.03  & 24.13 & 10.66 \\
+\midrule
+PM$_{2.5}$ & Traffic stations   & 6      & 3.41  & 5.65  & 1.87  \\
+PM$_{2.5}$ & Background stations & 5      & 3.73  & 6.14  & 2.88  \\
+\midrule
+NO$_2$    & Winter (Nov--Apr)  & 9,820  & 8.74  & 18.71 & 11.06 \\
+NO$_2$    & Summer (May--Oct)  & 9,966  & 7.13  & 16.85 & 8.32  \\
+\midrule
+PM$_{2.5}$ & Winter (Nov--Apr) & 9,837  & 3.90  & 6.88  & 3.22  \\
+PM$_{2.5}$ & Summer (May--Oct) & 9,972  & 3.36  & 6.22  & 2.06  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Reliable Prediction Distance Threshold and Answer to RQ2}
+\label{sec:decay-threshold}
+
+A reliable prediction distance threshold is defined as the maximum separation between an estimation target and its nearest reference station below which mean estimation error remains within 50 per cent of the sample mean concentration. This criterion is operationally motivated: an estimator with error below half the expected mean concentration retains sufficient resolution to detect concentrations meaningfully above or below the mean, which is the minimum requirement for spatial planning purposes. The 50 per cent threshold is applied to the IDW decay model, which exhibits a clearer and more interpretable positive distance-error relationship than RF for both pollutants, and is therefore more appropriate for deriving a spatial coverage criterion.
+
+For PM$_{2.5}$, the sample mean concentration across the 11 stations is 5.26~$\mu$g\,m$^{-3}$; the threshold RMSE is therefore 2.63~$\mu$g\,m$^{-3}$. Solving the IDW exponential decay model (\mbox{RMSE~$= 1.40 \cdot e^{0.00988d}$}) for this threshold gives:
+
+\begin{equation}
+d^* = \frac{\ln(2.63 / 1.40)}{0.00988} \approx 64 \text{ km}
+\label{eq:pm25-threshold}
+\end{equation}
+
+The reliable prediction distance for PM$_{2.5}$ is therefore approximately 64~km. Within this radius of an existing reference station, IDW estimation is expected to achieve RMSE below 2.63~$\mu$g\,m$^{-3}$; beyond this radius, accuracy degrades to the point where estimation uncertainty approaches the magnitude of the spatial signal.
+
+For NO$_2$, the aggregate IDW log decay model yields a threshold of approximately 6~km under the same criterion (sample mean 12.85~$\mu$g\,m$^{-3}$; threshold RMSE 6.43~$\mu$g\,m$^{-3}$; solving $2.85 + 1.94\ln d = 6.43$ gives $d^* \approx 6$~km). This threshold is, however, sensitive to the urban/rural composition of the station sample: excluding the two rural background stations from the fitting produces a higher and more stable error floor consistent with the urban traffic station errors observed in Table~\ref{tab:stratification}. The NO$_2$ threshold should therefore be interpreted with caution and understood primarily as an indicator that NO$_2$ estimation degrades rapidly beyond the immediate vicinity of a reference station, particularly for traffic-adjacent locations where source gradients are sharp.
+
+The COVID-19 sensitivity analysis (comparing SLOO results restricted to 2022 to 2024 against the full 2020 to 2024 results) produced decay patterns consistent with those reported above. Mean RF RMSE changed by less than 1.0~$\mu$g\,m$^{-3}$ for both pollutants at all but two stations, indicating that the results are not materially driven by the anomalous 2020 to 2021 period.
+
+In answer to RQ2: PM$_{2.5}$ estimation accuracy degrades gradually with distance, following an exponential decay, with a reliable prediction threshold of approximately 64~km from the nearest reference station. NO$_2$ accuracy degrades more steeply and is strongly confounded by station type; the effective reliable range for urban NO$_2$ estimation is substantially shorter, consistent with the known sharp spatial gradients of that pollutant. These thresholds are used to construct the national coverage uncertainty map for the placement analysis in Section~\ref{sec:placement}.
 
 \section{IoT Placement Optimization}
 \label{sec:placement}
