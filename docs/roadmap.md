@@ -154,7 +154,7 @@
 - [x] Run EDA: distributions, negative clipping (12 values), precipitation imputation (15,236 values, 31.6%), empirical variogram
 - [x] Finalise SLOO buffer: 5 km confirmed (variogram raw range 150-200 km is operationally impossible; buffer justified by network structure)
 - [x] Write §4 (Data Sources and Feature Engineering) — all 7 subsections drafted in `writing/thesis.tex`
-- [ ] Decay threshold criterion (specific error bound): deferred to Phase 6 after decay curve fitting
+- [x] Decay threshold criterion (specific error bound): 50% of sample mean concentration applied to IDW decay model — PM2.5: 2.63 µg/m³ → d* ≈ 64 km; NO2: 6.43 µg/m³ → d* ≈ 6 km (urban confound caveat). Written in §6.4.
 
 **Output:** `data/processed/feature_matrix_clean.csv` — 48,283 rows × 37 columns (10.3 MB)
 
