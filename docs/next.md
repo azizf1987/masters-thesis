@@ -1,8 +1,54 @@
 # next.md -- current state and what's next
 
-## Where we are (as of 2026-06-28, session 4)
+## Where we are (as of 2026-06-29, session 5)
 
-Phases 1-6 complete. §§1, 2, 3, 4, 5, and 6 drafted in `writing/thesis.tex`. Phase 7 (placement artefact) is next.
+Phases 1-7 complete. §§1, 2, 3, 4, 5, 6, and 7 drafted in `writing/thesis.tex`. Phase 8 (synthesis + submission) is next.
+
+**Phase 7 results (computed in `data/phase7_placement.py`):**
+
+Output files in `data/results/`:
+- `placement_coordinates.csv` — 20 ranked sensor locations (lat, lon, cumulative PM2.5 coverage %)
+- `coverage_grid.csv` — 4,588 Swedish land cells with coverage status before/after placement
+- `dsr_metrics.csv` — summary DSR evaluation metrics
+
+Figures in `writing/images/`:
+- `fig_placement_gain.png` — PM2.5 coverage gain curve (used in §7.2)
+- `fig_coverage_before_after.png` — before/after coverage maps (used in §7.3)
+- `fig_placement_map.png` — final distance surface with ranked sensors (used in §7.3)
+
+**Key findings for §7 (RQ3):**
+- National grid: 4,588 Swedish land cells at 10 km, ~458,800 km² total
+- PM2.5 baseline coverage: 10.9% (501/4,588 cells; 11 existing concurrent-passing stations)
+- PM2.5 urban baseline: 38.8% (19/49 CORINE urban cells)
+- After 20 greedy sensors: PM2.5 land = 67.2% (+56.3 pp); PM2.5 urban = 71.4% (+32.6 pp)
+- Constant marginal gain: 129 cells (12,900 km²) per step — no overlap within 20-step horizon
+- Placement sequence: 5 in Götaland, 6 in Svealand, 9 in Norrland
+- Regions transitioning to served (of 7 unmonitored): Jönköping, Örebro, Dalarna, Norrbotten = 4/7
+- NO2 coverage: 0.2% → 0.6% (not actionable at national scale with small budget)
+- Appendix C filled with algorithm parameter table
+
+**§7 written this session. Appendix C filled. No unverified citations added.**
+
+**Immediate next step: Phase 8 (thesis synthesis and submission)**
+- Write §8 Discussion (explicit RQ answers; comparison with related work; limitations; implications)
+- Write §9 Conclusion (summary; contributions; future work)
+- Write Abstract (~200 words)
+- Write Popular Science Summary (1-2 pages)
+- Write Declaration of AI Usage
+- Write Acknowledgements
+- Full formatting check (margins 30 mm, line spacing, figure captions, table titles)
+- Council review on §8 and §9
+- Compile LaTeX; resolve all warnings; confirm bibliography complete
+- Resolve all % VERIFY citations before submission
+- Submit by 2026-08-01
+
+**Open threads:**
+- §8 Discussion: add daily averages delimitation sentence; add infrastructure scope boundary (sensors as candidate coordinates, not deployment specs); note PSO as future work
+- Appendix A (Station Inventory) and Appendix B (Model Hyperparameters) still TODO
+- Abstract, Popular Science Summary, Declaration of AI Usage, Acknowledgements all TODO
+- Logo file needed before LaTeX compile: `writing/images/logo.jpg`
+
+---
 
 **Phase 6 results (computed in `data/phase6_modelling.py`):**
 

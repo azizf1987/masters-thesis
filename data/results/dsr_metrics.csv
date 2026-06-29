@@ -1,0 +1,17 @@
+metric,value
+n_existing_stations,11.0
+n_grid_cells_land,4588.0
+n_grid_cells_urban,49.0
+pm25_threshold_km,64.0
+no2_threshold_km,6.0
+pm25_land_pct_before,10.92
+pm25_urban_pct_before,38.78
+no2_land_pct_before,0.15
+no2_urban_pct_before,6.12
+n_sensors_placed,20.0
+pm25_land_pct_after,67.15
+pm25_urban_pct_after,71.43
+no2_land_pct_after,0.59
+no2_urban_pct_after,6.12
+pm25_absolute_gain_pct,56.23
+pm25_urban_absolute_gain_pct,32.65

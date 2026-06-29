@@ -10,7 +10,7 @@
 | Phase 4 complete (data feasibility confirmed) | 2026-07-06 | Done (2026-06-18) |
 | Phase 5 complete (unified feature matrix ready) | 2026-07-13 | Done (2026-06-22) |
 | Phase 6 complete (RQ1 and RQ2 answered) | 2026-07-20 | Done (2026-06-28) |
-| Phase 7 complete (RQ3 answered; artefact produced) | 2026-07-24 | Pending |
+| Phase 7 complete (RQ3 answered; artefact produced) | 2026-07-24 | Done (2026-06-29) |
 | Phase 8 complete (full thesis compiled and submitted) | 2026-08-01 | Pending |
 | Defense | TBD | — |
 
@@ -190,14 +190,14 @@
 
 ## Phase 7: Placement artefact (RQ3)
 
-**Status:** Pending (blocked by Phase 6)
+**Status:** Done (2026-06-29)
 
-- [ ] Construct national uncertainty grid from Phase 6 decay results (all Sweden, 10 km grid)
-- [ ] Implement greedy sequential placement algorithm
-- [ ] Run placement optimization; produce prioritized deployment coordinates
-- [ ] Generate coverage uncertainty heatmaps (before and after placement)
-- [ ] Evaluate artefact against real-world criterion named in §3.5
-- [ ] Write §7 (artefact design, case study, placement output; RQ3 answer)
+- [x] Construct national uncertainty grid from Phase 6 decay results (all Sweden, 10 km grid)
+- [x] Implement greedy sequential placement algorithm
+- [x] Run placement optimization; produce prioritized deployment coordinates
+- [x] Generate coverage uncertainty heatmaps (before and after placement)
+- [x] Evaluate artefact against real-world criterion named in §3.5
+- [x] Write §7 (artefact design, case study, placement output; RQ3 answer)
 
 ---
 

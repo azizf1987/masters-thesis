@@ -639,7 +639,89 @@ In answer to RQ2: PM$_{2.5}$ estimation accuracy degrades gradually with distanc
 
 \section{IoT Placement Optimization}
 \label{sec:placement}
-% TODO (Phase 7): DSR artefact design; placement approach per Phase 3 choices; national case study (all Sweden); coverage uncertainty heatmap; prioritized deployment coordinates by region. Addresses RQ3.
+
+\subsection{National Coverage Surface}
+\label{sec:coverage-surface}
+
+The placement analysis begins by characterising the spatial coverage provided by the 11 concurrent-passing reference stations under the PM$_{2.5}$ reliable prediction distance of 64~km derived in Section~\ref{sec:decay-threshold}. A regular grid of 4{,}588 cells at 10~km spacing is constructed over the Swedish national territory in the ETRS89 Lambert Azimuthal Equal-Area projection (EPSG:3035). Cells are retained by applying a land mask derived from the EU Digital Elevation Model and an approximate Swedish mainland polygon, which together exclude oceanic cells and neighbouring-country territory. Each cell covers 100~km\textsuperscript{2}, giving a total analysis extent of approximately 458{,}800~km\textsuperscript{2}, consistent with the area of the Swedish mainland.
+
+For each grid cell, the Euclidean distance to the nearest of the 11 existing stations is computed in projected coordinates. A cell is classified as \textit{covered} for PM$_{2.5}$ if this distance is at or below the 64~km threshold; cells beyond this distance are classified as \textit{underserved}. Under this criterion, the baseline network covers 501 of 4{,}588 land cells (10.9\% of national area). Of the 49 grid cells classified as urban fabric by CORINE Land Cover 2018 (classes 111 and 112, continuous and discontinuous urban fabric), 19 cells (38.8\%) fall within the PM$_{2.5}$ threshold. The spatial concentration of existing stations in the Stockholm metropolitan region and a small number of southern urban centres leaves the majority of Swedish territory, including the entire northern half of the country, without reliable PM$_{2.5}$ estimation from the current network.
+
+Under the NO$_2$ threshold of 6~km, baseline coverage is minimal: 7 of 4{,}588 land cells (0.2\%) lie within reliable range of an existing station. This reflects the short spatial decay range identified for NO$_2$ and the sharp concentration gradients associated with traffic sources; a meaningful improvement in national NO$_2$ coverage would require a substantially denser deployment than the one evaluated here. The remainder of this section focuses on PM$_{2.5}$, for which the 64~km threshold provides an actionable national coverage objective.
+
+\subsection{Greedy Sequential Placement}
+\label{sec:greedy-results}
+
+The greedy sequential algorithm described in Section~\ref{sec:placement-method} is applied to the national coverage surface, with PM$_{2.5}$ land area coverage as the optimisation objective. At each step, the grid cell whose addition to the sensor set would bring the largest number of currently uncovered cells within the 64~km threshold is selected as the next recommended placement. The algorithm runs for a maximum of 20 steps; full parameter settings are documented in Appendix~\ref{app:placement-params}.
+
+Table~\ref{tab:placement-coords} lists the 20 recommended sensor locations in priority order, together with the cumulative PM$_{2.5}$ coverage achieved after each placement. The first five placements target Götaland (southern Sweden, approximately 56 to 59$^\circ$N), where the existing network provides coverage only in the immediate vicinity of Malmö, Kalmar, and the Uppsala--Stockholm corridor. Placements 6 to 11 address Svealand (central Sweden, approximately 59 to 63$^\circ$N), including several counties without any concurrent-passing station. Placements 12 to 20 cover Norrland (northern Sweden, approximately 63 to 68$^\circ$N), the most sparsely monitored portion of the country by land area.
+
+\begin{table}[ht]
+\caption{Greedy sequential sensor placement: 20 recommended locations in priority order. Coordinates represent the centre of the selected 10~km grid cell. Cumulative PM$_{2.5}$ coverage is the percentage of Swedish land cells within the 64~km reliable estimation threshold after each placement (baseline: 10.9\%).}
+\label{tab:placement-coords}
+\centering
+\small
+\begin{tabular}{rrrrl}
+\hline
+\textbf{Rank} & \textbf{Lat. ($^\circ$N)} & \textbf{Lon. ($^\circ$E)} & \textbf{PM$_{2.5}$ coverage (\%)} & \textbf{Zone} \\
+\hline
+1  & 56.55 & 14.23 & 13.7 & Götaland \\
+2  & 57.31 & 12.82 & 16.5 & Götaland \\
+3  & 57.60 & 15.18 & 19.4 & Götaland \\
+4  & 58.36 & 13.75 & 22.2 & Götaland \\
+5  & 58.74 & 15.87 & 25.0 & Götaland \\
+6  & 59.29 & 12.63 & 27.8 & Svealand \\
+7  & 59.68 & 14.79 & 30.6 & Svealand \\
+8  & 60.45 & 13.08 & 33.4 & Svealand \\
+9  & 60.63 & 16.02 & 36.2 & Svealand \\
+10 & 61.41 & 14.29 & 39.0 & Svealand \\
+11 & 62.52 & 13.48 & 41.9 & Svealand \\
+12 & 63.53 & 17.82 & 44.7 & Norrland \\
+13 & 64.45 & 19.32 & 47.5 & Norrland \\
+14 & 64.85 & 16.71 & 50.3 & Norrland \\
+15 & 65.58 & 18.63 & 53.1 & Norrland \\
+16 & 65.98 & 21.19 & 55.9 & Norrland \\
+17 & 66.39 & 16.89 & 58.7 & Norrland \\
+18 & 66.81 & 19.51 & 61.5 & Norrland \\
+19 & 67.29 & 22.03 & 64.3 & Norrland \\
+20 & 68.02 & 19.03 & 67.2 & Norrland \\
+\hline
+\end{tabular}
+\end{table}
+
+Each of the 20 placements adds exactly 129 grid cells (12{,}900~km\textsuperscript{2}) of new PM$_{2.5}$ coverage, the theoretical maximum for a circular coverage area of radius 64~km on a 10~km grid (approximately $\pi r^2 \approx 12{,}868$~km\textsuperscript{2}). This constant marginal gain indicates that, within the 20-step horizon, no two placed sensors are sufficiently close (under 128~km) to produce overlapping coverage zones; the baseline network is sparse enough that each placement saturates its full theoretical footprint. The gain curve in Figure~\ref{fig:placement-gain} is accordingly linear across all 20 steps. Diminishing returns would be expected for further placements as coverage zones begin to overlap.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.75\textwidth]{images/fig_placement_gain.png}
+  \caption{PM$_{2.5}$ land area coverage as a function of the number of additional sensors placed by the greedy sequential algorithm. The dashed line marks the baseline coverage of 10.9\% provided by the 11 existing concurrent-passing stations. Each step adds 129 grid cells (12{,}900~km\textsuperscript{2}) of new coverage.}
+  \label{fig:placement-gain}
+\end{figure}
+
+\subsection{Coverage Evaluation and DSR Assessment}
+\label{sec:coverage-evaluation}
+
+After 20 additional sensors, PM$_{2.5}$ land area coverage increases from 10.9\% to 67.2\%, an absolute gain of 56.3 percentage points. Urban area coverage improves from 38.8\% to 71.4\% (an absolute gain of 32.6 percentage points). Figure~\ref{fig:coverage-before-after} shows the before and after coverage states across the national grid, and Figure~\ref{fig:placement-map} shows the final distance surface with all sensor locations marked.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{images/fig_coverage_before_after.png}
+  \caption{PM$_{2.5}$ national coverage before (left) and after (right) 20 greedy placements. Light grey cells are beyond the 64~km reliable estimation threshold; light blue cells are covered non-urban land; dark blue cells are covered urban land (CORINE 111 and 112). Red circles indicate existing stations; green triangles indicate recommended sensor locations (right panel only). Grid resolution: 10~km.}
+  \label{fig:coverage-before-after}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.75\textwidth]{images/fig_placement_map.png}
+  \caption{Distance to nearest monitoring station (km) across the Swedish national grid after greedy placement, combining the 11 existing stations and the 20 recommended sensors. The colourbar threshold at 64~km marks the PM$_{2.5}$ reliable estimation boundary. Existing stations are shown as blue circles; recommended sensors as red triangles, labelled by placement rank.}
+  \label{fig:placement-map}
+\end{figure}
+
+Against the primary DSR evaluation criterion defined in Section~\ref{sec:eval-metrics}, the proportion of Swedish urban area within reliable PM$_{2.5}$ estimation range increases from 38.8\% to 71.4\% following the 20 recommended placements. The higher initial urban coverage relative to overall land coverage (38.8\% versus 10.9\%) reflects that the existing reference stations are concentrated in or near urban centres; the residual 28.6\% of urban area that remains uncovered after 20 placements is concentrated in mid-sized cities and coastal urban clusters that receive lower marginal priority within the 20-step greedy horizon.
+
+Against the secondary DSR criterion, the recommended placements serve four of the seven Swedish administrative regions currently without any concurrent-passing PM$_{2.5}$ or NO$_2$ station: sensors are assigned within or immediately adjacent to Jönköping (ranks 1 and 3), Örebro (ranks 6 and 7), Dalarna (ranks 7 to 10), and Norrbotten (ranks 16 to 20). The remaining three unmonitored regions (Södermanland, Blekinge, and Gotland) are not served within the 20-step horizon: Södermanland and Blekinge are adjacent to regions with existing stations and would require fewer additional sensors to cover once the priority sequence extends; Gotland, as an island, cannot be reached from mainland sensor locations at the 64~km PM$_{2.5}$ threshold and would require a dedicated island installation. Administrative region attribution is based on approximate polygon boundaries rather than official administrative boundary files and should be understood as indicative.
+
+In answer to RQ3: a greedy sequential placement algorithm, applied to a national PM$_{2.5}$ coverage surface based on the 64~km reliable prediction threshold, identifies 20 candidate IoT sensor locations that increase national PM$_{2.5}$ land area coverage from 10.9\% to 67.2\% and urban area coverage from 38.8\% to 71.4\%. The proposed locations are distributed systematically across Götaland, Svealand, and Norrland, and serve four of the seven currently unmonitored Swedish administrative regions.
 
 \section{Analysis and Discussion}
 \label{sec:discussion}
@@ -663,6 +745,29 @@ In answer to RQ2: PM$_{2.5}$ estimation accuracy degrades gradually with distanc
 % TODO: RF, LUR, and IDW configuration details
 
 \section{Placement Algorithm Parameters}
-% TODO: greedy sequential algorithm settings, grid resolution, stopping criteria
+\label{app:placement-params}
+
+Table~\ref{tab:placement-params} documents the parameters used in the greedy sequential placement algorithm described in Section~\ref{sec:placement-method} and applied in Section~\ref{sec:greedy-results}.
+
+\begin{table}[ht]
+\caption{Greedy sequential sensor placement: algorithm parameters and justifications.}
+\label{tab:placement-params}
+\centering
+\small
+\begin{tabular}{p{4cm}p{3.5cm}p{6cm}}
+\hline
+\textbf{Parameter} & \textbf{Value} & \textbf{Justification} \\
+\hline
+Grid resolution & 10 km (EPSG:3035) & Computationally tractable; coarser than site-level precision but adequate for regional gap identification \\
+PM$_{2.5}$ coverage threshold & 64 km & Derived from IDW exponential decay model (Section~\ref{sec:decay-threshold}) \\
+NO$_2$ coverage threshold & 6 km & Derived from IDW log decay model (Section~\ref{sec:decay-threshold}); reported as secondary metric only \\
+Optimisation objective & PM$_{2.5}$ land area coverage & NO$_2$ threshold (6~km) is not actionable at national scale with a small sensor budget \\
+Maximum steps & 20 & Covers the non-overlapping placement horizon under current network density \\
+Land mask & EU-DEM + Sweden polygon & DEM excludes ocean; polygon restricts to Swedish mainland, excluding Norwegian and Finnish territory \\
+Urban classification & CORINE 111 + 112 & Continuous and discontinuous urban fabric; secondary evaluation metric \\
+Distance metric & Euclidean (EPSG:3035) & Valid approximation for distances up to 200~km at Swedish latitudes \\
+\hline
+\end{tabular}
+\end{table}
 
 \end{document}
