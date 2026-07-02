@@ -57,10 +57,33 @@ If a specific model name, validation protocol, or optimization algorithm appears
 - Update `docs/roadmap.md` phase status whenever a phase is completed or its status changes
 - Never delete or overwrite core project documents without explicit instruction
 
+## Roadmap (agentkan)
+
+Live task tracking now lives on the agentkan board, not in new prose appended to
+`docs/next.md` / `docs/roadmap.md`. Those two files are kept as the historical record
+of Phases 0-7 (all done) and are not deleted, but going forward, board state is the
+source of truth for what's open.
+
+Board directory: `docs/board/`. State lives in JSON (`roadmap.json`, `next.json`);
+prose detail lives in `docs/board/epics/<ID>.md`.
+
+**Start:** read `docs/board/next.json` and skim the active epics (`P8`) in
+`docs/board/roadmap.json`.
+
+**Board work:** follow the installed `agentkan` skill. After edits: `npx agentkan validate docs/board`.
+
+**End (handoff):** run agentkan handoff — status snapshot, update the board, validate,
+optionally log to `docs/sessions/`.
+
+**Human owns:** dragging epics to Done and archiving in the viewer (`npx agentkan serve docs/board`).
+
+**New epic stub:** `npx agentkan epic new "<title>" [--phase Pn]`, then fill goal, exit, tasks, and `docs/board/epics/<ID>.md`.
+
 ## Key files
 
 | Path | Purpose |
 |---|---|
+| `docs/board/` | agentkan roadmap board — live task state (`roadmap.json`, `next.json`, `epics/`) |
 | `writing/proposal.md` | Approved research proposal (anchor document) |
 | `writing/thesis.tex` | Thesis LaTeX (skeleton; sections are TODO stubs) |
 | `writing/thesis-structure.md` | MAU structure and formatting rules |

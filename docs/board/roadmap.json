@@ -1,0 +1,275 @@
+{
+  "$schema": "./roadmap.schema.json",
+  "version": 1,
+  "project": "MAU Thesis: Air Quality Spatial Estimation & IoT Placement",
+  "updated": "2026-07-01",
+  "phases": [
+    {
+      "id": "P0",
+      "title": "Harness setup",
+      "emoji": "🧰",
+      "status": "done",
+      "goal": "Set up the repo scaffold, agent instruction chain, and phased research working method.",
+      "exit": "CLAUDE.md -> AGENTS.md -> docs/project.md chain in place; working method documented.",
+      "epics": [
+        {
+          "id": "E0.1",
+          "title": "Harness and working method setup",
+          "emoji": "🧰",
+          "status": "done",
+          "assignee": "ai+verify",
+          "labels": ["setup"],
+          "planned": null,
+          "shipped": "2026-06-05",
+          "order": 1,
+          "goal": "Repo scaffold, instruction chain, and phased research method in place.",
+          "exit": "CLAUDE.md, AGENTS.md, docs/project.md chain established; council POV files updated; working method documented in AGENTS.md.",
+          "body": "epics/E0.1.md"
+        }
+      ]
+    },
+    {
+      "id": "P1",
+      "title": "Problem grounding (§1 Introduction)",
+      "emoji": "📐",
+      "status": "done",
+      "goal": "Establish why the problem is real, name the gap, and state the research claim in general terms. No method names in §1.",
+      "exit": "§1 drafted with motivation, SMHI network limitations, IoT placement problem, RQs, and scope.",
+      "epics": [
+        {
+          "id": "E1.1",
+          "title": "§1 Introduction: problem grounding",
+          "emoji": "📐",
+          "status": "done",
+          "assignee": "ai+verify",
+          "labels": ["writing"],
+          "planned": null,
+          "shipped": "2026-06-05",
+          "order": 1,
+          "goal": "Establish why the problem is real and state RQ1-RQ3 without committing to methods.",
+          "exit": "§1 fully drafted in writing/thesis.tex: motivation, SMHI limitations, IoT placement problem, RQ1-RQ3, scope/delimitations, structure paragraph.",
+          "body": "epics/E1.1.md"
+        }
+      ]
+    },
+    {
+      "id": "P2",
+      "title": "Literature review (§2 Background)",
+      "emoji": "📚",
+      "status": "done",
+      "goal": "Survey the field and identify what the literature leaves unresolved, ending with gap statements that motivate the RQs.",
+      "exit": "§2 drafted; all citations confirmed; no unverified citations remain.",
+      "epics": [
+        {
+          "id": "E2.1",
+          "title": "§2 Background and Related Work",
+          "emoji": "📚",
+          "status": "done",
+          "assignee": "ai+verify",
+          "labels": ["writing", "research"],
+          "planned": null,
+          "shipped": "2026-06-05",
+          "order": 1,
+          "goal": "Survey monitoring, IoT sensing, spatial estimation, and placement literature; end with three named gaps.",
+          "exit": "§2.1-§2.5 drafted; references added to writing/references.bib; no % VERIFY flags remain.",
+          "body": "epics/E2.1.md"
+        }
+      ]
+    },
+    {
+      "id": "P3",
+      "title": "Research design (§3 Methodology)",
+      "emoji": "🧪",
+      "status": "done",
+      "goal": "Argue every technical choice from the Phase 2 literature. Nothing assumed; everything earned.",
+      "exit": "§3 drafted; all council conditions met; decision record written.",
+      "epics": [
+        {
+          "id": "E3.1",
+          "title": "§3 Research Methodology",
+          "emoji": "🧪",
+          "status": "done",
+          "assignee": "ai+verify",
+          "labels": ["writing", "research"],
+          "planned": null,
+          "shipped": "2026-06-05",
+          "order": 1,
+          "goal": "Choose and argue validation protocol, models, decay method, placement approach, and metrics.",
+          "exit": "§3.1-§3.7 drafted; all ten council conditions met; docs/decisions/phase3-methodology.md complete.",
+          "body": "epics/E3.1.md"
+        }
+      ]
+    },
+    {
+      "id": "P4",
+      "title": "Data feasibility audit",
+      "emoji": "🔎",
+      "status": "done",
+      "goal": "Confirm the Phase 3 methodology is executable with the available data.",
+      "exit": "All five data sources pulled and verified; SLOO buffer set; audit documented.",
+      "epics": [
+        {
+          "id": "E4.1",
+          "title": "Data feasibility audit",
+          "emoji": "🔎",
+          "status": "done",
+          "assignee": "ai+verify",
+          "labels": ["data"],
+          "planned": null,
+          "shipped": "2026-06-18",
+          "order": 1,
+          "goal": "Verify SMHI, CORINE, EU-DEM, and GEOSTAT data are available and sufficient for the chosen methodology.",
+          "exit": "34 stations inventoried (13 pass completeness); preliminary 5 km SLOO buffer set; docs/data-audit.md written.",
+          "body": "epics/E4.1.md"
+        }
+      ]
+    },
+    {
+      "id": "P5",
+      "title": "Data engineering",
+      "emoji": "🛠️",
+      "status": "done",
+      "goal": "Build the unified analytical feature matrix and resolve data quality issues.",
+      "exit": "Cleaned feature matrix produced; §4 written.",
+      "epics": [
+        {
+          "id": "E5.1",
+          "title": "Feature matrix construction and EDA",
+          "emoji": "🛠️",
+          "status": "done",
+          "assignee": "ai+verify",
+          "labels": ["data"],
+          "planned": null,
+          "shipped": "2026-06-22",
+          "order": 1,
+          "goal": "Join all five data sources into one daily feature matrix and resolve missing-data handling.",
+          "exit": "data/processed/feature_matrix_clean.csv (48,283 x 37) produced; §4 (Data and Feature Engineering) written in writing/thesis.tex.",
+          "body": "epics/E5.1.md"
+        }
+      ]
+    },
+    {
+      "id": "P6",
+      "title": "Empirical work (RQ1, RQ2)",
+      "emoji": "📈",
+      "status": "done",
+      "goal": "Answer RQ1 (estimation accuracy) and RQ2 (accuracy-distance decay) under buffered SLOO.",
+      "exit": "RF/LUR/IDW evaluated; decay curves and thresholds derived; §5-§6 written.",
+      "epics": [
+        {
+          "id": "E6.1",
+          "title": "Spatial estimation and accuracy-distance analysis",
+          "emoji": "📈",
+          "status": "done",
+          "assignee": "ai+verify",
+          "labels": ["research", "data"],
+          "planned": null,
+          "shipped": "2026-06-28",
+          "order": 1,
+          "goal": "Run buffered SLOO for RF/LUR/IDW per pollutant and fit error-distance decay curves.",
+          "exit": "Per-station RMSE/MAE/R² computed; decay thresholds set (PM2.5 ~64 km, NO2 ~6 km); §5 and §6 written.",
+          "body": "epics/E6.1.md"
+        }
+      ]
+    },
+    {
+      "id": "P7",
+      "title": "Placement artefact (RQ3)",
+      "emoji": "📍",
+      "status": "done",
+      "goal": "Answer RQ3 with a national IoT sensor placement recommendation grounded in the RQ2 thresholds.",
+      "exit": "Greedy placement run; coverage evaluated against the DSR criterion; §7 written.",
+      "epics": [
+        {
+          "id": "E7.1",
+          "title": "IoT sensor placement artefact",
+          "emoji": "📍",
+          "status": "done",
+          "assignee": "ai+verify",
+          "labels": ["research"],
+          "planned": null,
+          "shipped": "2026-06-29",
+          "order": 1,
+          "goal": "Run greedy sequential placement over the national coverage grid and evaluate against the DSR criterion.",
+          "exit": "20 ranked sensor locations produced; PM2.5 coverage 10.9% -> 67.2%; §7 written.",
+          "body": "epics/E7.1.md"
+        }
+      ]
+    },
+    {
+      "id": "P8",
+      "title": "Thesis synthesis and submission",
+      "emoji": "🎯",
+      "status": "active",
+      "goal": "Complete the remaining thesis sections, resolve formatting and compile issues, and submit the finished thesis.",
+      "exit": "Full thesis compiles cleanly, is complete end to end, and is submitted by 2026-08-01.",
+      "epics": [
+        {
+          "id": "E8.0",
+          "title": "Prepare and submit the 60% supervisor draft",
+          "emoji": "🚩",
+          "status": "active",
+          "assignee": "me",
+          "labels": ["submission"],
+          "planned": null,
+          "order": 0,
+          "goal": "A PDF covering Introduction through Results (plus commenced Discussion) reaches the supervisor, formatted to MAU rules.",
+          "exit": "Supervisor has the PDF and confirms receipt; course management milestone can be marked complete.",
+          "body": "epics/E8.0.md",
+          "tasks": [
+            { "id": "E8.0-T1", "title": "Confirm E8.1-T3/T4/T5 (Abstract, Pop Sci Summary, Declaration of AI Usage) and E8.2-T6/T8 (logo, bibliography fix) are done", "status": "doing", "assignee": "ai+verify", "labels": ["submission"], "planned": null, "note": "Abstract, Pop Sci Summary, Declaration, and the bibliography fix are done (2026-07-01); only the logo (E8.2-T6) remains, and it's a human action." },
+            { "id": "E8.0-T2", "title": "Full clean compile (pdflatex x2 + bibtex + pdflatex) with zero errors and a rendered reference list", "status": "done", "assignee": "ai+verify", "labels": ["submission"], "planned": null, "note": "Done 2026-07-01: 37 pages, working 21-entry reference list, zero overfull-hbox/undefined-reference warnings. Only remaining compile warning is the missing logo placeholder." },
+            { "id": "E8.0-T3", "title": "Visual proof pass: margins, fonts, page numbers, banner, captions against writing/thesis-structure.md", "status": "done", "assignee": "ai+verify", "labels": ["submission"], "planned": null, "note": "Done 2026-07-01: title page, Abstract, Popular Science Summary, and Declaration of AI Usage pages spot-checked; margins/fonts/spacing match thesis-structure.md. Banner will show the real MAU logo once E8.2-T6 lands." },
+            { "id": "E8.0-T4", "title": "Submit the PDF to the supervisor / course system", "status": "todo", "assignee": "me", "labels": ["submission"], "planned": null }
+          ]
+        },
+        {
+          "id": "E8.1",
+          "title": "Complete remaining thesis sections",
+          "emoji": "📝",
+          "status": "active",
+          "assignee": "ai+verify",
+          "labels": ["writing"],
+          "planned": null,
+          "order": 1,
+          "goal": "All remaining sections and appendices drafted in writing/thesis.tex.",
+          "exit": "§8, §9, Abstract, Popular Science Summary, Declaration of AI Usage, Acknowledgements, and Appendices A-B are no longer TODO stubs.",
+          "body": "epics/E8.1.md",
+          "tasks": [
+            { "id": "E8.1-T1", "title": "Write §8 Discussion (RQ answers; comparison with related work; limitations; implications)", "status": "todo", "assignee": "ai+verify", "labels": ["writing"], "planned": null, "note": "Full treatment is for the final submission; a commenced version (RQ answers + benchmark comparison) is a nice-to-have for the 60% draft, not required." },
+            { "id": "E8.1-T2", "title": "Write §9 Conclusion (summary; contributions; future work)", "status": "todo", "assignee": "ai+verify", "labels": ["writing"], "planned": null, "note": "Not required for the 60% draft." },
+            { "id": "E8.1-T3", "title": "Write Abstract (~200 words: problem, aim, method, contribution)", "status": "done", "assignee": "ai+verify", "labels": ["writing"], "planned": null, "note": "Drafted and compiled 2026-07-01; user to review wording." },
+            { "id": "E8.1-T4", "title": "Write Popular Science Summary (1-2 pages, non-technical)", "status": "done", "assignee": "ai+verify", "labels": ["writing"], "planned": null, "note": "Drafted and compiled 2026-07-01; fits on one page; user to review wording." },
+            { "id": "E8.1-T5", "title": "Write Declaration of AI Usage", "status": "done", "assignee": "ai", "labels": ["writing"], "planned": null, "note": "Drafted 2026-07-01 with broad disclosure, per user's choice; user to review wording." },
+            { "id": "E8.1-T6", "title": "Write Acknowledgements", "status": "todo", "assignee": "me", "labels": ["writing"], "planned": null, "note": "Optional; not required for the 60% draft." },
+            { "id": "E8.1-T7", "title": "Fill Appendix A: Station Inventory and Completeness", "status": "todo", "assignee": "ai", "labels": ["writing"], "planned": null, "note": "Optional for the 60% draft; nice to have." },
+            { "id": "E8.1-T8", "title": "Fill Appendix B: Model Hyperparameters (RF, LUR, IDW configs)", "status": "todo", "assignee": "ai", "labels": ["writing"], "planned": null, "note": "Optional for the 60% draft; nice to have." }
+          ]
+        },
+        {
+          "id": "E8.2",
+          "title": "Formatting, compile, and submission readiness",
+          "emoji": "🧾",
+          "status": "active",
+          "assignee": "ai+verify",
+          "labels": ["formatting", "submission"],
+          "planned": "2026-08-01",
+          "order": 2,
+          "goal": "Thesis compiles cleanly end to end and is ready for submission.",
+          "exit": "pdflatex produces the full PDF with no overfull-hbox or undefined-reference warnings, and the thesis is handed in.",
+          "body": "epics/E8.2.md",
+          "tasks": [
+            { "id": "E8.2-T1", "title": "Full formatting check: margins, line spacing, figure captions, table titles, reference list", "status": "todo", "assignee": "ai+verify", "labels": ["formatting"], "planned": null },
+            { "id": "E8.2-T2", "title": "Fix table width overflow in Tables 4-5 (NO2/PM2.5 per-station results)", "status": "done", "assignee": "ai", "labels": ["formatting"], "planned": null, "note": "Fixed 2026-07-01: wrapped both tables in \\resizebox{\\textwidth}{!}{...}." },
+            { "id": "E8.2-T3", "title": "Restore truncated writing/thesis.tex end-of-file (\\end{document} was missing)", "status": "done", "assignee": "ai", "labels": ["formatting"], "planned": null, "note": "Fixed 2026-07-01: file was cut off mid \\end{tabular}; ending restored and recompiled clean." },
+            { "id": "E8.2-T4", "title": "Council review on §8 Discussion and §9 Conclusion", "status": "todo", "assignee": "ai", "labels": ["submission"], "planned": null, "note": "Final submission only, not the 60% draft." },
+            { "id": "E8.2-T5", "title": "Compile LaTeX end to end (multiple passes + bibtex); resolve all warnings", "status": "done", "assignee": "ai+verify", "labels": ["formatting"], "planned": null, "note": "Done 2026-07-01: pdflatex x2 + bibtex + pdflatex x2, 37 pages, zero overfull-hbox and zero undefined-reference warnings. Only remaining warning is the missing logo (E8.2-T6)." },
+            { "id": "E8.2-T6", "title": "Add MAU logo file (writing/images/logo.jpg)", "status": "todo", "assignee": "me", "labels": ["submission"], "planned": null, "note": "Blocks a clean title page for the 60% draft too. Last item standing between the current PDF and a fully clean compile." },
+            { "id": "E8.2-T7", "title": "Submit finished thesis", "status": "todo", "assignee": "me", "labels": ["submission"], "planned": "2026-08-01" },
+            { "id": "E8.2-T8", "title": "Switch \\bibliographystyle{IEEEtran} to \\bibliographystyle{ieeetr} and run a full bibtex pass", "status": "done", "assignee": "ai", "labels": ["formatting"], "planned": null, "note": "Done 2026-07-01: IEEEtran.bst was not available in the build toolchain and bibtex had never been run; switched to ieeetr and confirmed a clean 21-entry numbered reference list renders correctly." }
+          ]
+        }
+      ]
+    }
+  ]
+}

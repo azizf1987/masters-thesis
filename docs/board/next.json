@@ -1,0 +1,13 @@
+{
+  "updated": "2026-07-01",
+  "next": "E8.0-T4",
+  "note": "60% draft PDF is compiled and ready (writing/thesis.pdf, 37 pages, working bibliography, Abstract/Pop Sci Summary/Declaration of AI Usage drafted). Only the MAU logo (E8.2-T6) and a wording review remain before submitting.",
+  "criticalPath": [
+    { "title": "Add MAU logo file (writing/images/logo.jpg) for a fully clean title page", "assignee": "me", "status": "todo", "unblocks": "E8.0-T4" },
+    { "title": "Review the drafted Abstract, Popular Science Summary, and Declaration of AI Usage wording", "assignee": "me", "status": "todo", "unblocks": "E8.0-T4" },
+    { "title": "Confirm exact submission deadline and channel (Canvas vs. direct to supervisor) with course management", "assignee": "me", "status": "todo", "unblocks": "E8.0-T4" }
+  ],
+  "risks": [
+    "Supervisor review turnaround for the full/final thesis (§8-§9) is not yet confirmed and could pressure the 2026-08-01 final deadline, though it does not block the 60% checkpoint."
+  ]
+}
