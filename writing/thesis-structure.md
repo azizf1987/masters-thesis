@@ -51,7 +51,7 @@ No page number is displayed.
 - Academic summary:
   - Problem
   - Aim
-  - Method (DSR, SLOOCV, PSO artefact)
+  - Method (DSR, buffered SLOO, greedy sequential placement artefact)
   - Contribution
 - Must align exactly with research questions and scope
 
@@ -116,9 +116,9 @@ No implementation details.
 ## Research Methodology
 
 - Design Science Research approach
-- Spatial Leave-One-Out Cross-Validation (SLOOCV) design
-- Model progression (IDW, RF/XGBoost, Kriging hybrid)
-- Evaluation metrics (RMSE, MAE)
+- Buffered spatial leave-one-out cross-validation (SLOO) design
+- Models: Random Forest (primary), benchmarked against IDW and land-use regression (LUR); no second ML model or hybrid geostatistical approach (Phase 3 council decision, 2026-06-05 — see `docs/decisions/phase3-methodology.md`)
+- Evaluation metrics (RMSE, MAE, R²)
 - Ethical considerations
 - Validity and reliability
 
@@ -157,8 +157,8 @@ No interpretation beyond reporting metrics.
 
 ## IoT Placement Optimization
 
-- DSR artefact: PSO-based placement tool
-- Case-study city selection and uncertainty grid
+- DSR artefact: greedy sequential placement algorithm (PSO considered and rejected at Phase 3 council, 2026-06-05 — see `docs/decisions/phase3-methodology.md`)
+- National case-study scope and uncertainty grid (expanded from an initial single-city scope, 2026-06-18 — see `docs/next.md`)
 - Coverage uncertainty heatmaps
 - Prioritized deployment coordinates
 - Addresses RQ3
@@ -195,8 +195,8 @@ No interpretation beyond reporting metrics.
 ## Appendices (Optional)
 
 - Station inventory and completeness tables
-- Model hyperparameters
-- PSO placement parameters
+- Model hyperparameters (RF, LUR, IDW)
+- Placement algorithm parameters (greedy sequential)
 
 No essential arguments here.
 
