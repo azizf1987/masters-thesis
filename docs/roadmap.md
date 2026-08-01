@@ -203,19 +203,28 @@
 
 ## Phase 8: Thesis synthesis and submission
 
-**Status:** Pending (blocked by Phase 7)
+**Status:** In progress. Live task tracking has moved to the agentkan board (`docs/board/`, epics E8.0-E8.2); this checklist is kept in sync for historical continuity but the board is the source of truth for current status (see AGENTS.md). Board files still date from 2026-07-04 as of this update and need to be brought current separately.
 
-- [ ] Write §8 Discussion (explicit RQ answers; comparison with related work; limitations; implications)
-- [ ] Write §9 Conclusion (summary; contributions; future work)
-- [ ] Write Abstract (~200 words: problem, aim, method, contribution)
-- [ ] Write Popular Science Summary (1-2 pages; non-technical)
-- [ ] Write Declaration of AI Usage
-- [ ] Write Acknowledgements
-- [ ] Full formatting check: margins (30 mm), line spacing, figure captions, table titles, reference list
-- [ ] Council review on §8 Discussion and §9 Conclusion
-- [ ] Compile LaTeX; resolve all warnings; confirm bibliography complete and correctly formatted
-- [ ] Resolve all % VERIFY citations before submission
-- [ ] Submit by 2026-08-01
+- [x] Write §8 Discussion (explicit RQ answers; comparison with related work; limitations; implications) — done 2026-07-04; strengthened 2026-08-01 (NO2 evidence added to 8.3, two new Limitations items)
+- [x] Write §9 Conclusion (summary; contributions; future work) — done 2026-07-04; RQ3 answer and future work updated 2026-08-01 to match §8
+- [x] Write Abstract (~200 words: problem, aim, method, contribution) — done 2026-07-01; trimmed 286→248 words 2026-08-01 to meet the 150–250 target
+- [x] Write Popular Science Summary (1-2 pages; non-technical) — done 2026-07-01
+- [x] Write Declaration of AI Usage — done 2026-07-01
+- [x] Write Acknowledgements — done 2026-08-01 (supervisor, data providers, family/friends)
+- [x] Fill Appendix A (Station Inventory and Completeness) — done 2026-08-01, full 34-station table
+- [x] Fill Appendix B (Model Hyperparameters) — done 2026-08-01, RF/LUR/IDW configuration
+- [ ] Full formatting check: margins (30 mm), line spacing, figure captions, table titles, reference list — mechanical checks (brace/label/ref/citation balance) done 2026-08-01; **actual compiled-PDF formatting not yet verified, no LaTeX toolchain available this session**
+- [ ] Council review on §8 Discussion and §9 Conclusion (final submission only, not the 60% draft)
+- [ ] **Compile LaTeX end-to-end and reverify** — the 2026-07-04 compile (41 pages, zero warnings) predates all 2026-08-01 changes (station-count fix, NO2 figures, appendices, Acknowledgements, bibliography cleanup, figure color fix) and is now stale; must be recompiled before submission
+- [x] Resolve all % VERIFY citations before submission — none remain
+- [x] Remove unused/unverified bibliography entries — done 2026-08-01, 6 entries removed (28→22, all cited)
+- [ ] Add MAU logo file (writing/images/logo.jpg) — blocks a fully clean compile; human action; still outstanding as of 2026-08-01
+- [ ] Human wording read-through of AI-drafted sections (Abstract, PopSci, Declaration, §8, §9) — status unconfirmed
+- [ ] Confirm exact submission deadline/channel with course management — status unconfirmed
+- [ ] Submit 60% draft to supervisor (course checkpoint)
+- [ ] Submit final thesis by 2026-08-01
+
+**Data-integrity fixes made 2026-08-01** (see `docs/next.md` session 8 entry for full detail): analytical sample count corrected 13→11 (7 locations, verified against source data and project history); rural station count corrected in §4.1/§8.4 (Bredkälen + Norr Malma, not Norr Malma alone); COVID sensitivity claim in §6.4 corrected against `covid_sensitivity.csv` (4 stations exceed threshold, not 2); NO2 placement figures added to §7.3 with real before/after numbers; figure color scheme unified across all four §7.3 figures.
 
 ---
 

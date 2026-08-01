@@ -1,5 +1,56 @@
 # next.md -- current state and what's next
 
+## Where we are (as of 2026-08-01, session 8)
+
+Extensive review and correction session covering the full thesis (front matter through appendices), triggered by a full section-by-section read-through that then expanded into direct verification of every major numeric claim against the underlying data files and results CSVs, not just the prose. This surfaced and fixed several real errors that had survived earlier sessions.
+
+**Content additions:**
+- Filled Appendix A (Station Inventory and Completeness: full 34-station table with per-pollutant completeness, sourced directly from `feature_matrix_clean.csv`) and Appendix B (Model Hyperparameters: RF/LUR/IDW configuration, sourced from `phase6_modelling.py`) -- both were empty `% TODO` stubs.
+- Wrote the Acknowledgements section (supervisor, data providers, family/friends) -- the last remaining `% TODO` in the document.
+- Added NO2 before/after coverage figures (`fig_no2_coverage_before_after.png`, `fig_no2_placement_map.png`) to Section 7.3, showing that the same 20 PM2.5-optimised sensors leave NO2 coverage essentially unchanged (0.2% to 0.6% land, 6.1% urban unchanged). Previously this was only asserted in prose with no NO2-side visualisation or after-number.
+- Strengthened Section 8: Limitations gained two items (feature-to-station ratio risk; 10 km grid resolution vs. 6 km NO2 threshold mismatch), and 8.3's central claim is now backed by the NO2 evidence above instead of argued purely theoretically.
+
+**Bugs found and fixed (all verified against source data before correcting, and cross-checked against project history where relevant):**
+- **Analytical sample count was wrong throughout**: Sections 3.2, 4.1, 4.7, 8.2, 8.4 all said "13 stations, 11 concurrent + 2 NO2-only." Verified against `feature_matrix_clean.csv` and against the actual `PASSING` station set hardcoded in `phase6_modelling.py` (the script that produced every RMSE table in S5/S6): 11 stations pass the 90% threshold concurrently for both pollutants -- this matches the 2026-06-22 session note in this file, which had already revised the count down from 13 to 11 after checking the full 1,827-day period. The thesis text had just never been updated to match. Separately, 19 of 34 stations pass for at least one pollutant (11 concurrent + 8 single-pollutant: 7 NO2-only, 1 PM2.5-only); the "13" figure conflated these. Also corrected the regional breakdown (6 regions, Stockholm 5 stations -- not 7 regions, Stockholm 6) and added an explicit methodological justification for restricting the analytical sample to the 11 concurrent stations. A follow-up sweep caught three more stray instances of the same stale "13" figure with different phrasing that the first fix missed.
+- **Rural station count was wrong**: Section 4.1 called Norr Malma "the sole non-urban station," contradicting Section 6's own repeated use of "the two rural background stations" (Bredkälen is also typed Rural Background in the same dataset). Verified both stations have full real SLOO results/predictions before correcting both locations.
+- **COVID sensitivity claim was wrong**: Section 6.4 said RF RMSE changed by <1.0 ug/m3 "at all but two stations." Computed precisely from `covid_sensitivity.csv`: four stations (all NO2) exceed 1.0 ug/m3, not two; PM2.5 is fully robust at every station. Rewrote to report the accurate per-pollutant pattern.
+- **Bibliography**: removed 6 unused, unverified entries (`author = {others}`, `note = {TBC}`) from `references.bib` that were never cited -- 28 down to 22 entries, all cited.
+- **Figure color inconsistency**: the two coverage before/after figures used red=existing/green=placed while the two distance-surface figures used blue=existing/red=placed, for the same 20 sensors in the same subsection. Regenerated the coverage figures to match (blue=existing, red=placed) across all four.
+- Abstract trimmed from 286 to 248 words (target: 150-250 per `thesis-structure.md`).
+- Corrected stale XGBoost/PSO/Kriging references in `writing/thesis-structure.md` that predated the Phase 3 council's actual methodology decision (RF+LUR+IDW only, greedy not PSO).
+
+**Still open:**
+- Add the MAU logo file at `writing/images/logo.jpg` (human action; still not present as of this entry).
+- Actual LaTeX compile end-to-end -- no LaTeX toolchain was available in this session's environment, so none of the above has been compile-verified. All checks performed were syntax/reference/data consistency checks (brace balance, label/ref/citation resolution, direct comparison against source CSVs), not a real build. This is the single highest-priority remaining step.
+- Human wording read-through of the AI-drafted sections (Abstract, Popular Science Summary, Declaration of AI Usage, S8, S9) -- status unconfirmed.
+- Confirm the exact submission deadline/channel with course management -- status unconfirmed.
+- `docs/board/next.json` and `docs/board/roadmap.json` still date from 2026-07-04 and do not yet reflect this session; update alongside or after this entry.
+- Council review of S8/S9 -- optional, not required for the 60% draft.
+
+All of the above is committed and pushed to `origin/master` (commits up to `2d228fb`).
+
+---
+
+## Where we are (as of 2026-07-04, session 7)
+
+Phase 8 is well underway; live task tracking has moved to the agentkan board (`docs/board/`), which is now the source of truth for open items (see AGENTS.md). This entry is a summary checkpoint, not a replacement for the board.
+
+**Done since the last entry (2026-06-29):**
+- Fixed a truncated `writing/thesis.tex` (file was cut off mid-table, missing `\end{document}`) and a table-width overflow in the NO2/PM2.5 per-station results tables (Tables 4-5), both discovered 2026-07-01.
+- Discovered and fixed a real blocker: `\bibliographystyle{IEEEtran}` requires `IEEEtran.bst`, which was never available in the build toolchain, so `bibtex` had never actually been run and no compiled PDF ever had a working reference list. Switched to `ieeetr` (bundled with base BibTeX); confirmed a clean 21-entry IEEE-numeric reference list renders correctly.
+- Drafted the three mandatory front-matter sections that were empty `% TODO` stubs: Abstract, Popular Science Summary, Declaration of AI Usage (2026-07-01).
+- Drafted §8 Discussion (RQ answers, comparison with related work, implications for municipal IoT planning, limitations, risks) and §9 Conclusion (2026-07-04) — both go beyond what the 60% checkpoint requires ("commenced" discussion was optional; both are now complete).
+- Recompiled end to end (pdflatex x2 + bibtex + pdflatex x2): 41 pages, zero overfull-hbox and zero undefined-reference warnings. `writing/thesis.pdf` is current as of 2026-07-04.
+
+**Still open for the 60% draft:**
+- Add the MAU logo file at `writing/images/logo.jpg` (human action; title page currently shows a draft placeholder).
+- Review the wording of the AI-drafted sections (Abstract, Popular Science Summary, Declaration of AI Usage, §8, §9).
+- Confirm the exact submission deadline/channel with course management, then submit.
+
+**Deferred to the final submission (not required for the 60% draft):** Acknowledgements, Appendix A (Station Inventory) and Appendix B (Model Hyperparameters), council review of §8/§9.
+
+---
+
 ## Where we are (as of 2026-06-29, session 5)
 
 Phases 1-7 complete. §§1, 2, 3, 4, 5, 6, and 7 drafted in `writing/thesis.tex`. Phase 8 (synthesis + submission) is next.
