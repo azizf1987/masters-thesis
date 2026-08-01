@@ -1,13 +1,15 @@
 {
-  "updated": "2026-07-01",
+  "updated": "2026-08-01",
   "next": "E8.0-T4",
-  "note": "60% draft PDF is compiled and ready (writing/thesis.pdf, 37 pages, working bibliography, Abstract/Pop Sci Summary/Declaration of AI Usage drafted). Only the MAU logo (E8.2-T6) and a wording review remain before submitting.",
+  "note": "Peer-feedback pass applied 2026-08-01: (1) abstract reframed to lead with IDW beating Random Forest for PM2.5 rather than burying it, since RQ3's headline placement result is built on PM2.5; (2) bib key beelen_escape_no2_2013 renamed to wang_escape_no2_2013 to match its actual author (Wang et al.), all 7 usages updated; (3) RQ3 conclusion sentence sharpened to state directly that RQ3 is answered for PM2.5 and effectively unanswerable for NO2 at this sensor budget; (4) added a threshold-sensitivity analysis (data/phase8_threshold_sensitivity.py, Section 6.4 and Limitations) showing the 50% criterion is not stable -- post-placement PM2.5 coverage swings from 2.9% to 94.7% across a 20-80% criterion sweep, against the 67.2% reported at 50% -- with the caveat that the qualitative PM2.5-over-NO2 asymmetry holds at every criterion tested. writing/thesis.tex was NOT recompiled to PDF in this session: no LaTeX toolchain (pdflatex/bibtex) is available on this machine and Docker/WSL were not usable either. writing/thesis.pdf on disk still reflects the 2026-07-04 build and does not yet include these four edits -- recompile before submission.",
   "criticalPath": [
+    { "title": "Recompile writing/thesis.pdf (pdflatex x2 + bibtex + pdflatex x2) to pick up the 2026-08-01 abstract/bib-key/RQ3/sensitivity edits", "assignee": "me", "status": "todo", "unblocks": "E8.0-T4" },
     { "title": "Add MAU logo file (writing/images/logo.jpg) for a fully clean title page", "assignee": "me", "status": "todo", "unblocks": "E8.0-T4" },
-    { "title": "Review the drafted Abstract, Popular Science Summary, and Declaration of AI Usage wording", "assignee": "me", "status": "todo", "unblocks": "E8.0-T4" },
+    { "title": "Review the drafted Abstract, Popular Science Summary, Declaration of AI Usage, §8, and §9 wording", "assignee": "me", "status": "todo", "unblocks": "E8.0-T4" },
     { "title": "Confirm exact submission deadline and channel (Canvas vs. direct to supervisor) with course management", "assignee": "me", "status": "todo", "unblocks": "E8.0-T4" }
   ],
   "risks": [
-    "Supervisor review turnaround for the full/final thesis (§8-§9) is not yet confirmed and could pressure the 2026-08-01 final deadline, though it does not block the 60% checkpoint."
+    "Supervisor review turnaround for the full/final thesis is not yet confirmed and could pressure the 2026-08-01 final deadline, though it does not block the 60% checkpoint.",
+    "writing/thesis.pdf is currently stale relative to writing/thesis.tex (last recompiled 2026-07-04, four substantive edits made 2026-08-01 not yet baked in) -- do not submit the PDF as-is."
   ]
 }
