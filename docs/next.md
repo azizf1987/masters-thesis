@@ -1,5 +1,17 @@
 # next.md -- current state and what's next
 
+## Where we are (as of 2026-08-06, session 10)
+
+Two more supervisor-comment items addressed in `writing/thesis.tex`.
+
+**"PST" undefined acronym removed:** traced "PST" (used twice, S4.2 and S4.7, re: the precipitation gauge network SMHI transitioned to circa 2023) through the entire repo history -- thesis.tex, `download_metobs.py`, `data-audit.md`, every session of this file -- and found it was never defined anywhere, including in the commit that first introduced it, and a web search turned up nothing conclusive either. Rather than guess a formal expansion for a submitted thesis, reworded both sentences to describe the transition factually ("a newer automated gauge network") without asserting an unverified network name.
+
+**List of Abbreviations added:** new front-matter section, placed after the Table of Contents and before the Introduction (the conventional location), listing 31 abbreviations used throughout the thesis in a longtable matching the Appendix A table style. Excluded AI and MSc at the author's request (both are self-explanatory / not technical terms needing a glossary entry). Excluded PST since it no longer appears in the text after the rewording above.
+
+Recompiled end to end (pdflatex x2 + bibtex + pdflatex x1): 50 pages (+1 from the new front-matter section), no errors, no undefined references/citations. Same two pre-existing Appendix A warnings as session 9 (unaddressed, out of scope for this pass).
+
+---
+
 ## Where we are (as of 2026-08-06, session 9)
 
 Addressed supervisor comment: "In the results section try to connect the 3 RQs and show an integrated result."

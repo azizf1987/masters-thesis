@@ -135,6 +135,59 @@ Finally, I thank my family and friends for their patience and support throughout
 \clearpage
 
 % =====================================================
+% List of Abbreviations
+% =====================================================
+\section*{List of Abbreviations}
+\addcontentsline{toc}{section}{List of Abbreviations}
+
+\begin{longtable}{p{2.6cm}p{11.5cm}}
+\toprule
+\textbf{Abbreviation} & \textbf{Full form} \\
+\midrule
+\endfirsthead
+\multicolumn{2}{l}{\textit{List of Abbreviations continued}} \\
+\toprule
+\textbf{Abbreviation} & \textbf{Full form} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+AIC & Akaike Information Criterion \\
+API & Application Programming Interface \\
+AQ & Air Quality \\
+BIC & Bayesian Information Criterion \\
+CORINE & Coordination of Information on the Environment (land cover dataset) \\
+COVID-19 & Coronavirus Disease 2019 \\
+CSV & Comma-Separated Values \\
+DEM & Digital Elevation Model \\
+DSR & Design Science Research \\
+EDA & Exploratory Data Analysis \\
+EPSG & European Petroleum Survey Group (coordinate reference system registry) \\
+ESCAPE & European Study of Cohorts for Air Pollution Effects \\
+ETRS89 & European Terrestrial Reference System 1989 \\
+EU & European Union \\
+GEOSTAT & Eurostat Geostatistical Population Grid \\
+IDW & Inverse Distance Weighting \\
+IoT & Internet of Things \\
+JRC & Joint Research Centre (European Commission) \\
+LUR & Land-Use Regression \\
+MAE & Mean Absolute Error \\
+ML & Machine Learning \\
+NO$_2$ & Nitrogen Dioxide \\
+PM$_{2.5}$ & Particulate Matter with diameter $\leq$ 2.5~$\mu$m \\
+PSO & Particle Swarm Optimization \\
+R$^2$ & Coefficient of Determination \\
+RF & Random Forest \\
+RMSE & Root Mean Squared Error \\
+RQ & Research Question \\
+SLOO & Spatial Leave-One-Out (cross-validation) \\
+SMHI & Swedish Meteorological and Hydrological Institute \\
+WHO & World Health Organization \\
+\end{longtable}
+
+\clearpage
+
+% =====================================================
 % Main body (page 1)
 % =====================================================
 \pagenumbering{arabic}
@@ -382,7 +435,7 @@ For each of the 34 AQ stations, the nearest available SMHI surface observation s
 
 These five parameters capture the principal atmospheric drivers of near-surface pollutant transport and accumulation. Wind speed and direction govern advective dispersal and local plume dilution. Air temperature influences boundary layer mixing height and photochemical NO$_2$ formation. Relative humidity affects PM$_{2.5}$ hygroscopic growth and secondary aerosol partitioning. Precipitation is associated with wet deposition and pollutant scavenging.
 
-Coverage varies across parameters. Wind speed, wind direction, and relative humidity were available at all 34 stations with greater than 95 per cent daily completeness. Air temperature was available at 31 stations with adequate coverage; the three remaining stations, two in Västerås and one in Varberg, are affected by the operational closure or inactivity of their nearest meteorological observation station during parts of the study period. Precipitation coverage was substantially lower: only 19 of 34 stations have complete daily records, with the remaining 15 stations affected by SMHI's phased transition from traditional precipitation gauges to the PST sensor network, which resulted in systematic gaps for 2020 to 2022 at these stations. The handling of missing precipitation values is described in Section~\ref{sec:data-quality}.
+Coverage varies across parameters. Wind speed, wind direction, and relative humidity were available at all 34 stations with greater than 95 per cent daily completeness. Air temperature was available at 31 stations with adequate coverage; the three remaining stations, two in Västerås and one in Varberg, are affected by the operational closure or inactivity of their nearest meteorological observation station during parts of the study period. Precipitation coverage was substantially lower: only 19 of 34 stations have complete daily records, with the remaining 15 stations affected by SMHI's phased transition from traditional precipitation gauges to a newer automated gauge network, which resulted in systematic gaps for 2020 to 2022 at these stations. The handling of missing precipitation values is described in Section~\ref{sec:data-quality}.
 
 \subsection{Land-Use Features}
 \label{sec:data-corine}
@@ -443,7 +496,7 @@ Three data quality procedures were applied to the raw feature matrix before it w
 
 \textbf{Negative concentration clipping.} A small number of daily records contain negative concentration values arising from instrument drift and calibration adjustments in the SMHI reporting pipeline. Twelve such values were identified across the NO$_2$ and PM$_{2.5}$ columns. These values are physically impossible and were clipped to zero. Clipping rather than deletion was chosen to preserve the otherwise complete date-station record.
 
-\textbf{Precipitation imputation.} As noted in Section~\ref{sec:data-metobs}, 15 of the 34 stations have systematic precipitation gaps for 2020--2022 attributable to the phased PST network rollout. Across the full matrix, 15,236 daily precipitation values (31.6 per cent) were absent. These gaps were imputed using a monthly climatological mean: for each station, the mean observed precipitation was computed separately for each calendar month across all available years, and missing values were replaced with the corresponding station-month mean. Where no observed values existed for a given station-month combination, the national monthly median across all stations was used as a fallback. The binary column \texttt{precip\_observed} indicates original measurements (1) versus imputed values (0), enabling downstream sensitivity assessment.
+\textbf{Precipitation imputation.} As noted in Section~\ref{sec:data-metobs}, 15 of the 34 stations have systematic precipitation gaps for 2020--2022 attributable to this phased network transition. Across the full matrix, 15,236 daily precipitation values (31.6 per cent) were absent. These gaps were imputed using a monthly climatological mean: for each station, the mean observed precipitation was computed separately for each calendar month across all available years, and missing values were replaced with the corresponding station-month mean. Where no observed values existed for a given station-month combination, the national monthly median across all stations was used as a fallback. The binary column \texttt{precip\_observed} indicates original measurements (1) versus imputed values (0), enabling downstream sensitivity assessment.
 
 \textbf{Station-level completeness filtering.} The 11 concurrently-passing stations used in model training and validation were confirmed by checking completeness against the full 1,827-day study period. A further eight stations pass the 90 per cent threshold for one pollutant only and are excluded from the analytical sample for the reason given in Section~\ref{sec:data-aq}; two of these, Göteborg Haga (NO$_2$: 90.5 per cent, PM$_{2.5}$: 69 per cent) and Östersund (NO$_2$: 94.8 per cent, PM$_{2.5}$: 79 per cent), illustrate the pattern, clearing the NO$_2$ threshold while falling well short on PM$_{2.5}$ over the full study period.
 
