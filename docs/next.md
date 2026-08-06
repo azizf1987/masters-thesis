@@ -1,5 +1,20 @@
 # next.md -- current state and what's next
 
+## Where we are (as of 2026-08-06, session 12)
+
+Full read-through of the entire thesis (front matter through appendices), requested as a general feedback pass. Findings and fixes:
+
+- **Stale "metropolitan case study" wording (real inconsistency, fixed):** S1.2, S2.1, S2.4, S2.5, and the S3.1 DSR table still described RQ3 as a "Swedish metropolitan case study" / placement "at the scale of a metropolitan region," left over from the pre-Phase-2 Skåne scope. Every other section (S1.3, S7, S8, S9) already said "nationally" / "across Sweden" per the 2026-06-18 scope change. All 4 spots corrected to "national case study" / "national scale."
+- **Bib key/author mismatch (cosmetic, fixed):** `molnar_sweden_health_2017` was cited in-text as "Segersson et al." (correctly, per the entry's actual author list) but the key itself referenced a nonexistent "Molnar" first author. Renamed to `segersson_sweden_health_2017` throughout.
+- **Missing bib entry (real bug, fixed):** `munera_iot_aq_smart_cities_2021` was cited in S2.1 (the smart-cities IoT paragraph) but had no corresponding entry in `references.bib` in the last committed version -- would have failed to resolve as an undefined citation on a clean checkout. Entry added.
+- Confirmed via full re-verification: all headline statistics, station counts, and regional breakdowns in the main text match Appendix A and the results CSVs exactly (Bredkälen etc. region counts, 11+7+1+15=34 station status breakdown, 19/34 passing at least one pollutant).
+- Noted but not fixed (cosmetic, pre-existing, flagged in sessions 9-11): Appendix A table overfull hbox (~82pt) and two "float too large for page" figure warnings.
+- Noted but not changed (defensible as-is, flagged for the viva): S2.4 builds up PSO as the primary related-work method before S3.5 pivots to greedy sequential placement instead. The reasoning for the pivot is solid and appears in S3.5/S8.2, but it's worth having the explanation ready verbally since the narrative arc doesn't telegraph the pivot early.
+
+Recompiled end to end: 51 pages, no errors, no undefined references/citations, bibtex clean.
+
+---
+
 ## Where we are (as of 2026-08-06, session 11)
 
 Addressed final supervisor comment: "A section on future research directions is good for you to point to questions beyond your research limitations and to point to next year students to solve."
