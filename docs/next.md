@@ -1,5 +1,19 @@
 # next.md -- current state and what's next
 
+## Where we are (as of 2026-08-06, session 11)
+
+Addressed final supervisor comment: "A section on future research directions is good for you to point to questions beyond your research limitations and to point to next year students to solve."
+
+This was actually already planned: `docs/roadmap.md` always described S9 Conclusion as "summary; contributions; future work," but the future-work part was only ever a single dense paragraph folded into the closing text, not a distinct, actionable section.
+
+**Replaced that paragraph with a proper "Future Research Directions" subsection in S9**, after the RQ answers and contribution paragraph. Six concrete, actionable directions, each tied back to a specific limitation or result rather than restating Limitations (S8.4) verbatim: denser validation networks, road-network/dispersion-informed distance for NO2, hybrid geostatistical/spatiotemporal models (given IDW beat RF for PM2.5), sub-daily estimation, multi-objective and cost-aware placement (incl. revisiting PSO once budgets grow), and longitudinal threshold recalibration as vehicle electrification progresses.
+
+Added a missing `\label{sec:scope}` to S1.2 Scope and Delimitations (previously unlabelled) to support a cross-reference from the new subsection.
+
+Recompiled end to end: 51 pages (+1), no errors, no undefined references. Same two pre-existing Appendix A warnings noted in sessions 9-10, still unaddressed (separate pass).
+
+---
+
 ## Where we are (as of 2026-08-06, session 10)
 
 Two more supervisor-comment items addressed in `writing/thesis.tex`.
