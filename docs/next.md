@@ -1,5 +1,25 @@
 # next.md -- current state and what's next
 
+## Where we are (as of 2026-08-06, session 9)
+
+Addressed supervisor comment: "In the results section try to connect the 3 RQs and show an integrated result."
+
+**Found:** a "§7.4 Integrated Results Across RQ1--RQ3" subsection (synthesis table + connecting paragraph, immediately before §8 Discussion) was already present in the working copy of `writing/thesis.tex` but had never been committed and was not logged in this file -- it must have been added in an untracked session. Content was sound; folded it into this session's work instead of redoing it.
+
+**Bug found and fixed while verifying the integrated table's numbers against `data/results/station_metrics.csv`:** the NO2 Random Forest mean RMSE was stated as 7.36 ug/m3 everywhere in the thesis (Abstract, §5.1, Table 4, §5.3 RQ1 answer x2, the new §7.4 table and paragraph, §8.1 RQ1 answer, §9 RQ1 bullet -- 9 occurrences). The actual mean of the 11 per-station RF RMSE values in the CSV is 7.27 (79.934/11 = 7.2667). All 9 occurrences corrected to 7.27. All other headline means (PM2.5 RF/IDW/LUR RMSE, NO2 MAE/LUR/IDW RMSE, DSR coverage percentages, station-level win counts) were re-verified against the CSVs and are correct as stated -- this was an isolated error.
+
+**Added:**
+- A forward-signpost paragraph at the top of §5 (Spatial Estimation Models) telling the reader up front that RQ1/RQ2/RQ3 are answered in sequence across §5-7 and tied together in §7.4.
+- A closing paragraph at the end of §8.1 (Answers to the Research Questions) linking the three per-RQ answer paragraphs back to the §7.4 integrated table, stating the chain explicitly: RQ1's autocorrelation finding sets RQ2's threshold, which sets RQ3's sensor budget.
+
+**Recompiled end to end** (pdflatex x2 + bibtex + pdflatex x1): 49 pages, no errors, no undefined references/citations. Wrapped the new §7.4 table in `\resizebox` (matching the style of the other results tables) to fix a 14pt overfull hbox it introduced. Two pre-existing issues noted but NOT fixed here (out of scope for this pass): a large overfull-hbox in the Appendix A station table (~82pt, lines ~867-915) and two "float too large for page" warnings on figures around lines 748/768 -- both predate this session's changes and should be picked up separately.
+
+**Still open:**
+- Fix the Appendix A table overfull-hbox and the two oversized-figure warnings noted above.
+- Everything carried over from session 8 below (LaTeX toolchain compile-verification is now done as of this session; logo file and human wording read-through still open).
+
+---
+
 ## Where we are (as of 2026-08-01, session 8)
 
 Extensive review and correction session covering the full thesis (front matter through appendices), triggered by a full section-by-section read-through that then expanded into direct verification of every major numeric claim against the underlying data files and results CSVs, not just the prose. This surfaced and fixed several real errors that had survived earlier sessions.
