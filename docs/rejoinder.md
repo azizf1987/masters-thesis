@@ -41,3 +41,13 @@ Phrase cautiously if you cannot support by a systematic review, as you have not 
 
 **Response:**
 Revised. The claim is now scoped to the literature reviewed in this thesis (not an absolute claim about the field), and specifically extended to note that no distance-accuracy analysis exists for the Swedish SMHI network either, citing Segersson et al. and the Stockholm/Gothenburg/Malmö dispersion study to show the Swedish literature was checked.
+
+---
+
+## Comment 5 — Terminology for the 64 km / 6 km figures
+
+**Comment:**
+I would recommend that 64 km should not be called "the reliable prediction distance" without qualification. It would be better described as something like: the estimated prediction-distance threshold under the adopted 50% RMSE criterion. This distinction should appear in the Abstract, Results, Discussion and Conclusion.
+
+**Response:**
+Thank you for this comment. I've revised the thesis so 64 km and 6 km are now presented as "estimated prediction-distance thresholds under the adopted 50% criterion," not fixed reliability limits, with an added note that both are criterion-dependent estimates (with extra caution on the 6 km NO2 figure). This is reflected in the Abstract, Results (§6.4, now retitled accordingly), Discussion, and Conclusion.
