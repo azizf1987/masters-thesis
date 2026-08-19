@@ -31,3 +31,13 @@ As seen in Table 6 also, IDW provides better performance for all the aspects. So
 
 **Response:**
 Added MAE and R² for LUR and IDW here as well. Noted that no equivalent caveat is needed for PM₂.₅: IDW wins at 10/11 stations, which is consistent with its lower mean RMSE (unlike the NO₂ case).
+
+---
+
+## Comment 4 — Section 2.5 (Research Gaps and Positioning)
+
+**Comment:**
+Phrase cautiously if you cannot support by a systematic review, as you have not done for this work.
+
+**Response:**
+Revised. The claim is now scoped to the literature reviewed in this thesis (not an absolute claim about the field), and specifically extended to note that no distance-accuracy analysis exists for the Swedish SMHI network either, citing Segersson et al. and the Stockholm/Gothenburg/Malmö dispersion study to show the Swedish literature was checked.
