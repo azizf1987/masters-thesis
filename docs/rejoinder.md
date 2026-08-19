@@ -21,3 +21,13 @@ In table 5, IDW provides better RMSE in 7/11 stations. Even RF provides lower RM
 
 **Response:**
 Added MAE and R² for LUR and IDW (previously only RMSE was shown). Added a short explanation of why IDW wins at 7/11 stations despite RF's lower mean RMSE: RF's mean is pulled down by two isolated rural stations where it performs exceptionally well, while IDW is competitive or better at most of the remaining nine.
+
+---
+
+## Comment 3 — Table 6
+
+**Comment:**
+As seen in Table 6 also, IDW provides better performance for all the aspects. So, it would be better to provide all the related metrics for the three algorithms and compare fairly instead of making RF the core algorithm.
+
+**Response:**
+Added MAE and R² for LUR and IDW here as well. Noted that no equivalent caveat is needed for PM₂.₅: IDW wins at 10/11 stations, which is consistent with its lower mean RMSE (unlike the NO₂ case).
