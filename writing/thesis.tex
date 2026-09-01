@@ -22,6 +22,14 @@
 \usepackage{tocloft}
 \usepackage{float}
 \usepackage{longtable}
+\usepackage{placeins}
+% Force all pending floats (figures/tables) to be placed before crossing into
+% the next section/subsection, so they can never drift past the text that
+% refers to them.
+\let\oldsection\section
+\renewcommand{\section}{\FloatBarrier\oldsection}
+\let\oldsubsection\subsection
+\renewcommand{\subsection}{\FloatBarrier\oldsubsection}
 
 \renewcommand{\contentsname}{Contents}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
@@ -263,7 +271,7 @@ Land-use regression (LUR) represents the established peer-reviewed standard for 
 
 More recent Swedish research has characterised intra-urban exposure gradients using high-resolution dispersion modelling across Stockholm, Gothenburg, and Malmö, confirming that the spatial heterogeneity documented in ESCAPE-era studies persists in contemporary Swedish cities \cite{sweden_dispersion_2024}. The ESCAPE R\textsuperscript{2} benchmarks therefore remain the relevant standard for evaluating any spatial estimation framework operating on the national SMHI station network.
 
-LUR has known limitations. As Hoek et al.~\cite{hoek_lur_review_2008} discuss, LUR models are empirical and area-specific: their predictive performance is not guaranteed to transfer to areas or periods not represented in the monitoring campaign used to fit them, which is a constraint when a nationally-trained model is applied to locations with unusual land-use configurations. The linear regression form also does not, by construction, represent non-linear interactions between predictors that may occur in complex urban environments. % VERIFY limitations section of Hoek 2008
+LUR has known limitations. As Hoek et al.~\cite{hoek_lur_review_2008} discuss, LUR models are empirical and area-specific: their predictive performance is not guaranteed to transfer to areas or periods not represented in the monitoring campaign used to fit them, which is a constraint when a nationally-trained model is applied to locations with unusual land-use configurations. The linear regression form also does not, by construction, represent non-linear interactions between predictors that may occur in complex urban environments.
 
 Machine learning (ML) methods have been increasingly applied to spatial air quality estimation, motivated by their capacity to model non-linear relationships between predictor variables and pollutant concentrations. Agbehadji and Obagbuwa \cite{agbehadji_ml_aq_review_2024} provide a systematic review of ML and deep learning applications to spatiotemporal air quality prediction, documenting a consistent pattern of ML models outperforming traditional regression baselines on RMSE and MAE metrics across diverse geographic contexts. Chen and Lin \cite{chen_pm25_interpolation_2021} demonstrate ML-based spatial interpolation for PM$_{2.5}$ estimation, integrating microsensor cluster data with a regulatory station baseline to achieve high spatial resolution estimates across an urban area. Hybrid approaches combining ML feature extraction with geostatistical variance modelling have also been proposed: Xie et al. \cite{xie_swinlstm_kriging_2025} integrate a deep learning temporal encoder with Kriging spatial covariance estimation, demonstrating accuracy improvements in data-sparse regions. The applicability of such hybrid approaches in this thesis is conditional on the national station count confirmed in the data feasibility phase.
 
@@ -304,25 +312,23 @@ The Peffers et al.\ \cite{peffers_dsr_2007} framework prescribes six phases of d
 \centering
 \caption{Mapping of the Peffers et al.\ (2007) DSR phases to this thesis.}
 \label{tab:dsr-mapping}
-\begin{tabular}{p{0.26\textwidth} p{0.64\textwidth}}
+\footnotesize
+\renewcommand{\arraystretch}{0.9}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{0.24\textwidth} p{0.66\textwidth}}
 \toprule
 \textbf{DSR phase} & \textbf{This thesis} \\
 \midrule
 1. Problem identification and motivation &
   The SMHI Luftwebb network leaves large intra-urban areas without direct air quality measurement. IoT deployments lack analytical criteria for placement decisions. The health burden of PM$_{2.5}$ and NO$_2$ exposure in Swedish cities motivates better spatial characterisation of pollutant concentrations. \\
-\addlinespace
 2. Define objectives of a solution &
   RQ1 specifies the target: an ML estimation model whose out-of-sample accuracy at withheld stations is characterised under a spatially rigorous validation protocol. RQ2 specifies the distance-accuracy decay relationship and the reliable prediction distance threshold. RQ3 specifies the placement artefact: a prioritised set of IoT sensor deployment coordinates for a Swedish national case study, grounded in the empirical results of RQ1 and RQ2. \\
-\addlinespace
 3. Design and development &
   A spatial estimation framework is constructed using a Random Forest model with land-use, topographic, and meteorological covariates, evaluated against IDW and land-use regression (LUR) benchmarks under a buffered spatial leave-one-out cross-validation protocol. The per-station error-distance relationship is modelled to produce a decay curve and a threshold. A greedy sequential placement algorithm operationalises the threshold as a spatial coverage objective over the national territory. \\
-\addlinespace
 4. Demonstration &
   The placement artefact is applied to Sweden nationally as the case study, producing a prioritised list of IoT sensor deployment coordinates across all regions alongside before-and-after coverage uncertainty maps. \\
-\addlinespace
 5. Evaluation &
   The estimation model is evaluated by RMSE, MAE, and R\textsuperscript{2} per pollutant, benchmarked against IDW and LUR. The placement artefact is evaluated by the proportion of Swedish urban area brought within reliable prediction distance of at least one sensor (existing or newly placed), and by the number of currently unmonitored regions transitioning to served, as the primary real-world criteria. \\
-\addlinespace
 6. Communication &
   Findings are presented in this thesis, with methodology, empirical results, and artefact design reported in sufficient detail for replication and extension. \\
 \bottomrule
