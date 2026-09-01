@@ -1,22 +1,20 @@
 # Defense Presentation Script
 ### Spatial Estimation of Air Quality at Unmonitored Locations Using Machine Learning
-29 slides · ~20 minutes at a natural pace · Abdalazeez Asaad
+27 slides · ~18 minutes at a natural pace · Abdalazeez Asaad
 
 ---
 
 ## How to present this
 
-**Structure.** The deck has five movements: the problem and gap (slides 1–6), methodology (7–15), RQ1–RQ3 results in order (16–24), limitations and closing (25–29). Examiners are listening for whether you can narrate *why* each methodological choice was necessary, not just *what* you did — so on the methodology slides, always land on the reason, not the description.
+**Structure.** The deck has five movements: the problem and gap (slides 1–6), methodology (7–15), RQ1–RQ3 results in order (16–22), limitations and closing (23–27). Examiners are listening for whether you can narrate *why* each methodological choice was necessary, not just *what* you did — so on the methodology slides, always land on the reason, not the description.
 
-**Tone.** Several slides exist specifically to show self-critique before an examiner can raise it: slide 18 ("Reading the result straight"), slide 24 ("The honest counterpart"), and slide 26 ("What this doesn't yet resolve"). Deliver these with confidence, not apology — say them like findings, not confessions. That contrast is one of your strongest assets in the room.
+**Tone.** One slide exists specifically to show self-critique before an examiner can raise it: slide 24 ("What this doesn't yet resolve"). Deliver it with confidence, not apology — say the list like findings, not confessions. The RQ3 slide (20) also reports the NO2 result plainly, in the same breath as the PM2.5 headline — don't soften your voice or slow down for it.
 
-**Pacing budget.** ~20 minutes total, leaving 10 minutes for questions in a typical 30-minute slot. If you're running long, the safest slides to compress are 22 (placement map — the caption already says it) and 3 (three approaches — the card titles carry it).
+**Pacing budget.** ~18 minutes total, leaving plenty of room for questions in a typical 30-minute slot. If you're running long, the safest slides to compress are 21 (placement map — the caption already says it) and 3 (three approaches — the card titles carry it).
 
 **Opening line (before slide 1 title):** state your name, programme, and the one-sentence version of what you did, before you even click past the title slide. Something like: *"Thank you. I'm going to walk through how I measured the accuracy of estimating air pollution between Sweden's monitoring stations, and used that measurement to recommend where new sensors should go."*
 
-**Closing line (slide 29):** don't just say "thank you, questions" — land the contribution one more time in one breath, then stop talking. Silence is the cue for the chair to open questions.
-
-**A note on slides 21 and 24.** They now cover overlapping ground (both show the NO2 numbers). Slide 21's NO2 row is the quick stat; slide 24 is the fuller narrative beat. When you present, treat slide 21's NO2 mention as a preview ("we'll come back to this") and let slide 24 carry the actual emphasis — don't deliver the same point twice at full weight.
+**Closing line (slide 27):** don't just say "thank you, questions" — land the contribution one more time in one breath, then stop talking. Silence is the cue for the chair to open questions.
 
 ---
 
@@ -140,43 +138,35 @@
 
 ### 17 — Accuracy, pollutant by pollutant (RQ1)
 **~45s**
-> "First result: answering RQ1. For NO2, Random Forest wins outright — mean RMSE of 7.27 micrograms per cubic metre, against 8.90 for IDW and 15.33 for LUR. For PM2.5, the story flips: simple distance-averaging, IDW, wins at 2.33, against 3.56 for Random Forest and 5.87 for LUR. Two pollutants, two different winners — and that's not noise, it's the next slide."
+> "First result: answering RQ1. For NO2, Random Forest wins outright — mean RMSE of 7.27 micrograms per cubic metre, against 8.90 for IDW and 15.33 for LUR. For PM2.5, the story flips: simple distance-averaging, IDW, wins at 2.33, against 3.56 for Random Forest and 5.87 for LUR. Two pollutants, two different winners, and that tracks the physics: PM2.5's smooth regional spread favors simple distance-averaging, while NO2's sharp local gradients reward Random Forest's feature-based learning."
 
 ---
 
-### 18 — The simple method won where it mattered most
+### 18 — Choosing the decay curve: AIC picks the winner
+**~30s**
+> "One quick methods note before the results: I didn't just assume a curve shape, I tested for it. Three candidates — log, power-law, exponential — each fit to the data, and AIC picked the best one per pollutant and model, lowest score wins. NO2 came out log-shaped across the board; PM2.5 is exponential for Random Forest and IDW, log for LUR. For the actual threshold on the next slide, I used IDW's curve — it has the cleanest trend — and solved for where its error hits half the real mean concentration. Tested, not assumed."
+
+*Do: the slide numbers the steps 1 to 6 for you — glance at your own numbers on screen as a cue card rather than reciting every one. Say this fast and light; it's a methods aside, not a result to dwell on. Land on the last line — "tested, not assumed" — and move on.*
+
+---
+
+### 19 — How far can an estimate be trusted? (RQ2)
 **~55s**
-> "I want to be direct about both of these. PM2.5 is the pollutant the entire sensor-placement result rests on — and the simple method beat my machine learning model, winning at 10 of 11 stations. That's not a failure to bury, it's a finding: PM2.5 spreads smoothly enough that feature-based learning adds little over just averaging nearby stations. NO2 is subtler — Random Forest wins on the *mean*, but IDW actually has lower error at 7 of the 11 individual stations. RF's mean is pulled down by two isolated rural stations where it performs exceptionally well; IDW is competitive or ahead across the rest."
-
-*Do: this is a "reported, not hidden" slide — deliver both paragraphs at the same steady pace you'd use for a positive result. Don't slow down or soften your voice for the second one.*
-
----
-
-### 19 — Choosing the decay curve: AIC picks the winner
-**~45s**
-> "Before I show the decay curves themselves, one methodological note. For each pollutant-model combination, I fitted three candidate functional forms — logarithmic, power, and exponential — to the per-station error-distance data, eighteen fits in total, and kept whichever had the lowest AIC. NO2 turned out log-shaped across all three estimators. PM2.5 is exponential for Random Forest and IDW, but log for LUR. The shape wasn't chosen to fit the story — it's what the data selected. Worth noting: Random Forest also posts the lowest AIC of the three models for both pollutants, meaning its error-distance relationship is the cleanest fit of the three, even though IDW is still the more accurate PM2.5 estimator on RMSE."
-
-*Do: this slide exists to pre-empt "how did you actually choose the curve shape" before anyone has to ask it. Deliver it briskly and technically — it's a methods aside, not a result to dwell on.*
-
----
-
-### 20 — How far can an estimate be trusted? (RQ2)
-**~55s**
-> "Answering RQ2: fitting decay curves to per-station error against distance gives an estimated prediction-distance threshold of about 64 kilometres for PM2.5, and about 6 kilometres for NO2, under an adopted 50% RMSE criterion — I want to stress these are estimated thresholds under a stated criterion, not fixed reliability limits carved in stone. You can see why in the charts: PM2.5's curve rises gently across all three methods. NO2's error is tied tightly to nearby traffic and degrades far faster — notice the RF panel actually trends down at long range, pulled by those same two rural stations from the last slide."
+> "Answering RQ2: fitting decay curves to per-station error against distance gives an estimated prediction-distance threshold of about 64 kilometres for PM2.5, and about 6 kilometres for NO2, under an adopted 50% RMSE criterion — I want to stress these are estimated thresholds under a stated criterion, not fixed reliability limits carved in stone. You can see why in the charts: PM2.5's curve rises gently across all three methods. NO2's error is tied tightly to nearby traffic and degrades far faster — notice the RF panel actually trends down at long range. That's not a modelling win, it's two isolated rural stations with near-constant, very low NO2 levels, where small absolute errors flatter the curve rather than reflecting genuine long-range accuracy."
 
 *Do: point at the PM2.5/NO2 panel labels explicitly so the audience tracks which chart is which.*
 
 ---
 
-### 21 — 20 sensors, national coverage (RQ3)
+### 20 — 20 sensors, national coverage (RQ3)
 **~55s**
-> "Answering RQ3, applying the PM2.5 threshold: a 20-sensor greedy placement raises national PM2.5 land coverage from 10.9% to 67.2%, and urban coverage from 38.8% to 71.4%, bringing 4 of Sweden's 7 currently unmonitored regions into service. But — same 20 sensors, checked against NO2's stricter 6-kilometre threshold — land coverage barely moves, 0.2% to 0.6%, and urban coverage doesn't move at all, flat at 6.1%. I'll come back to why that matters in a moment."
+> "Answering RQ3, applying the PM2.5 threshold: a 20-sensor greedy placement raises national PM2.5 land coverage from 10.9% to 67.2%, and urban coverage from 38.8% to 71.4%, bringing 4 of Sweden's 7 currently unmonitored regions into service. But — same 20 sensors, checked against NO2's stricter 6-kilometre threshold — land coverage barely moves, 0.2% to 0.6%, and urban coverage doesn't move at all, flat at 6.1%. I'll come back to what that means for deployment planning shortly."
 
 *Do: this is the slide where RQ1→RQ2→RQ3 clicks into one story — PM2.5's smooth spatial pattern (RQ1) is why its decay is gradual (RQ2), which is why 20 sensors can move its coverage this much (RQ3); NO2's sharp gradient explains the opposite outcome. Say that connection out loud if you have the time — it's not on any slide, but it's the single best sentence you can add live.*
 
 ---
 
-### 22 — 20 recommended locations
+### 21 — 20 recommended locations
 **~35s**
 > "Here's where those 20 sensors actually land — spreading from Götaland in the south, through Svealand, up into Norrland in the north, each one chosen to close the biggest remaining gap at the time it was placed."
 
@@ -184,27 +174,19 @@
 
 ---
 
-### 23 — Before and after
+### 22 — Before and after
 **~35s**
 > "And the coverage picture before and after: grey is beyond the PM2.5 threshold, blue is within reliable range of a station or sensor. The shift from the left panel to the right is the 10.9%-to-67.2% number made visible."
 
 ---
 
-### 24 — The same 20 sensors barely help NO2
-**~40s**
-> "I already previewed this, but it's worth landing properly: checked against the stricter 6-kilometre NO2 threshold, the same 20 sensors move national NO2 land coverage only from 0.2% to 0.6% — and urban NO2 coverage doesn't move at all, flat at 6.1% before and after. A sensor plan sized for PM2.5 does not solve NO2. I'm saying that plainly because the thesis says it plainly, rather than letting the headline PM2.5 number imply otherwise."
-
-*Do: this is the second "reported, not hidden" beat — same steady, confident delivery as slide 18.*
-
----
-
-### 25 — Two pollutants, two planning problems
+### 23 — Two pollutants, two planning problems
 **~40s**
 > "So what does that mean practically? A PM2.5-sized deployment leaves NO2 exposure near traffic effectively unmonitored between stations. Municipalities planning IoT deployments need to treat the two thresholds as separate constraints, not a shared budget. And four newly-served regions — Jönköping, Örebro, Dalarna, Norrbotten — are concrete near-term priorities today, independent of any future NO2-specific work."
 
 ---
 
-### 26 — What this doesn't yet resolve
+### 24 — What this doesn't yet resolve
 **~55s**
 > "No thesis is without limits, and I'd rather name mine than have them found. Only 11 stations carry every result here. The 5-kilometre exclusion buffer is justified by how the network happens to cluster, not by the true spatial autocorrelation range. The evaluation grid, at 10 kilometres, is coarser than the NO2 threshold itself, so it can't fully resolve NO2's coverage geometry. Straight-line distance stands in for road-network distance, which would be more physically right for NO2, but wasn't computable from this network's sparsity. And the 50% criterion itself is a modelling choice, not a fixed rule — sweeping it from 20 to 80% swings the post-placement PM2.5 coverage figure all the way from 2.9% to 94.7%."
 
@@ -212,19 +194,19 @@
 
 ---
 
-### 27 — One sentence
+### 25 — One sentence
 **~35s**
 > "If I had to put the contribution in one sentence: a reproducible method, built entirely on public data, that turns 'how accurate is our estimate at distance X' into a ranked list of where to put the next sensor — demonstrated at the scale of an entire country. What it is *not*: an operational deployment plan, and not a regulatory compliance tool. It's a starting point for site-level planning, not a finished answer."
 
 ---
 
-### 28 — Future work
+### 26 — Future work
 **~35s**
 > "Looking ahead: validating against a denser reference network, or replicating this in another country; jointly optimizing placement for both pollutants instead of PM2.5 alone; a finer national grid that can actually resolve the NO2 threshold; and periodic recalibration as traffic patterns shift — vehicle electrification in particular is likely to flatten NO2's spatial gradient over the coming years."
 
 ---
 
-### 29 — Thank you
+### 27 — Thank you
 **~15s**
 > "Thank you. I'm happy to take questions."
 
@@ -249,12 +231,12 @@ Internal validity rests on the buffered SLOO design specifically preventing spat
 It's measured, not assumed — Section 6.3 stratifies explicitly. Traffic stations show mean RF RMSE of 8.30 µg/m³ versus 6.03 for background stations (background looks better only because the two rural stations have near-zero concentrations that suppress absolute error). For IDW the pattern *reverses* — traffic stations do better (7.44) than background (10.66), because IDW at isolated rural stations has to interpolate from distant, dissimilar urban training stations. There's also a seasonal effect: NO2 RF RMSE rises from 7.13 in summer to 8.74 in winter, consistent with winter inversion and heating emissions sharpening spatial gradients.
 
 **"What about the low-cost IoT sensor literature specifically — smart cities, calibration, integration?"**
-If pressed, acknowledge the thesis's related-work section covers this (low-cost IoT sensor networks for urban monitoring, and the smart-city framing where air quality is one of several sensed domains a city acts on), but that your contribution is squarely the placement decision rule, not sensor hardware or calibration — that's explicitly out of scope, consistent with the "not an operational deployment plan" framing on slide 27.
+If pressed, acknowledge the thesis's related-work section covers this (low-cost IoT sensor networks for urban monitoring, and the smart-city framing where air quality is one of several sensed domains a city acts on), but that your contribution is squarely the placement decision rule, not sensor hardware or calibration — that's explicitly out of scope, consistent with the "not an operational deployment plan" framing on slide 25.
 
 ---
 
 ## Final checklist before you present
 
-- Rehearse the full script once against a timer — you're targeting ~19 minutes, leaving room for the room's actual clock.
+- Rehearse the full script once against a timer — you're targeting ~18 minutes, leaving room for the room's actual clock.
 - Know the four numbers cold: **7.27** (NO2 RF RMSE), **64 km / 6 km** (thresholds), **67.2% / 71.4%** (PM2.5 coverage after), **0.6% / 6.1%** (NO2 coverage after). If you forget everything else, these four carry the whole results section.
 - If a laptop or projector substitution happens, the deck is a single self-contained HTML file — open it directly, no other files needed.

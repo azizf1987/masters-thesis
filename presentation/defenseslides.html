@@ -143,6 +143,11 @@ main.slide-area{
 strong.accent{ color:var(--primary); font-weight:700; }
 em.muted{ color:var(--on-surface-variant); font-style:italic; }
 .small-muted{ font-size:.85rem; color:var(--on-surface-variant); }
+.note-box{ border:1.5px dashed var(--outline-variant); border-radius:var(--r-lg); padding:.9rem 1.15rem; margin-top:1.1rem; background:var(--surface-container-low); }
+.note-box .note-label{ font-weight:800; text-transform:uppercase; letter-spacing:.07em; font-size:.64rem; color:var(--on-surface-variant); margin-bottom:.5rem; display:flex; align-items:center; gap:.35rem; }
+.note-box ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.32rem; }
+.note-box li{ position:relative; padding-left:1rem; font-size:.86rem; line-height:1.45; color:var(--on-surface-variant); }
+.note-box li::before{ content:"\2013"; position:absolute; left:0; }
 .mt-1{margin-top:.5rem;} .mt-2{margin-top:1rem;} .mb-0{margin-bottom:0;}
 
 /* ============ Lists ============ */
@@ -151,6 +156,9 @@ em.muted{ color:var(--on-surface-variant); font-style:italic; }
 .md-list li::before{ content:""; position:absolute; left:0; top:.55em; width:7px; height:7px; border-radius:50%; background:var(--primary); }
 .md-list.tight li{ font-size:.95rem; }
 .md-list strong{ color:var(--on-surface); font-weight:700; }
+.md-list .sub-list{ list-style:none; display:flex; flex-direction:column; gap:.5rem; margin:.6rem 0 0; padding-left:1.4rem; }
+.md-list .sub-list li{ position:relative; padding-left:1.1rem; font-size:.92rem; line-height:1.5; }
+.md-list .sub-list li::before{ content:""; position:absolute; left:0; top:.5em; width:6px; height:6px; border-radius:50%; background:none; border:1.5px solid var(--on-surface-variant); }
 
 /* ============ Cards / grid ============ */
 .grid-2{ display:grid; grid-template-columns:1fr; gap:1.6rem; }
@@ -183,6 +191,17 @@ em.muted{ color:var(--on-surface-variant); font-style:italic; }
 .callout p{ margin:0; font-size:.98rem; line-height:1.55; }
 .callout.primary{ background:var(--primary-container); color:var(--on-primary-container); }
 .callout.primary .icon{ background:color-mix(in srgb, var(--on-primary-container) 12%, transparent); }
+.callout .steps{ list-style:none; margin:.5rem 0 0; padding:0; display:flex; flex-direction:column; gap:.45rem; counter-reset:step; }
+.callout .steps li{ position:relative; padding-left:1.85rem; font-size:.92rem; line-height:1.45; }
+.callout .steps li::before{
+  counter-increment:step; content:counter(step);
+  position:absolute; left:0; top:.02em; width:1.3rem; height:1.3rem; border-radius:50%;
+  background:color-mix(in srgb, var(--on-tertiary-container) 16%, transparent);
+  color:var(--on-tertiary-container); font-size:.68rem; font-weight:800;
+  display:flex; align-items:center; justify-content:center;
+}
+.callout .steps code{ font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; background:color-mix(in srgb, var(--on-tertiary-container) 14%, transparent); padding:.04rem .32rem; border-radius:.3rem; font-size:.86em; }
+.callout .tagline{ margin-top:.6rem; font-weight:700; }
 
 /* ============ Chips ============ */
 .chip-row{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.8rem 0; }
@@ -277,6 +296,9 @@ figcaption.cap{ margin-top:.6rem; text-align:center; font-size:.85rem; color:var
   .print-inner .grid-2, .print-inner .grid-3, .print-inner figure{ break-inside:avoid; page-break-inside:avoid; }
   .print-inner img{ max-height:34vh !important; width:auto !important; max-width:100% !important; object-fit:contain; }
   .print-inner table{ font-size:9pt !important; }
+  .print-inner .chart-pair{ margin-top:.5rem !important; gap:.3rem !important; }
+  .print-inner .chart-pair img{ max-height:17vh !important; }
+  .print-inner .md-img-wrap{ display:flex !important; align-items:center; justify-content:center; }
 }
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
 </style>
@@ -350,12 +372,12 @@ not to reintroduce a ./figures/ path.
       <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Stylised dot-grid map of Sweden, with monitoring points sparse in the north and dense in the south">
         <defs>
           <linearGradient id="heroDusk" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="color-mix(in srgb, var(--on-surface) 92%, var(--tertiary) 8%)"/>
-            <stop offset="100%" stop-color="color-mix(in srgb, var(--on-surface) 78%, var(--primary) 22%)"/>
+            <stop offset="0%" stop-color="#241F27"/>
+            <stop offset="100%" stop-color="#202849"/>
           </linearGradient>
           <radialGradient id="heroGlow" cx="72%" cy="30%" r="55%">
-            <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.55"/>
-            <stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/>
+            <stop offset="0%" stop-color="#3355D8" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#3355D8" stop-opacity="0"/>
           </radialGradient>
           <clipPath id="swedenClip">
             <path d="M498,34 C560,26 606,64 600,124 C594,182 552,214 566,270 C580,326 616,352 604,410
@@ -629,9 +651,12 @@ not to reintroduce a ./figures/ path.
   <h2 class="h2">Greedy, on purpose</h2>
   <ul class="md-list">
     <li>At each step, place the sensor that closes the <strong>biggest remaining gap</strong></li>
-    <li>Chosen over swarm-based optimization (PSO) for two reasons: <strong>transparency</strong> and a <strong>provable guarantee</strong></li>
-    <li>A planner can see exactly why each sensor was recommended &mdash; no black box to trust</li>
-    <li>For this class of coverage objective, greedy search is mathematically guaranteed to land within a <strong>constant factor of the true optimum</strong> &mdash; not just a heuristic hope</li>
+    <li>Chosen over swarm-based optimization (PSO) for two reasons: <strong>transparency</strong> and a <strong>provable guarantee</strong>
+      <ul class="sub-list">
+        <li>A planner can see exactly why each sensor was recommended &mdash; no black box to trust</li>
+        <li>For this class of coverage objective, greedy search is mathematically guaranteed to land within a <strong>constant factor of the true optimum</strong> &mdash; not just a heuristic hope</li>
+      </ul>
+    </li>
   </ul>
   <div class="chip-row">
     <span class="chip primary">Greedy &middot; transparent, provably near-optimal</span>
@@ -757,26 +782,22 @@ not to reintroduce a ./figures/ path.
       <p>Mean RMSE (&micro;g/m&sup3;): <strong>IDW 2.33</strong> vs RF 3.56 vs LUR 5.87</p>
     </div>
   </div>
+  <div class="callout">
+    <div class="icon">&#128204;</div>
+    <div class="body-col">
+      <p class="label">Buffered SLOO &mdash; Steps</p>
+      <ol class="steps">
+        <li>Select a station, withhold it as the test point.</li>
+        <li>Draw the 5&nbsp;km buffer around it.</li>
+        <li>Drop that station and any other station inside the buffer from training.</li>
+        <li>Train on what's left.</li>
+        <li>Predict at the withheld station, record its RMSE.</li>
+      </ol>
+      <p class="tagline">Every RMSE above was measured this way.</p>
+    </div>
+  </div>
 </div></template>
 <template id="s17"><div class="slide-root">
-  <span class="kicker">Reading the result straight</span>
-  <h2 class="h2">The simple method won where it mattered most</h2>
-  <div class="callout">
-    <div class="icon">&#128064;</div>
-    <div class="body-col">
-      <p class="label">Reported, not hidden</p>
-      <p>PM2.5 is the pollutant the entire sensor-placement result rests on &mdash; and simple distance-averaging beat Random Forest on it, winning 10 of 11 stations. That's not a failure to bury; it's a finding: PM2.5 spreads smoothly enough that feature-based learning adds little over just averaging nearby stations.</p>
-    </div>
-  </div>
-  <div class="callout">
-    <div class="icon">&#128064;</div>
-    <div class="body-col">
-      <p class="label">Reported, not hidden</p>
-      <p>NO2 tells a subtler story: Random Forest wins on <em class="muted">mean</em> RMSE, but IDW actually has the lower error at 7 of the 11 individual stations. RF's mean is pulled down by two isolated rural stations where it performs exceptionally well &mdash; IDW is competitive or ahead across the rest.</p>
-    </div>
-  </div>
-</div></template>
-<template id="s18"><div class="slide-root">
   <span class="kicker">Behind the numbers</span>
   <h2 class="h2">Choosing the decay curve: AIC picks the winner</h2>
   <div class="md-table-wrap"><table class="md-table"><thead><tr><th>Pollutant</th><th>Model</th><th>Best-fit form</th><th class="num">AIC</th><th class="num">BIC</th></tr></thead><tbody>
@@ -790,14 +811,21 @@ not to reintroduce a ./figures/ path.
   <div class="callout">
     <div class="icon">&#128269;</div>
     <div class="body-col">
-      <p class="label">Not an assumed shape &mdash; a tested one</p>
-      <p>Three candidate functional forms &mdash; logarithmic, power, and exponential &mdash; were fitted to each of the six pollutant/model combinations, eighteen fits in total. The form with the lowest AIC was kept for the decay curves and thresholds on the next slide. NO2's error-distance relationship is log-shaped for all three estimators; PM2.5 is exponential for RF and IDW, but log for LUR. The curve shape wasn't chosen to fit the story &mdash; it's what the data selected. Random Forest also posts the lowest AIC of the three models for <strong>both</strong> pollutants (60.68 for NO2, 25.33 for PM2.5) &mdash; its error-distance relationship is the cleanest fit of the three, even though IDW is still the more accurate estimator for PM2.5 on RMSE.</p>
+      <p class="label">Decay Curve Fitting &mdash; Steps</p>
+      <ol class="steps">
+        <li>Test 3 curve shapes: log, power-law, exponential</li>
+        <li>Fit each with OLS &rarr; get <code>a</code> and <code>b</code></li>
+        <li>Pick the best shape using AIC (lowest score wins)</li>
+        <li>Check the sign of <code>b</code> &rarr; confirms error grows with distance</li>
+        <li>Use IDW's curve (clearest trend) to find the threshold</li>
+        <li>Take 50% of real mean concentration = acceptable error</li>
+      </ol>
+      <p class="tagline">Not an assumed shape &mdash; a tested one.</p>
     </div>
   </div>
   <p class="small-muted">n = 11 stations in every fit. Full candidate comparison &mdash; all three forms per combination, with fitted coefficients &mdash; is Table 7 in the thesis.</p>
 </div></template>
-
-<template id="s19"><div class="slide-root">
+<template id="s18"><div class="slide-root">
   <span class="kicker">Answering RQ2</span>
   <h2 class="h2">How far can an estimate be trusted?</h2>
   <div class="stat-row">
@@ -823,7 +851,7 @@ not to reintroduce a ./figures/ path.
   </figure>
   <p class="lead">PM2.5 degrades gradually. NO2 degrades fast &mdash; tied tightly to nearby traffic.</p>
 </div></template>
-<template id="s20"><div class="slide-root">
+<template id="s19"><div class="slide-root">
   <span class="kicker">Answering RQ3</span>
   <h2 class="h2">20 sensors, national coverage</h2>
   <p class="small-muted" style="margin-bottom:.35rem;"><strong>PM2.5</strong> &mdash; the placement objective</p>
@@ -839,7 +867,7 @@ not to reintroduce a ./figures/ path.
   </div>
   <p class="body">Each of the 20 placements picked, one at a time, whichever spot closed the biggest remaining gap in PM2.5 coverage &mdash; the same sensors were not chosen with NO2 in mind.</p>
 </div></template>
-<template id="s21"><div class="slide-root">
+<template id="s20"><div class="slide-root">
   <span class="kicker">Where the sensors go</span>
   <h2 class="h2">20 recommended locations</h2>
   <figure class="md-figure">
@@ -853,7 +881,7 @@ not to reintroduce a ./figures/ path.
     <figcaption class="cap">Spread from G&ouml;taland in the south, through Svealand, to Norrland in the north.</figcaption>
   </figure>
 </div></template>
-<template id="s22"><div class="slide-root">
+<template id="s21"><div class="slide-root">
   <span class="kicker">The coverage gain</span>
   <h2 class="h2">Before and after</h2>
   <figure class="md-figure">
@@ -867,18 +895,7 @@ not to reintroduce a ./figures/ path.
     <figcaption class="cap">Grey = beyond the 50%-criterion PM2.5 threshold. Blue = within reliable range of a station or sensor.</figcaption>
   </figure>
 </div></template>
-<template id="s23"><div class="slide-root">
-  <span class="kicker">The honest counterpart</span>
-  <h2 class="h2">The same 20 sensors barely help NO2</h2>
-  <div class="callout">
-    <div class="icon">&#128064;</div>
-    <div class="body-col">
-      <p class="label">Reported, not hidden</p>
-      <p>Checked against the stricter 6&nbsp;km NO2 threshold, the same 20 sensors move national NO2 land coverage only from <strong>0.2% to 0.6%</strong> &mdash; and urban NO2 coverage doesn't move at all, staying flat at <strong>6.1%</strong> before and after. A sensor plan sized for PM2.5 does not solve NO2 &mdash; and the thesis says so plainly, rather than letting the headline PM2.5 number imply otherwise.</p>
-    </div>
-  </div>
-</div></template>
-<template id="s24"><div class="slide-root">
+<template id="s22"><div class="slide-root">
   <span class="kicker">So what</span>
   <h2 class="h2">Two pollutants, two planning problems</h2>
   <ul class="md-list">
@@ -887,7 +904,7 @@ not to reintroduce a ./figures/ path.
     <li>Four newly served regions &mdash; J&ouml;nk&ouml;ping, &Ouml;rebro, Dalarna, Norrbotten &mdash; are concrete near-term priorities</li>
   </ul>
 </div></template>
-<template id="s25"><div class="slide-root">
+<template id="s23"><div class="slide-root">
   <span class="kicker">Where to press</span>
   <h2 class="h2">What this doesn't yet resolve</h2>
   <ul class="md-list">
@@ -898,7 +915,7 @@ not to reintroduce a ./figures/ path.
     <li>The 50% criterion itself is a modelling choice, not a fixed rule &mdash; sweeping it 20&ndash;80% swings post-placement PM2.5 coverage from 2.9% to 94.7%</li>
   </ul>
 </div></template>
-<template id="s26"><div class="slide-root">
+<template id="s24"><div class="slide-root">
   <span class="kicker">The contribution</span>
   <h2 class="h2">One sentence</h2>
   <div class="callout primary">
@@ -910,7 +927,7 @@ not to reintroduce a ./figures/ path.
     <span class="chip outline">Not claimed: a regulatory compliance tool</span>
   </div>
 </div></template>
-<template id="s27"><div class="slide-root">
+<template id="s25"><div class="slide-root">
   <span class="kicker">What's next</span>
   <h2 class="h2">Future work</h2>
   <ul class="md-list">
@@ -920,7 +937,7 @@ not to reintroduce a ./figures/ path.
     <li>Periodic recalibration as traffic patterns shift (e.g. vehicle electrification)</li>
   </ul>
 </div></template>
-<template id="s28"><div class="slide-root">
+<template id="s26"><div class="slide-root">
   <h1 class="h1">Thank you</h1>
   <p class="subtitle" style="font-size:1.4rem;font-weight:700;color:var(--on-surface);">Questions?</p>
   <p class="small-muted" style="max-width:42rem;line-height:1.6;">Spatial Estimation of Air Quality at Unmonitored Locations Using Machine Learning: Implications for IoT Sensor Network Design in Swedish Cities &mdash; Abdalazeez Asaad</p>
@@ -946,13 +963,11 @@ not to reintroduce a ./figures/ path.
     "Data reality check",
     "Station map",
     "RQ1 results",
-    "Honest reporting: IDW vs RF",
     "Decay curve model selection",
     "RQ2 results: decay & thresholds",
     "RQ3 results: coverage numbers",
     "Placement map",
     "Coverage before/after",
-    "NO2 null result",
     "Implications for planning",
     "Limitations",
     "Contribution",
@@ -1071,6 +1086,22 @@ not to reintroduce a ./figures/ path.
     inner.className = 'print-inner';
     const t = document.getElementById('s' + i);
     inner.appendChild(t.content.cloneNode(true));
+    /* Avoid duplicate-id collisions with the live single-slide view (e.g. SVG
+       gradient/pattern/clipPath ids) — Chromium's print pipeline can resolve
+       url(#id) references to a hidden duplicate and fail to paint. */
+    inner.querySelectorAll('[id]').forEach((el) => {
+      const oldId = el.id;
+      const newId = 'print' + i + '-' + oldId;
+      el.id = newId;
+      inner.querySelectorAll('[fill],[stroke],[clip-path],[mask],[filter]').forEach((ref) => {
+        ['fill', 'stroke', 'clip-path', 'mask', 'filter'].forEach((attr) => {
+          const val = ref.getAttribute(attr);
+          if (val && val.indexOf('#' + oldId) !== -1) {
+            ref.setAttribute(attr, val.split('#' + oldId).join('#' + newId));
+          }
+        });
+      });
+    });
     page.appendChild(inner);
     printStack.appendChild(page);
   }
