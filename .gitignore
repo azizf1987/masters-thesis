@@ -22,3 +22,7 @@ data/raw/
 
 # Office temp/lock files
 ~$*
+
+# Editor backup / temp files
+*.bak
+*.tmp

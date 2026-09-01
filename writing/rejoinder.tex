@@ -1,0 +1,420 @@
+% =========================
+% MAU Master's Thesis: Abdalazeez Asaad
+% Rejoinder to examiner and opponent comments
+% =========================
+\documentclass[11pt,a4paper]{article}
+
+% --- Page / typography ---
+\usepackage[a4paper,margin=30mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{setspace}
+\setstretch{1.0}
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+
+\pagestyle{plain}
+\justifying
+
+\newcommand{\rjcomment}[1]{\par\noindent\textbf{Comment:}\ #1\par}
+\newcommand{\rjresponse}[1]{\par\noindent\textbf{Response: #1}\par}
+
+\title{Rejoinder}
+\author{Abdalazeez Asaad}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+Responses to comments received on the thesis draft from the examiner (Erdal Akin) and the
+opponents (linne, Pari). Organised in two parts, in the order the comments appear in the
+thesis. Each entry states the comment, whether it was fixed or is defended as written, and
+what actually changed. References are to section names, not line numbers, since the
+authoritative working copy is maintained outside this repository.
+
+% =====================================================
+\section{Part 1: Examiner Comments}
+% =====================================================
+
+\subsection{E1: Section 2.5 (Research Gaps and Positioning)}
+
+\rjcomment{Phrase cautiously if you cannot support by a systematic review, as you have not
+done for this work.}
+
+\rjresponse{Fixed.}
+The claim is now scoped to the literature reviewed in this thesis (not an absolute claim about
+the field), and specifically extended to note that no distance-accuracy analysis exists for the
+Swedish SMHI network either, citing Segersson et al.\ and the Stockholm/Gothenburg/Malm\"o
+dispersion study to show the Swedish literature was checked.
+
+\subsection{E2: Section 3.3 (Spatial Validation Protocol)}
+
+\rjcomment{Using buffered spatial leave-one-out validation is appropriate, but the 5\,km buffer
+is much smaller than the reported spatial autocorrelation range (150--200\,km). Therefore, the
+validation should not be described as fully ``spatially honest.'' The limitation should be
+stated more clearly, and a small sensitivity test with different feasible buffer distances would
+strengthen the work.}
+
+\rjresponse{Fixed.}
+Three changes:
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+  \item The phrase ``spatially honest'' is removed throughout (Introduction and \S3.3) and
+    replaced with language that does not overstate the protocol (e.g.\ ``with near-neighbour
+    leakage suppressed'').
+  \item The existing buffer-justification paragraph in \S3.3 is sharpened to state explicitly
+    that the 5\,km buffer reduces but does not eliminate the optimistic bias from spatial
+    autocorrelation, and that the reported errors should be read as a lower bound on true
+    prediction error.
+  \item A buffer-distance sensitivity analysis was run: the full buffered SLOO procedure was
+    repeated at 0, 5, 10, 25, and 50\,km exclusion radii
+    (\texttt{data/phase6\_buffer\_sensitivity.py}). The estimator ranking is unchanged at every
+    buffer tested (IDW best for PM$_{2.5}$, Random Forest best for NO$_2$, LUR worst for both),
+    and mean RMSE for the two selected estimators varies by no more than 6\,\% between the 5\,km
+    and 50\,km buffers. A new table and paragraph reporting this are added to \S3.3, and a
+    corresponding sentence is added to the limitations section (\S7.4). Buffers approaching the
+    150--200\,km autocorrelation range are not testable: above roughly 80\,km, at least one
+    validation fold loses all training data, which is now stated explicitly.
+\end{enumerate}
+
+\subsection{E3: Section 4.1 (Air Quality Observations)}
+
+\rjcomment{This is a small effective spatial sample for generalization.}
+
+\rjresponse{Defended, no change.}
+Agreed, and already stated as a limitation. \S7.4 notes that the 11 concurrently-passing
+stations are ``substantially smaller than the 20--40 monitoring sites comprising each ESCAPE
+study area,'' constraining the statistical power of the validation and the granularity of the
+resulting decay curves. No further change made; this is treated as an acknowledged constraint of
+the Swedish national network rather than a defect to correct.
+
+\subsection{E4: Section 5.1 (NO2 Estimation Results, Table 5)}
+
+\rjcomment{In table 5, IDW provides better RMSE in 7/11 stations. Even RF provides lower RMSE,
+this situation needs to be clarified. It would be great if you could provide $R^2$ and MAE of
+LUR and IDW.}
+
+\rjresponse{Fixed.}
+Added MAE and $R^2$ for LUR and IDW (previously only RMSE was shown). Added a short explanation
+of why IDW wins at 7/11 stations despite RF's lower mean RMSE: RF's mean is pulled down by two
+isolated rural stations where it performs exceptionally well, while IDW is competitive or better
+at most of the remaining nine.
+
+\subsection{E5: Section 5.2 (PM2.5 Estimation Results, Table 6)}
+
+\rjcomment{As seen in Table 6 also, IDW provides better performance for all the aspects. So, it
+would be better to provide all the related metrics for the three algorithms and compare fairly
+instead of making RF the core algorithm.}
+
+\rjresponse{Fixed.}
+Added MAE and $R^2$ for LUR and IDW here as well. Noted that no equivalent caveat is needed for
+PM$_{2.5}$: IDW wins at 10/11 stations, which is consistent with its lower mean RMSE (unlike the
+NO$_2$ case).
+
+\subsection{E6: Section 6.2 (Decay Curve Fitting)}
+
+\rjcomment{These criteria should be defined and elaborated to show the effect and necessity.
+Also, this section needs a transition why we need to see Decay curve fitting.}
+
+\rjresponse{Fixed.}
+AIC/BIC are now defined and elaborated in \S6.2 (formulas, what they measure, why AIC over raw
+fit), with the design rationale for the choice moved to \S3.4 so it is argued once, in the
+methodology, rather than repeated. Added a transition at the start of \S6.2 linking it back to
+\S3.4.
+
+\subsection{E7: Section 6.4 (Reliable Prediction Distance Threshold and Answer to RQ2)}
+
+\rjcomment{I would therefore recommend that 64\,km should not be called ``the reliable
+prediction distance'' without qualification. It would be better described as something like: the
+estimated prediction-distance threshold under the adopted 50\,\% RMSE criterion. This
+distinction should appear in the Abstract, Results, Discussion and Conclusion. The 64\,km and
+especially the 6\,km values should therefore be presented as criterion-dependent estimates, not
+precise national reliability limits.}
+
+\rjresponse{Fixed.}
+The thesis presents 64\,km and 6\,km as ``estimated prediction-distance thresholds under the
+adopted 50\,\% criterion,'' not fixed reliability limits, with an added note that both are
+criterion-dependent estimates (with extra caution on the 6\,km NO$_2$ figure). This is applied
+in the Abstract, in \S6.4 (retitled ``Estimated Prediction-Distance Threshold and Answer to
+RQ2''), in the Discussion's RQ2-answer paragraph, and in the Conclusion.
+
+On review, three further occurrences of the unqualified phrase ``the reliable prediction
+distance/threshold'' attached directly to the 64\,km figure had survived outside \S6.4, in the
+Placement section's opening paragraph, in the Integrated Results (RQ1--RQ3) paragraph (two
+occurrences), and in the Discussion's Risks and Constraints subsection, the last of which also
+asserted that a covered location was ``trustworthy'' without qualification. All three are now
+corrected to ``estimated prediction-distance threshold,'' and the Risks and Constraints sentence
+is reworded to state that coverage indicates the location is expected to meet the adopted 50\,\%
+criterion, not that it is unqualifiedly ``trustworthy.''
+
+\subsection{E8: Section 7.1 (National Coverage Surface)}
+
+\rjcomment{Good point to declare. \emph{(on the statement that NO2 baseline coverage is minimal:
+7 of 4,588 land cells, 0.2\%)}}
+
+\rjresponse{Acknowledged, no change requested.}
+This was agreement with a point already made in the thesis, not a request for revision.
+
+\subsection{E9: Section 7.3 (Coverage Evaluation and DSR Assessment)}
+
+\rjcomment{Can you extend the work for population-weighted coverage. You can use same experiment
+you have done for this evaluation and do again wrt population. I would like to see this. If time
+permits, you can also work on urban-area coverage, which is pretty similar to the
+population-based approach.}
+
+\rjresponse{Fixed.}
+Urban-area coverage was already reported in the thesis (land coverage 10.9\,\% $\rightarrow$
+67.2\,\%; urban coverage 38.8\,\% $\rightarrow$ 71.4\,\%). Population-weighted coverage is new:
+each 10\,km grid cell was weighted by its resident population, aggregated from the JRC GEOSTAT
+2018 1\,km population grid ($\sim$10.6 million inhabitants assigned across the national land
+grid; \texttt{data/phase7\_population\_coverage.py}). Results: population-weighted PM$_{2.5}$
+coverage rises from 45.0\,\% to 77.1\,\% nationally (67.1\,\% to 75.9\,\% within urban fabric)
+after the 20 recommended placements, markedly higher than the land-area figures, because
+existing stations are concentrated in populated areas. For NO$_2$, population-weighted coverage
+moves only from 10.1\,\% to 10.4\,\% nationally and is unchanged at 17.0\,\% within urban fabric,
+consistent with the land-area result: the PM$_{2.5}$-optimised deployment does not materially
+improve NO$_2$ coverage on any measure. A new paragraph and table (land-area vs.\
+population-weighted, national vs.\ urban, before/after, both pollutants) are added to \S7.3, and
+a caveat is added to \S7.4 noting that the population-weighted NO$_2$ figures inherit the same
+10\,km grid-resolution limitation already stated for the land-area NO$_2$ figures.
+
+\subsection{E10: Figures 2 and 3, decay curves (LUR centre panel)}
+
+\rjcomment{Explain more about the middle (LUR) panel: the fitted line is nearly straight/flat,
+which could be read as LUR being more stable with respect to distance. Why was LUR not
+selected?}
+
+\rjresponse{Fixed.}
+The single existing sentence in \S6.3 (``LUR curves are reported for completeness but carry
+substantial uncertainty due to the high cross-fold variability of the linear model'') is
+expanded to explain the flat line explicitly. The LUR fit is flat because its error is uniformly
+poor, not because it is distance-robust: LUR RMSE sits at approximately 15\,$\mu$g/m$^3$
+(NO$_2$) and 6\,$\mu$g/m$^3$ (PM$_{2.5}$) at every distance, in both cases above the pollutant's
+own mean concentration (12.85 and $\sim$5.3\,$\mu$g/m$^3$). The near-zero slope arises because
+LUR's error is dominated by cross-fold instability (30 partly collinear predictors on 11 folds),
+which is large relative to any distance effect; the wide vertical scatter of the points and the
+poor curve fit (AIC 83.5 / 58.8 versus 60.7--63.4 and 25.3--38.6 for RF and IDW) show the flat
+line is not an informative relationship. LUR is therefore not a candidate for the threshold,
+consistent with it being the least accurate estimator for both pollutants in \S5. A one-clause
+note to the same effect is added to the captions of Figures 2 and 3.
+
+% =====================================================
+\section{Part 2: Opponent Comments}
+% =====================================================
+
+\subsection{O1: Title page}
+
+\rjcomment{\emph{(linne)} Shouldn't this be a sub-title? \emph{(on the portion of the title
+after the colon)}}
+
+\rjresponse{Defended, no change.}
+The title is the one approved in the research proposal; the wording is unchanged either way.
+Reformatting it as a two-line title/sub-title is a cosmetic option, not a required change, and is
+left as a single line consistent with the approved proposal.
+
+\subsection{O2: Section 2 (Background and Related Work)}
+
+\rjcomment{\emph{(linne)} A short introduction to the different topics you talk about in this
+section would be nice.}
+
+\rjresponse{Fixed.}
+A short paragraph was added immediately after the section heading, previewing the five
+subsections that follow (regulatory monitoring, low-cost IoT sensors, spatial estimation
+methods, sensor placement optimisation, and the research gaps).
+
+\subsection{O3: Section 2 / 2.1 (Background and Related Work)}
+
+\rjcomment{\emph{(Pari)} The section discusses relevant previous studies but the process used to
+identify and select the literature is not described. Could you briefly explain which databases or
+search tools were used.}
+
+\rjresponse{Fixed.}
+A paragraph was added describing the search process: literature was identified primarily through
+Google Scholar, with IEEE Xplore used for the conference proceedings, and by following the
+reference lists of the principal review papers (Hoek et al.; the ESCAPE studies) to trace
+related work. Search terms are listed. The paragraph states explicitly that this was a targeted
+narrative review, not a systematic review, consistent with the hedge already applied to \S2.5
+(E1 above).
+
+\subsection{O4: Section 2.1 (Urban Air Quality Monitoring and Regulatory Networks)}
+
+\rjcomment{\emph{(linne)} This thesis? \emph{(on the phrase ``The present thesis'')}}
+
+\rjresponse{Fixed.}
+``The present thesis'' is reworded to ``This thesis'' at this location and at one further,
+equivalent occurrence in \S2.3.
+
+\subsection{O5: Section 2.3 (Spatial Estimation of Air Quality at Unmonitored Locations)}
+
+\rjcomment{\emph{(linne)} When writing abbreviations the text should be ``Inverse Distance
+Weighting.'' By some university writing guidelines for acronyms and abbreviations.}
+
+\rjresponse{Defended, no change.}
+The term is introduced in the standard form used throughout the thesis: lower case at first use
+with the acronym given in parentheses, and capitalised in the List of Abbreviations. This
+follows the convention used consistently for every other abbreviation in the thesis (e.g.\
+``land-use regression (LUR)''), so it is retained for consistency rather than treated as an
+isolated exception.
+
+\subsection{O6: Section 2.3 (Spatial Estimation of Air Quality at Unmonitored Locations)}
+
+\rjcomment{\emph{(linne)} Reference? \emph{(on the paragraph describing LUR's known
+limitations)}}
+
+\rjresponse{Fixed.}
+The paragraph is attributed to Hoek et al.\ and reworded to state only what that review
+supports: that LUR models are empirical and area-specific, and their predictive performance is
+not guaranteed to transfer to areas or periods outside the monitoring campaign used to fit them,
+alongside the existing point that a linear form does not represent non-linear predictor
+interactions by construction. A \texttt{\% VERIFY} marker is attached pending a direct read of
+the review's limitations section, per the thesis's own citation-verification standard.
+
+\subsection{O7: Section 3 (Research Methodology)}
+
+\rjcomment{\emph{(linne)} All theses do not need to look exactly the same, but I think
+best-practice is that new ``chapters'' should start on a new page.}
+
+\rjresponse{Defended, no change.}
+The opponent's own phrasing acknowledges this is a formatting preference, not a requirement. The
+document follows the MAU thesis template's layout conventions. Left as is; a one-line
+\texttt{\textbackslash clearpage} change is a trivial future option if a stronger visual break is
+wanted.
+
+\subsection{O8: Section 3.2.2 (Feature Set)}
+
+\rjcomment{\emph{(Pari)} Section 4.1 represents that all 34 stations may contribute training
+data, while only 11 stations are eligible as validation targets. So, the phrase ``11 unique
+spatial training locations'' is unclear and appears inconsistent with Sections 4.1 and 5.}
+
+\rjresponse{Fixed.}
+This was a genuine wording inconsistency; \S4.1 already states the correct relationship (34
+stations may contribute training rows; 11 concurrently-passing stations are eligible to be
+withheld as validation targets), and \S5 confirms training uses 26--33 stations per fold, not
+11. The phrase ``11 unique spatial training locations'' is corrected to ``11 spatially
+independent validation targets'' (or equivalent) at the three locations where it previously
+appeared incorrectly (\S3.2.2, \S3.4, \S7.4), aligning them with \S4.1.
+
+\subsection{O9: Section 5 (Spatial Estimation Models)}
+
+\rjcomment{\emph{(linne)} What is ``this chapter''? I think the structure of what is results
+could perhaps be better structured or perhaps just named differently so it is more clear what is
+the actual results of the study. I cannot see that chapter is used anywhere else in the thesis
+and it is therefore unclear what is chapter/section.}
+
+\rjresponse{Partially fixed.}
+``This chapter'' was a genuine slip: it is the only use of ``chapter'' in the entire thesis,
+which otherwise uses ``section'' as the top-level unit throughout. It is corrected to ``the
+results'' with an explicit section range. The broader structural point is defended: the three
+results sections are each named by research question (RQ1/RQ2/RQ3) and explicitly signposted in
+the opening paragraph of \S5, which is judged sufficient without renaming the sections
+themselves.
+
+\subsection{O10: Section 5 (Spatial Estimation Models)}
+
+\rjcomment{\emph{(linne)} This is ``double negative'' phrasing which is a bit unclear, and as
+per my understanding should be avoided. \emph{(on ``not excluded by the 5\,km buffer'')}}
+
+\rjresponse{Fixed.}
+Reworded to ``the stations that remained after the 5\,km exclusion buffer was applied,''
+removing the double negative.
+
+\subsection{O11: Section 6.4 (Reliable Prediction Distance Threshold and Answer to RQ2)}
+
+\rjcomment{\emph{(Pari)} The sensitivity analysis clearly explains that the 50\,\% criterion is
+a modelling choice. But, it is still unclear why this level represents the ``minimum
+requirement'' for spatial planning.}
+
+\rjresponse{Fixed.}
+The unsupported claim that 50\,\% is the ``minimum requirement for spatial planning purposes''
+is removed. The paragraph is reworded to state plainly that the 50\,\% level is a working
+threshold adopted for this study, not a universal planning standard, and to point immediately to
+the sensitivity analysis that tests it, consistent with the criterion-dependent framing already
+applied elsewhere in \S6.4 (E7 above).
+
+\subsection{O12: Figure 6}
+
+\rjcomment{\emph{(linne)} The triangles are red not green. A little confusion to write ``placed
+sensors'' on the figure, and ``recommended sensor locations'' in the description? There are no
+red circles in the figure.}
+
+\rjresponse{Fixed.}
+The figure itself (\texttt{fig\_coverage\_before\_after.png}) already used the correct, current
+colour scheme (blue circles for existing stations, red triangles for recommended sensors),
+matching Figures 7 and 8; only the caption was stale, describing an earlier colour scheme (red
+circles, green triangles). The caption is corrected to match the actual figure, and the ``placed
+sensors'' legend label vs.\ ``recommended sensor locations'' caption wording is reconciled by
+noting the legend label explicitly in the caption.
+
+\subsection{O13: Figure 7}
+
+\rjcomment{\emph{(linne)} These labels are impossible to see or read. \emph{(on the numbered
+placement-rank labels)}}
+
+\rjresponse{Fixed.}
+Confirmed: the rank labels were drawn at font size 7 in the same colour as the marker, directly
+on top of the darkest part of the heatmap, and were effectively illegible. The figure
+(\texttt{fig\_placement\_map.png}) is regenerated with larger, bold, black labels with a white
+halo, clearly legible against both the heatmap and the markers. A new standalone script,
+\texttt{data/phase7\_fix\_placement\_labels.py}, rebuilds this figure from saved results without
+touching any other figure or data file.
+
+\subsection{O14: References}
+
+\rjcomment{\emph{(Pari)} IEEE reference guide is to write et al.\ after six authors.}
+
+\rjresponse{Fixed.}
+Four bibliography entries exceeded six authors (Hoek et al.\ 2008, 7 authors; Segersson et al.\
+2017, 7 authors; Roberts et al.\ 2017, 14 authors; Kilbo Edlund et al.\ 2024, 14 authors). Each
+is now truncated to the first author plus ``and others'' in \texttt{references.bib}, which the
+thesis's \texttt{ieeetr} bibliography style renders as ``et al.'' No other references or the
+bibliography style itself were changed.
+
+% =====================================================
+\section{Summary}
+% =====================================================
+
+\begin{longtable}{@{}c p{0.52\textwidth} p{0.30\textwidth}@{}}
+\toprule
+\textbf{\#} & \textbf{Comment} & \textbf{Outcome} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{\#} & \textbf{Comment} & \textbf{Outcome} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+E1  & \S2.5 systematic-review hedging & Fixed \\
+E2  & \S3.3 buffer / ``spatially honest'' & Fixed (wording + sensitivity table + limitation) \\
+E3  & \S4.1 small validation sample & Defended \\
+E4  & \S5.1 Table 5 IDW/RF & Fixed \\
+E5  & \S5.2 Table 6 IDW/RF & Fixed \\
+E6  & \S6.2 AIC/BIC definition & Fixed \\
+E7  & \S6.4 threshold terminology & Fixed \\
+E8  & \S7.1 NO2 baseline coverage & Acknowledged \\
+E9  & \S7.3 population-weighted coverage & Fixed (new analysis) \\
+E10 & Figures 2--3 LUR centre panel & Fixed (expanded \S6.3 + caption clauses) \\
+O1  & Title sub-title & Defended \\
+O2  & \S2 intro paragraph & Fixed \\
+O3  & \S2/2.1 literature search process & Fixed \\
+O4  & \S2.1 ``This thesis?'' wording & Fixed \\
+O5  & \S2.3 IDW capitalisation & Defended \\
+O6  & \S2.3 LUR limitations reference & Fixed \\
+O7  & \S3 chapters on new page & Defended \\
+O8  & \S3.2.2 ``11 unique spatial training locations'' & Fixed \\
+O9  & \S5 ``this chapter'' / structure & Partially fixed (wording fixed; structure defended) \\
+O10 & \S5 double negative & Fixed \\
+O11 & \S6.4 ``minimum requirement'' & Fixed \\
+O12 & Figure 6 caption & Fixed \\
+O13 & Figure 7 labels & Fixed \\
+O14 & References ``et al.'' & Fixed \\
+\end{longtable}
+
+\end{document}
