@@ -297,7 +297,7 @@ def fit_decay(metrics_df, label):
         rmse_all = metrics_df[f'{model}_RMSE'].values.astype(float)
         mask = ~(np.isnan(d_all) | np.isnan(rmse_all)) & (d_all > 0) & (rmse_all > 0)
         if mask.sum() < 4:
-            print(f"  {label} {model}: only {mask.sum()} valid points — skipping")
+            print(f"  {label} {model}: only {mask.sum()} valid points, skipping")
             continue
         d, r = d_all[mask], rmse_all[mask]
         ln_d, ln_r = np.log(d), np.log(r)
@@ -351,7 +351,7 @@ COLORS = {'RF': '#2166ac', 'LUR': '#d6604d', 'IDW': '#4dac26'}
 
 def plot_decay_curves(metrics_df, decay_df, label):
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-    fig.suptitle(f'{label} — Error vs. Distance (Buffered SLOO)', fontsize=13)
+    fig.suptitle(f'{label}: Error vs. Distance (Buffered SLOO)', fontsize=13)
 
     d_max = metrics_df['nn_dist_km'].max()
     d_range = np.linspace(1, d_max + 20, 300)
@@ -402,7 +402,7 @@ def plot_metrics_bar(m_no2, m_pm25):
         ax.set_xticks(x)
         ax.set_xticklabels(names, rotation=45, ha='right', fontsize=8)
         ax.set_ylabel('RMSE (µg/m³)')
-        ax.set_title(f'{label} — Per-station RMSE by model')
+        ax.set_title(f'{label}: Per-station RMSE by model')
         ax.legend()
         ax.grid(True, axis='y', alpha=0.3)
     plt.tight_layout()
@@ -413,7 +413,7 @@ def plot_metrics_bar(m_no2, m_pm25):
 
 def plot_scatter(preds_df, label):
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-    fig.suptitle(f'{label} — Predicted vs. Actual (all SLOO folds)', fontsize=13)
+    fig.suptitle(f'{label}: Predicted vs. Actual (all SLOO folds)', fontsize=13)
     for ax, model in zip(axes, ['RF', 'LUR', 'IDW']):
         sub  = preds_df.dropna(subset=['actual', model])
         lim  = max(sub['actual'].max(), sub[model].max()) * 1.05

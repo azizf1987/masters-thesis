@@ -108,7 +108,7 @@ def build_coverage_figure(before_col, after_col, thresh_km, pct_before, pct_afte
         mpatches.Patch(color='#4393c3', label='Covered (urban)'),
     ]
     fig.legend(handles=patches, loc='lower center', ncol=3, fontsize=9, bbox_to_anchor=(0.5, 0.0))
-    title = f'{pollutant_label} national coverage — greedy sequential placement\n(10 km grid, {len(grid):,} land cells)'
+    title = f'{pollutant_label} national coverage, greedy sequential placement\n(10 km grid, {len(grid):,} land cells)'
     if note:
         title = f'{pollutant_label} national coverage under the PM2.5-optimised placement\n{note}'
     fig.suptitle(title, fontsize=12)

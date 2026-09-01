@@ -11,6 +11,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import matplotlib.patches as mpatches
+import matplotlib.patheffects as pe
 sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Paths ─────────────────────────────────────────────────────────
@@ -207,7 +208,7 @@ for step in range(MAX_GREEDY_STEPS):
     uncovered = ~pm25_cov   # (n_land,)
     n_uncov   = uncovered.sum()
     if n_uncov == 0:
-        print(f"  Step {step+1}: 100% coverage reached — stopping.")
+        print(f"  Step {step+1}: 100% coverage reached, stopping.")
         break
 
     best_gain = 0
@@ -222,7 +223,7 @@ for step in range(MAX_GREEDY_STEPS):
             best_idx  = i
 
     if best_idx == -1 or best_gain == 0:
-        print(f"  Step {step+1}: no further gain possible — stopping.")
+        print(f"  Step {step+1}: no further gain possible, stopping.")
         break
 
     placed_land_indices.append(best_idx)
@@ -420,7 +421,7 @@ patches = [
 ]
 fig.legend(handles=patches, loc='lower center', ncol=3, fontsize=9,
            bbox_to_anchor=(0.5, 0.0))
-fig.suptitle(f'PM2.5 national coverage — greedy sequential placement\n'
+fig.suptitle(f'PM2.5 national coverage, greedy sequential placement\n'
              f'(10 km grid, {n_land:,} land cells)', fontsize=12)
 plt.tight_layout(rect=[0, 0.06, 1, 1])
 
@@ -454,10 +455,11 @@ if len(placed_xy) > 0:
                     label=f'Recommended sensors (n={n_placed})', zorder=7)
     for rank, idx in enumerate(placed_land_indices, start=1):
         ax.annotate(str(rank), xy=(land_xy[idx, 0], land_xy[idx, 1]),
-                    xytext=(4, 4), textcoords='offset points',
-                    fontsize=7, color='#d6604d', fontweight='bold')
+                    xytext=(6, 6), textcoords='offset points',
+                    fontsize=10, color='black', fontweight='bold', zorder=8,
+                    path_effects=[pe.withStroke(linewidth=2.5, foreground='white')])
 
-ax.set_title(f'Sensor placement — final distance surface\n'
+ax.set_title(f'Sensor placement, final distance surface\n'
              f'PM2.5 threshold: {PM25_THRESH_KM:.0f} km  |  '
              f'After placement: {pct_pm25_final:.1f}% land coverage', fontsize=10)
 ax.set_xlabel('EPSG:3035 x (m)')

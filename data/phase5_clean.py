@@ -127,8 +127,8 @@ for b in range(len(bins_km) - 1):
     no2_g  = round(0.5 * np.mean(no2_sv[b]),  2) if no2_sv[b]  else None
     pm25_g = round(0.5 * np.mean(pm25_sv[b]), 3) if pm25_sv[b] else None
     n1 = len(no2_sv[b]); n2 = len(pm25_sv[b])
-    ns = f"{no2_g:>12.2f}" if no2_g is not None else f"{'—':>12}"
-    ps = f"{pm25_g:>15.3f}" if pm25_g is not None else f"{'—':>15}"
+    ns = f"{no2_g:>12.2f}" if no2_g is not None else f"{'n/a':>12}"
+    ps = f"{pm25_g:>15.3f}" if pm25_g is not None else f"{'n/a':>15}"
     print(f"  {label:>18}  {ns}  {n1:>8,}  {ps}  {n2:>8,}")
 
 # Estimate range: first bin where gamma reaches 80% of sill

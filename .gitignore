@@ -19,3 +19,6 @@ data/raw/
 *.bbl
 *.bcf
 *.run.xml
+
+# Office temp/lock files
+~$*

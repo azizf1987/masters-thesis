@@ -1,0 +1,181 @@
+==========================================================================================
+MAU_Thesis_Abdalazeez_comments_examiner.pdf
+==========================================================================================
+
+--- PDF PAGE 14 ---
+[Highlight] by Erdal Akin
+   CONTEXT: , p p y the nearest reference station has not been systematically quantified across a national-scale monitoring network. Aggregate cross-validation performance figures do not characterisei
+   NOTE: phrase cautiously if you cannot support by a systematic review as you have not done for this work.
+
+[Text] by aziz_
+   CONTEXT: the n moni
+   NOTE: Revised. the claim is now scoped to the literature reviewed in this thesis (not an absolute claim about the field), and specifically extended to note that no distance-accuracy analysis exists for the Swedish SMHI network either, citing Segersson et al. and the Stockholm/Gothenburg/Malmö dispersion study to show the Swedish literature was checked.
+
+
+--- PDF PAGE 17 ---
+[Highlight] by Erdal Akin
+   CONTEXT: dbuffer is set to 5 km
+   NOTE: Using buffered spatial leave-one-out validation is appropriate, but the 5 km buffer is much smaller than the reported spatial autocorrelation range (150-200 km). Therefore, the validation should not be described as fully “spatially honest.” The limitation should be stated more clearly, and a small sensitivity test with different feasible buffer distances would strengthen the work.
+
+
+--- PDF PAGE 21 ---
+[Highlight] by Erdal Akin
+   CONTEXT: 11
+   NOTE: This is a small effective spatial sample for generalization.
+
+
+--- PDF PAGE 25 ---
+[Text] by Erdal Akin
+   NOTE: In table 5, IDW provides better RMSE in 7/11 stations. Even RF provides lower RMSE, this situation needs to be clarified. It would be great if you could provide R^2 and MAE of LUR and IDW.
+
+[Text] by aziz_
+   NOTE: Added MAE and R² for LUR and IDW (previously only RMSE was shown). Added a short explanation of why IDW wins at 7/11 stations despite RF's lower mean RMSE: RF's mean is pulled down by two isolated rural stations where it performs exceptionally well, while IDW is competitive or better at most of the remaining nine.
+
+
+--- PDF PAGE 26 ---
+[Text] by Erdal Akin
+   NOTE: As seen in Table 6 also, IDW provides better performance for all the aspects. So, it would be better to provide all the related metrics for the three algorithms and compare fairly instead of making RF the core algorithm.
+
+[Text] by aziz_
+   NOTE: Added MAE and R² for LUR and IDW here as well. Noted that no equivalent caveat is needed for PM₂.₅: IDW wins at 10/11 stations, which is consistent with its lower mean RMSE (unlike the NO₂ case).
+
+
+--- PDF PAGE 28 ---
+[Highlight] by Erdal Akin
+   CONTEXT: y y q g g pp p selection was based on the Akaike Information Criterion (AIC); the Bayesian Information Criterion (BIC) was computed as a secondary check. Results are reported in Table 7, and
+   NOTE: These criteria should be defined and eloborated to show the effect and necessity. Also, this section needs a transition why we need to see Decay curve fitting.
+
+[Text] by aziz_
+   CONTEXT: select Crite
+   NOTE: Fixed. AIC/BIC are now defined and elaborated in Section 6.2 (formulas, what they measure, why AIC over raw fit), with the design rationale for the choice moved to Section 3.4 so it's argued once, in the methodology, rather than repeated. Added a transition at the start of 6.2 linking it back to 3.4.
+
+
+--- PDF PAGE 31 ---
+[Highlight] by Erdal Akin
+   CONTEXT: 64
+   NOTE: The 64 km and especially the 6 km values should therefore be presented as criterion-dependent estimates, not precise national reliability limits.
+
+[Highlight] by Erdal Akin
+   CONTEXT: , In answer to RQ2
+   NOTE: I would therefore recommend that 64 km should not be called “the reliable prediction distance” without qualification. It would be better described as something like:the estimated prediction-distance threshold under the adopted 50% RMSE criterion.This distinction should appear in the Abstract, Results, Discussion and Conclusion.
+
+[Highlight] by Erdal Akin
+   CONTEXT: Q 2.5 y g g y , following an exponential decay, with a reliable prediction threshold of approximately 64 km from the nearest reference station. NO2 accuracy degrades more steeply and isf
+   NOTE: I would recommend that 64 km should not be called “the reliable prediction distance” without qualification. It would be better described as something like:the estimated prediction-distance threshold under the adopted 50% RMSE criterion.This distinction should appear in the Abstract, Results, Discussion and Conclusion.
+
+[Text] by aziz_
+   CONTEXT: follow 64 km
+   NOTE: Thank you for this comment. I've revised the thesis so 64 km and 6 km are now presented as "estimated prediction-distance thresholds under the adopted 50% criterion," not fixed reliability limits, with an added note that both are criterion-dependent estimates (with extra caution on the 6 km NO2 figure). This is reflected in the Abstract, Results (§6.4, now retitled accordingly), Discussion, and Conclusion.
+
+[Text] by aziz_
+   CONTEXT: 64 km stron
+   NOTE: Thank you for this comment. The 64 km and 6 km values are now presented throughout as criterion-dependent estimates under the adopted 50% criterion, not precise national reliability limits — with added caution on the 6 km NO2 figure. This is reflected in the Abstract, Results (§6.4), Discussion, and Conclusion.
+
+
+--- PDF PAGE 32 ---
+[Highlight] by Erdal Akin
+   CONTEXT: Under the NO2 threshold of 6 km, baseline coverage is minimal: 7 of 4,588 land cells (0.2 %) lie within reliable range of an existing station. This reflects the short spatial decay range identified for NO2 and the sharp concentration gradients associated with traffic sources; a meaningful improvement in national NO2 coverage would require a substantially denser deployment than the one evaluated he
+
+[Text] by Erdal Akin
+   NOTE: Good point to declare.
+
+[Text] by aziz_
+   NOTE: Thanks!
+
+
+--- PDF PAGE 35 ---
+[Text] by Erdal Akin
+   CONTEXT: The orrlan
+   NOTE: Can you extend the work for population-weighted coverage. You can use same experiment you have done for this evaluation, and do again wrt population. I would like to see this. If time permits, you can also work on urban-area coverage, which is pretty similar to the population based approach.
+
+==========================================================================================
+TAIOT - Abdalazeez_Commented version.pdf
+==========================================================================================
+
+--- PDF PAGE 1 ---
+[Highlight] by linne
+   CONTEXT: p Q y Locations Using Machine Learning: Implications for IoT Sensor Network Design in Swedish Cities
+   NOTE: Shouldn't this be a sub-title?
+
+
+--- PDF PAGE 2 ---
+[Highlight] by linne
+   CONTEXT: y p y y g g, , at a time, the locations that would do the most to close that gap. Applying this method nationally shows that a modest number of well-placed sensors can bring a substantially larger share of Swedish territory, including several currently unmonitored regions, within reliable reach of an air quality estimate, at a fraction of the cost of building more full-scale SMHI stations. The res
+   NOTE: Very interesting!
+
+
+--- PDF PAGE 11 ---
+[Highlight] by linne
+   CONTEXT: The present
+   NOTE: This thesis?
+
+[Highlight] by linne
+   CONTEXT: 2 Background and Related Work
+   NOTE: A short introduction to the different topics you talk about in this section would be nice :)
+
+[Highlight] by Pari
+   CONTEXT: 2 Background and Related Work 2.1 Urban Air Quality Monitoring and Regulatory
+   NOTE: The section discusses relevant previous studiess but the process used to identify and select the literature is not described. Could you briefly explain which databases or search tools were used
+
+
+--- PDF PAGE 12 ---
+[Highlight] by linne
+   CONTEXT: y, p y, q inverse distance weighting (IDW),
+   NOTE: When writing abbreviations the text should be "Inverse Distance Weighting". By some university writing guidlines for ackronyms and abbreviations
+
+
+--- PDF PAGE 13 ---
+[Highlight] by linne
+   CONTEXT: predictor values observed during training, which is a constraint when applying a nationally- trained model to locations with unusual land-use configurations. The linear regression framework may also fail to capture non-linear interactions between predictors present in complex urban environments.
+   NOTE: Reference?
+
+
+--- PDF PAGE 14 ---
+[Highlight] by linne
+   CONTEXT: Research
+   NOTE: All thesises do not need to look exactly the same, but I think best-practice is that new "chapters" should start on a new page :)
+
+
+--- PDF PAGE 16 ---
+[Highlight] by Pari
+   CONTEXT: p p With 11 unique spatial training locations,
+   NOTE: Section 4.1 represents that all 34 stations may contribute training data, while only 11 stations are eligible as validation targets. So, the phrase “11 unique spatial training locations” is unclear and appears inconsistent with Sections 4.1 and 5.
+
+
+--- PDF PAGE 24 ---
+[Highlight] by linne
+   CONTEXT: chapter
+   NOTE: What is "this chapter" ? I think the structure of what is results could perhaps be better structured or perhaps just named differently so it is more clear what is the actual results of the study. I cannot see that chapter is used anywhere else in the thesis and it is therefor unclear what is chapter/section
+
+[Highlight] by linne
+   CONTEXT: not excluded
+   NOTE: this is "double negative" phrasing which is a bit unclear, and as per my understanding should be avoided.
+
+
+--- PDF PAGE 30 ---
+[Highlight] by Pari
+   CONTEXT: p sufficient resolution to detect concentrations meaningfully above or below the mean, which is the minimum requirement for spatial planning purposes. The 50 per cent threshold is
+   NOTE: The sensitivity analysis clearly explains that the 50% criterion is a modelling choice. but, it is still unclear why this level represents the “minimum requirement” for spatial planning.
+
+
+--- PDF PAGE 42 ---
+[Highlight] by linne
+   CONTEXT: green triangles
+   NOTE: The triangles are red not green. Alittle confusion to write "placed sensors" on the figure, and "recommended sensor locations" in the description?
+
+[Highlight] by linne
+   CONTEXT: Red
+   NOTE: There are no red circles in the figure
+
+
+--- PDF PAGE 43 ---
+[Highlight] by linne
+   CONTEXT: 2.5 y g stations are shown as blue circles; recommended sensors as red triangles, labelled by placement rank.
+   NOTE: These labels are impossible to see or read
+
+
+--- PDF PAGE 46 ---
+[Highlight] by linne
+   CONTEXT: K. Kilbo Edlund, M. A. Kisiel, C. Asker, D. Segersson, C. Bennet, M. Spanne, S. Gustafsson, J. Lindvall, K. Eneroth, M. Tondel, P. Ljungman, G. Pershagen, P. Molnár, and L. Stockfelt, “High-resolution dispersion modelling of PM2.5, PM10,
+   NOTE: IEEE reference guide is to write et al. after six authors
+

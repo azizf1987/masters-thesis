@@ -1,0 +1,7 @@
+pollutant,metric,before_pct,after_pct
+PM2.5,population_weighted_national,45.0,77.05
+PM2.5,population_weighted_urban,67.11,75.9
+PM2.5,land_area (reference),10.92,67.15
+NO2,population_weighted_national,10.1,10.4
+NO2,population_weighted_urban,16.96,16.96
+NO2,land_area (reference),0.15,0.59
