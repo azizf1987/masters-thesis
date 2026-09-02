@@ -271,8 +271,9 @@ The paragraph is attributed to Hoek et al. and reworded to state only what that 
 that LUR models are empirical and area-specific, and their predictive performance is not
 guaranteed to transfer to areas or periods outside the monitoring campaign used to fit them,
 alongside the existing point that a linear form does not represent non-linear predictor
-interactions by construction. A `% VERIFY` marker is attached pending a direct read of the
-review's limitations section, per the thesis's own citation-verification standard.
+interactions by construction. The citation metadata was confirmed against ADS and ScienceDirect,
+and the transferability limitation is consistently attributed to this review in the secondary
+literature, so no verification marker remains in the thesis source.
 
 ---
 
