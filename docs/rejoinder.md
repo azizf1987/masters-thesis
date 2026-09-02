@@ -285,8 +285,7 @@ should start on a new page.
 
 **Response: Defended, no change.**
 The opponent's own phrasing acknowledges this is a formatting preference, not a requirement. The
-document follows the MAU thesis template's layout conventions. Left as is; a one-line
-`\clearpage` change is a trivial future option if a stronger visual break is wanted.
+document follows the MAU thesis template's layout conventions. Left as is.
 
 ---
 
