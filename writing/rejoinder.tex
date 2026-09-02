@@ -79,7 +79,7 @@ Three changes:
     buffer tested (IDW best for PM$_{2.5}$, Random Forest best for NO$_2$, LUR worst for both),
     and mean RMSE for the two selected estimators varies by no more than 6\,\% between the 5\,km
     and 50\,km buffers. A new table and paragraph reporting this are added to \S3.3, and a
-    corresponding sentence is added to the limitations section (\S7.4). Buffers approaching the
+    corresponding sentence is added to the limitations section (\S8.4). Buffers approaching the
     150--200\,km autocorrelation range are not testable: above roughly 80\,km, at least one
     validation fold loses all training data, which is now stated explicitly.
 \end{enumerate}
@@ -89,7 +89,7 @@ Three changes:
 \rjcomment{This is a small effective spatial sample for generalization.}
 
 \rjresponse{Defended, no change.}
-Agreed, and already stated as a limitation. \S7.4 notes that the 11 concurrently-passing
+Agreed, and already stated as a limitation. \S8.4 notes that the 11 concurrently-passing
 stations are ``substantially smaller than the 20--40 monitoring sites comprising each ESCAPE
 study area,'' constraining the statistical power of the validation and the granularity of the
 resulting decay curves. No further change made; this is treated as an acknowledged constraint of
@@ -129,7 +129,7 @@ fit), with the design rationale for the choice moved to \S3.4 so it is argued on
 methodology, rather than repeated. Added a transition at the start of \S6.2 linking it back to
 \S3.4.
 
-\subsection{E7: Section 6.4 (Reliable Prediction Distance Threshold and Answer to RQ2)}
+\subsection{E7: Section 6.4 (Estimated Prediction-Distance Threshold and Answer to RQ2)}
 
 \rjcomment{I would therefore recommend that 64\,km should not be called ``the reliable
 prediction distance'' without qualification. It would be better described as something like: the
@@ -182,7 +182,7 @@ moves only from 10.1\,\% to 10.4\,\% nationally and is unchanged at 17.0\,\% wit
 consistent with the land-area result: the PM$_{2.5}$-optimised deployment does not materially
 improve NO$_2$ coverage on any measure. A new paragraph and table (land-area vs.\
 population-weighted, national vs.\ urban, before/after, both pollutants) are added to \S7.3, and
-a caveat is added to \S7.4 noting that the population-weighted NO$_2$ figures inherit the same
+a caveat is added to \S8.4 noting that the population-weighted NO$_2$ figures inherit the same
 10\,km grid-resolution limitation already stated for the land-area NO$_2$ figures.
 
 \subsection{E10: Figures 2 and 3, decay curves (LUR centre panel)}
@@ -192,7 +192,7 @@ which could be read as LUR being more stable with respect to distance. Why was L
 selected?}
 
 \rjresponse{Fixed.}
-The single existing sentence in \S6.3 (``LUR curves are reported for completeness but carry
+The single existing sentence in \S6.2 (``LUR curves are reported for completeness but carry
 substantial uncertainty due to the high cross-fold variability of the linear model'') is
 expanded to explain the flat line explicitly. The LUR fit is flat because its error is uniformly
 poor, not because it is distance-robust: LUR RMSE sits at approximately 15\,$\mu$g/m$^3$
@@ -298,7 +298,7 @@ stations may contribute training rows; 11 concurrently-passing stations are elig
 withheld as validation targets), and \S5 confirms training uses 26--33 stations per fold, not
 11. The phrase ``11 unique spatial training locations'' is corrected to ``11 spatially
 independent validation targets'' (or equivalent) at the three locations where it previously
-appeared incorrectly (\S3.2.2, \S3.4, \S7.4), aligning them with \S4.1.
+appeared incorrectly (\S3.2.2, \S3.2.3, \S8.4), aligning them with \S4.1.
 
 \subsection{O9: Section 5 (Spatial Estimation Models)}
 
@@ -324,7 +324,7 @@ per my understanding should be avoided. \emph{(on ``not excluded by the 5\,km bu
 Reworded to ``the stations that remained after the 5\,km exclusion buffer was applied,''
 removing the double negative.
 
-\subsection{O11: Section 6.4 (Reliable Prediction Distance Threshold and Answer to RQ2)}
+\subsection{O11: Section 6.4 (Estimated Prediction-Distance Threshold and Answer to RQ2)}
 
 \rjcomment{\emph{(Pari)} The sensitivity analysis clearly explains that the 50\,\% criterion is
 a modelling choice. But, it is still unclear why this level represents the ``minimum
@@ -388,8 +388,9 @@ bibliography style itself were changed.
 \textbf{\#} & \textbf{Comment} & \textbf{Outcome} \\
 \midrule
 \endhead
-\bottomrule
 \endfoot
+\bottomrule
+\endlastfoot
 E1  & \S2.5 systematic-review hedging & Fixed \\
 E2  & \S3.3 buffer / ``spatially honest'' & Fixed (wording + sensitivity table + limitation) \\
 E3  & \S4.1 small validation sample & Defended \\
@@ -399,7 +400,7 @@ E6  & \S6.2 AIC/BIC definition & Fixed \\
 E7  & \S6.4 threshold terminology & Fixed \\
 E8  & \S7.1 NO2 baseline coverage & Acknowledged \\
 E9  & \S7.3 population-weighted coverage & Fixed (new analysis) \\
-E10 & Figures 2--3 LUR centre panel & Fixed (expanded \S6.3 + caption clauses) \\
+E10 & Figures 2--3 LUR centre panel & Fixed (expanded \S6.2 + caption clauses) \\
 O1  & Title sub-title & Defended \\
 O2  & \S2 intro paragraph & Fixed \\
 O3  & \S2/2.1 literature search process & Fixed \\

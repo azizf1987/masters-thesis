@@ -45,7 +45,7 @@ Three changes:
    ranking is unchanged at every buffer tested (IDW best for PM$_{2.5}$, Random Forest best for
    NO$_2$, LUR worst for both), and mean RMSE for the two selected estimators varies by no more
    than 6% between the 5 km and 50 km buffers. A new table and paragraph reporting this are added
-   to §3.3, and a corresponding sentence is added to the limitations section (§7.4). Buffers
+   to §3.3, and a corresponding sentence is added to the limitations section (§8.4). Buffers
    approaching the 150-200 km autocorrelation range are not testable: above roughly 80 km, at
    least one validation fold loses all training data, which is now stated explicitly.
 
@@ -57,7 +57,7 @@ Three changes:
 This is a small effective spatial sample for generalization.
 
 **Response: Defended, no change.**
-Agreed, and already stated as a limitation. §7.4 notes that the 11 concurrently-passing stations
+Agreed, and already stated as a limitation. §8.4 notes that the 11 concurrently-passing stations
 are "substantially smaller than the 20-40 monitoring sites comprising each ESCAPE study area,"
 constraining the statistical power of the validation and the granularity of the resulting decay
 curves. No further change made; this is treated as an acknowledged constraint of the Swedish
@@ -108,7 +108,7 @@ methodology, rather than repeated. Added a transition at the start of §6.2 link
 
 ---
 
-### E7: Section 6.4 (Reliable Prediction Distance Threshold and Answer to RQ2)
+### E7: Section 6.4 (Estimated Prediction-Distance Threshold and Answer to RQ2)
 
 **Comment:**
 I would therefore recommend that 64 km should not be called "the reliable prediction distance"
@@ -167,7 +167,7 @@ population-weighted coverage moves only from 10.1% to 10.4% nationally and is un
 within urban fabric, consistent with the land-area result: the PM$_{2.5}$-optimised deployment
 does not materially improve NO$_2$ coverage on any measure. A new paragraph and table
 (land-area vs. population-weighted, national vs. urban, before/after, both pollutants) are added
-to §7.3, and a caveat is added to §7.4 noting that the population-weighted NO$_2$ figures inherit
+to §7.3, and a caveat is added to §8.4 noting that the population-weighted NO$_2$ figures inherit
 the same 10 km grid-resolution limitation already stated for the land-area NO$_2$ figures.
 
 ---
@@ -179,7 +179,7 @@ Explain more about the middle (LUR) panel: the fitted line is nearly straight/fl
 be read as LUR being more stable with respect to distance. Why was LUR not selected?
 
 **Response: Fixed.**
-The single existing sentence in §6.3 ("LUR curves are reported for completeness but carry
+The single existing sentence in §6.2 ("LUR curves are reported for completeness but carry
 substantial uncertainty due to the high cross-fold variability of the linear model") is expanded
 to explain the flat line explicitly. The LUR fit is flat because its error is uniformly poor, not
 because it is distance-robust: LUR RMSE sits at approximately 15 µg/m³ (NO$_2$) and 6 µg/m³
@@ -302,7 +302,7 @@ stations may contribute training rows; 11 concurrently-passing stations are elig
 withheld as validation targets), and §5 confirms training uses 26-33 stations per fold, not 11.
 The phrase "11 unique spatial training locations" is corrected to "11 spatially independent
 validation targets" (or equivalent) at the three locations where it previously appeared
-incorrectly (§3.2.2, §3.4, §7.4), aligning them with §4.1.
+incorrectly (§3.2.2, §3.2.3, §8.4), aligning them with §4.1.
 
 ---
 
@@ -335,7 +335,7 @@ the double negative.
 
 ---
 
-### O11: Section 6.4 (Reliable Prediction Distance Threshold and Answer to RQ2)
+### O11: Section 6.4 (Estimated Prediction-Distance Threshold and Answer to RQ2)
 
 **Comment (Pari):**
 The sensitivity analysis clearly explains that the 50% criterion is a modelling choice. But, it
@@ -408,7 +408,7 @@ itself were changed.
 | E7 | §6.4 threshold terminology | Fixed |
 | E8 | §7.1 NO2 baseline coverage | Acknowledged |
 | E9 | §7.3 population-weighted coverage | Fixed (new analysis) |
-| E10 | Figures 2-3 LUR centre panel | Fixed (expanded §6.3 + caption clauses) |
+| E10 | Figures 2-3 LUR centre panel | Fixed (expanded §6.2 + caption clauses) |
 | O1 | Title sub-title | Defended |
 | O2 | §2 intro paragraph | Fixed |
 | O3 | §2/2.1 literature search process | Fixed |
