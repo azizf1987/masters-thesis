@@ -380,11 +380,9 @@ white outline, legible against both the map and the markers.
 IEEE reference guide is to write et al. after six authors.
 
 **Response: Fixed.**
-Four bibliography entries exceeded six authors (Hoek et al. 2008, 7 authors; Segersson et al.
-2017, 7 authors; Roberts et al. 2017, 14 authors; Kilbo Edlund et al. 2024, 14 authors). Each is
-now truncated to the first author plus "and others" in `references.bib`, which the thesis's
-`ieeetr` bibliography style renders as "et al." No other references or the bibliography style
-itself were changed.
+Four entries exceeded six authors (Hoek 2008, Segersson 2017, Roberts 2017, Kilbo Edlund 2024).
+Each is truncated in `references.bib` to the first author plus "and others", which the `ieeetr`
+style renders as "et al." The bibliography style is unchanged.
 
 ---
 
