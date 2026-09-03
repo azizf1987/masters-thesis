@@ -381,7 +381,7 @@ IEEE reference guide is to write et al. after six authors.
 
 **Response: Fixed.**
 Four entries exceeded six authors (Hoek 2008, Segersson 2017, Roberts 2017, Kilbo Edlund 2024).
-Each is truncated in `references.bib` to the first author plus "and others", which the `ieeetr`
+Each is truncated to the first author plus "and others" in the references, which the `ieeetr`
 style renders as "et al." The bibliography style is unchanged.
 
 ---
