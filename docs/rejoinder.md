@@ -357,12 +357,10 @@ The triangles are red not green. A little confusion to write "placed sensors" on
 "recommended sensor locations" in the description? There are no red circles in the figure.
 
 **Response: Fixed.**
-The figure itself (`fig_coverage_before_after.png`) already used the correct, current colour
-scheme (blue circles for existing stations, red triangles for recommended sensors), matching
-Figures 7 and 8; only the caption was stale, describing an earlier colour scheme (red circles,
-green triangles). The caption is corrected to match the actual figure, and the "placed sensors"
-legend label vs. "recommended sensor locations" caption wording is reconciled by noting the
-legend label explicitly in the caption.
+Figure 6 already used the correct colours (blue circles for existing stations, red triangles for
+recommended sensors), matching Figures 7 and 8. Only the caption was stale, still describing red
+circles and green triangles. The caption is corrected to match the figure, and now states that
+these markers are labelled "placed sensors" in the figure's own legend.
 
 ---
 
@@ -372,12 +370,9 @@ legend label explicitly in the caption.
 These labels are impossible to see or read. *(on the numbered placement-rank labels)*
 
 **Response: Fixed.**
-Confirmed: the rank labels were drawn at font size 7 in the same colour as the marker, directly
-on top of the darkest part of the heatmap, and were effectively illegible. The figure
-(`fig_placement_map.png`) is regenerated with larger, bold, black labels with a white halo,
-clearly legible against both the heatmap and the markers. A new standalone script,
-`data/phase7_fix_placement_labels.py`, rebuilds this figure from saved results without touching
-any other figure or data file.
+The rank labels in Figure 7 were too small and drawn in the marker colour on the darkest part of
+the map, making them unreadable. Figure 7 is regenerated with larger, bold, black labels with a
+white outline, legible against both the map and the markers.
 
 ---
 
