@@ -41,7 +41,7 @@ Three changes:
    5 km buffer reduces but does not eliminate the optimistic bias from spatial autocorrelation,
    and that the reported errors should be read as a lower bound on true prediction error.
 3. A buffer-distance sensitivity analysis was run: the full buffered SLOO procedure was repeated
-   at 0, 5, 10, 25, and 50 km exclusion radii (`data/phase6_buffer_sensitivity.py`). The estimator
+   at 0, 5, 10, 25, and 50 km exclusion radii. The estimator
    ranking is unchanged at every buffer tested (IDW best for PM$_{2.5}$, Random Forest best for
    NO$_2$, LUR worst for both), and mean RMSE for the two selected estimators varies by no more
    than 6% between the 5 km and 50 km buffers. A new table and paragraph reporting this are added
