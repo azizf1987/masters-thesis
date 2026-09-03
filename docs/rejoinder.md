@@ -159,7 +159,7 @@ approach.
 Urban-area coverage was already reported in the thesis (land coverage 10.9% → 67.2%; urban
 coverage 38.8% → 71.4%). Population-weighted coverage is new: each 10 km grid cell was weighted
 by its resident population, aggregated from the JRC GEOSTAT 2018 1 km population grid (~10.6
-million inhabitants assigned across the national land grid; `data/phase7_population_coverage.py`).
+million inhabitants assigned across the national land grid).
 Results: population-weighted PM$_{2.5}$ coverage rises from 45.0% to 77.1% nationally (67.1% to
 75.9% within urban fabric) after the 20 recommended placements, markedly higher than the
 land-area figures, because existing stations are concentrated in populated areas. For NO$_2$,
