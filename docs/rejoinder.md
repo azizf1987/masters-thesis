@@ -1,7 +1,7 @@
 # Rejoinder
 
 Responses to comments received on the thesis draft from the examiner (Erdal Akin) and the
-opponents (linne, Pari). Organised in two parts, in the order the comments appear in the
+opponents (linnea, Parisa). Organised in two parts, in the order the comments appear in the
 thesis. Each entry states the comment, whether it was fixed or is defended as written, and
 what actually changed. References are to section names, not line numbers, since the
 authoritative working copy is maintained outside this repository.
@@ -198,7 +198,7 @@ captions of Figures 2 and 3.
 
 ### O1: Title page
 
-**Comment (linne):**
+**Comment (linnea):**
 Shouldn't this be a sub-title? *(on the portion of the title after the colon)*
 
 **Response: Defended, no change.**
@@ -210,7 +210,7 @@ left as a single line consistent with the approved proposal.
 
 ### O2: Section 2 (Background and Related Work)
 
-**Comment (linne):**
+**Comment (linnea):**
 A short introduction to the different topics you talk about in this section would be nice.
 
 **Response: Fixed.**
@@ -222,7 +222,7 @@ sensor placement optimisation, and the research gaps).
 
 ### O3: Section 2 / 2.1 (Background and Related Work)
 
-**Comment (Pari):**
+**Comment (Parisa):**
 The section discusses relevant previous studies but the process used to identify and select the
 literature is not described. Could you briefly explain which databases or search tools were used.
 
@@ -237,7 +237,7 @@ review, not a systematic review, consistent with the hedge already applied to §
 
 ### O4: Section 2.1 (Urban Air Quality Monitoring and Regulatory Networks)
 
-**Comment (linne):**
+**Comment (linnea):**
 This thesis? *(on the phrase "The present thesis")*
 
 **Response: Fixed.**
@@ -248,7 +248,7 @@ occurrence in §2.3.
 
 ### O5: Section 2.3 (Spatial Estimation of Air Quality at Unmonitored Locations)
 
-**Comment (linne):**
+**Comment (linnea):**
 When writing abbreviations the text should be "Inverse Distance Weighting." By some university
 writing guidelines for acronyms and abbreviations.
 
@@ -263,7 +263,7 @@ exception.
 
 ### O6: Section 2.3 (Spatial Estimation of Air Quality at Unmonitored Locations)
 
-**Comment (linne):**
+**Comment (linnea):**
 Reference? *(on the paragraph describing LUR's known limitations)*
 
 **Response: Fixed.**
@@ -277,7 +277,7 @@ citation.
 
 ### O7: Section 3 (Research Methodology)
 
-**Comment (linne):**
+**Comment (linnea):**
 All theses do not need to look exactly the same, but I think best-practice is that new "chapters"
 should start on a new page.
 
@@ -289,7 +289,7 @@ document follows the MAU thesis template's layout conventions. Left as is.
 
 ### O8: Section 3.2.2 (Feature Set)
 
-**Comment (Pari):**
+**Comment (Parisa):**
 Section 4.1 represents that all 34 stations may contribute training data, while only 11 stations
 are eligible as validation targets. So, the phrase "11 unique spatial training locations" is
 unclear and appears inconsistent with Sections 4.1 and 5.
@@ -306,7 +306,7 @@ incorrectly (§3.2.2, §3.2.3, §8.4), aligning them with §4.1.
 
 ### O9: Section 5 (Spatial Estimation Models)
 
-**Comment (linne):**
+**Comment (linnea):**
 What is "this chapter"? I think the structure of what is results could perhaps be better
 structured or perhaps just named differently so it is more clear what is the actual results of
 the study. I cannot see that chapter is used anywhere else in the thesis and it is therefore
@@ -323,7 +323,7 @@ paragraph of §5, which is judged sufficient without renaming the sections thems
 
 ### O10: Section 5 (Spatial Estimation Models)
 
-**Comment (linne):**
+**Comment (linnea):**
 This is "double negative" phrasing which is a bit unclear, and as per my understanding should be
 avoided. *(on "not excluded by the 5 km buffer")*
 
@@ -335,7 +335,7 @@ the double negative.
 
 ### O11: Section 6.4 (Estimated Prediction-Distance Threshold and Answer to RQ2)
 
-**Comment (Pari):**
+**Comment (Parisa):**
 The sensitivity analysis clearly explains that the 50% criterion is a modelling choice. But, it
 is still unclear why this level represents the "minimum requirement" for spatial planning.
 
@@ -350,7 +350,7 @@ applied elsewhere in §6.4 (E7 above).
 
 ### O12: Figure 6
 
-**Comment (linne):**
+**Comment (linnea):**
 The triangles are red not green. A little confusion to write "placed sensors" on the figure, and
 "recommended sensor locations" in the description? There are no red circles in the figure.
 
@@ -364,7 +364,7 @@ these markers are labelled "placed sensors" in the figure's own legend.
 
 ### O13: Figure 7
 
-**Comment (linne):**
+**Comment (linnea):**
 These labels are impossible to see or read. *(on the numbered placement-rank labels)*
 
 **Response: Fixed.**
@@ -376,7 +376,7 @@ white outline, legible against both the map and the markers.
 
 ### O14: References
 
-**Comment (Pari):**
+**Comment (Parisa):**
 IEEE reference guide is to write et al. after six authors.
 
 **Response: Fixed.**
