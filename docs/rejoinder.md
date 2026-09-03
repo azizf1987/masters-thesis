@@ -267,13 +267,11 @@ exception.
 Reference? *(on the paragraph describing LUR's known limitations)*
 
 **Response: Fixed.**
-The paragraph is attributed to Hoek et al. and reworded to state only what that review supports:
-that LUR models are empirical and area-specific, and their predictive performance is not
-guaranteed to transfer to areas or periods outside the monitoring campaign used to fit them,
-alongside the existing point that a linear form does not represent non-linear predictor
-interactions by construction. The citation metadata was confirmed against ADS and ScienceDirect,
-and the transferability limitation is consistently attributed to this review in the secondary
-literature, so no verification marker remains in the thesis source.
+The paragraph now cites Hoek et al. and is reworded to state only what that review supports:
+LUR models are empirical and area-specific, so their accuracy is not guaranteed to transfer to
+areas or periods outside the monitoring campaign used to fit them. The separate point that a
+linear form cannot represent non-linear predictor interactions is structural and needs no
+citation.
 
 ---
 
