@@ -49,7 +49,7 @@ weighting (IDW) and land-use regression (LUR). For PM2.5, IDW was the most
 accurate estimator, with a mean RMSE of 2.33 against 3.56 micrograms per
 cubic metre for Random Forest, indicating that PM2.5 concentrations are
 spatially smooth at the national scale. For NO2, Random Forest achieved the
-lowest mean RMSE at 7.27 microgram per cubic metre. Decay curves fitted to
+lowest mean RMSE at 7.27 micrograms per cubic metre. Decay curves fitted to
 per-station error against distance yielded estimated reliable prediction
 distances of approximately 64 km for PM2.5 and 6 km for NO2 under a 50
 percent error criterion; both are criterion-dependent estimates. A greedy
@@ -184,7 +184,7 @@ placement criterion define the problem; RQ1 to RQ3 define the solution
 objectives; the estimation model, decay analysis, and placement algorithm
 below constitute design and development; and the artefact is demonstrated on
 Sweden nationally and evaluated by coverage gain, following the design-science
-rigor guidelines of Hevner et al. \cite{hevner_design_science_2004}.
+rigour guidelines of Hevner et al. \cite{hevner_design_science_2004}.
 
 \subsection{Data}
 \label{sec:method-data}
@@ -253,9 +253,9 @@ here is far wider than the 1 to 6~km over which a linear fit was found
 sufficient in comparable work \cite{zhivkov_fidanova_2026}, three non-linear
 forms are fitted to the 11 resulting pairs per estimator: logarithmic
 ($a + b\ln d$), power ($a\,d^{b}$), and exponential ($a\,e^{bd}$). The form is
-selected by the Akaike Information Criterion (AIC), which is appropriate
-because the fitted curve is later evaluated at thousands of grid-cell
-distances outside the fitted sample. The reliable prediction distance $d^{*}$
+selected by the Akaike Information Criterion (AIC) \cite{akaike_1974}, which is
+appropriate because the fitted curve is later evaluated at thousands of
+grid-cell distances outside the fitted sample. The reliable prediction distance $d^{*}$
 is defined as the distance at which expected RMSE reaches 50 percent of the
 sample mean concentration; this working criterion is swept from 20 to 80
 percent in a sensitivity analysis.
@@ -449,10 +449,10 @@ is used throughout, though road-network distance would be more appropriate for
 NO$_2$. The NO$_2$ decay fit is confounded by having only two rural stations
 in the sample. The 10~km placement grid is coarser than the 6~km NO$_2$
 threshold, so it cannot resolve NO$_2$ coverage geometry. Finally, the
-reported coverage percentages are contingent on the 50~percent criterion: a 20
-to 80~percent sweep moves post-placement PM$_{2.5}$ land coverage between 2.9
-and 94.7~percent. What is robust across that range is the PM$_{2.5}$/NO$_2$
-asymmetry itself.
+reported coverage percentages are contingent on the 50~percent criterion: the
+same sensitivity sweep moves post-placement PM$_{2.5}$ land coverage across a
+2.9 to 94.7~percent range. What is robust across that range is the
+PM$_{2.5}$/NO$_2$ asymmetry itself.
 
 \section{Conclusion}
 \label{sec:conclusion}
