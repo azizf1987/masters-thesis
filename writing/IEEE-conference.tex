@@ -5,9 +5,7 @@
 % Template: IEEEtran conference (template version 6/27/2024)
 % =====================================================
 \documentclass[conference]{IEEEtran}
-\IEEEoverridecommandlockouts
-% The preceding line is only needed to identify funding in the first footnote.
-% If that is unneeded, please comment it out.
+% \IEEEoverridecommandlockouts  % only needed for a funding \thanks; none here
 
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
@@ -48,7 +46,7 @@ land-use, topographic, meteorological, and population covariates for 34
 reference stations over 2020 to 2024 was evaluated under buffered spatial
 leave-one-out cross-validation and benchmarked against inverse distance
 weighting (IDW) and land-use regression (LUR). For PM2.5, IDW was the most
-accurate estimator, with a mean RMSE of 2.33 against 3.56 microgram per
+accurate estimator, with a mean RMSE of 2.33 against 3.56 micrograms per
 cubic metre for Random Forest, indicating that PM2.5 concentrations are
 spatially smooth at the national scale. For NO2, Random Forest achieved the
 lowest mean RMSE at 7.27 microgram per cubic metre. Decay curves fitted to
@@ -149,11 +147,13 @@ observations and makes no assumption about the drivers of spatial variation,
 but remains a standard deterministic baseline. Land-use regression (LUR) is
 the established peer-reviewed standard for long-run outdoor concentrations in
 Europe: Hoek et al. \cite{hoek_lur_review_2008} review 25 studies, and the
-ESCAPE project reports cross-validation R$^2$ of about 0.71 for PM$_{2.5}$
-\cite{eeftens_escape_pm_2012} and leave-one-out R$^2$ of 0.83 for NO$_2$
-\cite{wang_escape_no2_2013}. Machine learning methods are increasingly applied
-for their capacity to model non-linear predictor interactions, with reviews
-reporting consistent RMSE and MAE improvements over regression baselines
+European Study of Cohorts for Air Pollution Effects (ESCAPE) reports a
+cross-validation coefficient of determination (R$^2$) of about 0.71 for
+PM$_{2.5}$ \cite{eeftens_escape_pm_2012} and a leave-one-out R$^2$ of 0.83 for
+NO$_2$ \cite{wang_escape_no2_2013}. Machine learning methods are increasingly
+applied for their capacity to model non-linear predictor interactions, with
+reviews reporting consistent root mean squared error (RMSE) and mean absolute
+error (MAE) improvements over regression baselines
 \cite{agbehadji_ml_aq_review_2024, chen_pm25_interpolation_2021}.
 
 \textit{Validation and placement optimisation.} When training data are
@@ -203,7 +203,7 @@ projected to ETRS89 LAEA (EPSG:3035). The joined daily feature matrix has
 
 \subsection{Feature Set}
 
-Thirty predictors span five groups: 18 CORINE land-use proportions (nine
+Thirty predictors span six groups: 18 CORINE land-use proportions (nine
 functional classes at 500~m and 1~km buffers), two topographic (elevation and
 terrain roughness within 1~km), two population (counts within 1~km and 5~km),
 five meteorological (wind speed, wind direction, temperature, relative
@@ -225,7 +225,8 @@ chen_pm25_interpolation_2021}, its native handling of mixed feature types, and
 its robustness in a low-sample regime. Deep learning and hybrid geostatistical
 models are excluded, as the station count cannot support them. PM$_{2.5}$ and
 NO$_2$ are modelled separately throughout, reflecting their different spatial
-autocorrelation ranges.
+autocorrelation ranges: roughly 0.5 to 2~km for traffic-sourced NO$_2$ against
+5 to 20~km for the more regional PM$_{2.5}$.
 
 \subsection{Buffered Spatial Leave-One-Out Validation}
 
@@ -247,8 +248,10 @@ measured by RMSE (primary), MAE, and R$^2$.
 \subsection{Accuracy-Distance Analysis}
 
 For each withheld station, per-station RMSE is paired with the Euclidean
-distance to the nearest retained training station. Three functional forms are
-fitted to the 11 resulting pairs per estimator: logarithmic
+distance to the nearest retained training station. Because the distance range
+here is far wider than the 1 to 6~km over which a linear fit was found
+sufficient in comparable work \cite{zhivkov_fidanova_2026}, three non-linear
+forms are fitted to the 11 resulting pairs per estimator: logarithmic
 ($a + b\ln d$), power ($a\,d^{b}$), and exponential ($a\,e^{bd}$). The form is
 selected by the Akaike Information Criterion (AIC), which is appropriate
 because the fitted curve is later evaluated at thousands of grid-cell
@@ -316,28 +319,32 @@ PM$_{2.5}$ & LUR          & 5.87  & 4.91  \\
 \subsection{Accuracy versus Distance (RQ2)}
 \label{sec:results-rq2}
 
-Fig.~\ref{fig:decay} shows per-station RMSE against distance to the nearest
-retained training station, with the AIC-selected curve for each estimator. For
-PM$_{2.5}$ the exponential form is selected for both RF and IDW: IDW error
+Fig.~\ref{fig:decay} shows per-station PM$_{2.5}$ RMSE against distance to the
+nearest retained training station, with the AIC-selected curve for each
+estimator. The exponential form is selected for both RF and IDW: IDW error
 rises from below 1.3~$\mu$g\,m$^{-3}$ within 10~km to about 5.5~$\mu$g\,m$^{-3}$
-at 82~km. For NO$_2$ the IDW curve follows a logarithmic rise, while the
-aggregate NO$_2$ RF curve is inverted by the two rural stations, whose
-near-zero concentrations suppress absolute error regardless of distance.
+at 82~km. For NO$_2$ (not shown) the IDW curve follows a logarithmic rise,
+while the aggregate NO$_2$ RF curve is inverted by the two rural stations,
+whose near-zero concentrations suppress absolute error regardless of distance.
 
-Solving the fitted IDW curves at the 50~percent criterion gives an estimated
-reliable prediction distance of
+Solving the fitted IDW curves at the 50~percent criterion, where expected RMSE
+equals half the sample mean concentration (2.63~$\mu$g\,m$^{-3}$ for
+PM$_{2.5}$, mean 5.26; 6.43~$\mu$g\,m$^{-3}$ for NO$_2$, mean 12.85), gives an
+estimated reliable prediction distance of
 
 \begin{equation}
 d^{*}_{\mathrm{PM2.5}}
-= \frac{\ln(2.63 / 1.40)}{0.00988} \approx 64~\text{km},
+= \frac{\ln(2.63 / 1.40)}{0.00988} \approx 64~\text{km}
 \label{eq:dstar}
 \end{equation}
 
-and $d^{*}_{\mathrm{NO2}} \approx 6$~km from the corresponding logarithmic
-model. Both figures are criterion-dependent estimates rather than fixed
-properties of the network: sweeping the criterion from 20 to 80~percent of the
-sample mean concentration moves $d^{*}_{\mathrm{PM2.5}}$ between roughly 12 and
-98~km. The NO$_2$ threshold is further confounded by station type, with only
+from the PM$_{2.5}$ exponential fit ($a = 1.40$, $b = 0.00988$), and
+$d^{*}_{\mathrm{NO2}} \approx 6$~km from the NO$_2$ logarithmic fit
+($a = 2.85$, $b = 1.94$). Both figures are criterion-dependent estimates
+rather than fixed properties of the network: over a 20 to 80~percent sweep of
+the criterion, $d^{*}_{\mathrm{PM2.5}}$ ranges from about 12~km (at
+30~percent) to about 98~km (at 70~percent). The NO$_2$ threshold is further
+confounded by station type, with only
 two rural stations in the sample, and is best read as an indication that
 NO$_2$ estimation degrades rapidly beyond the immediate vicinity of a
 reference station.
