@@ -15,7 +15,14 @@
 \usepackage{xcolor}
 \usepackage[T1]{fontenc} % added: correct output of Swedish characters a-ring, a-uml, o-uml
 \usepackage{booktabs}    % added: result tables
+\usepackage{placeins}    % added: \FloatBarrier keeps Fig. 2 from drifting away from RQ3
 \graphicspath{{images/}} % added: resolve figures in writing/images/
+
+% added: loosen LaTeX's default reluctance to place a large double-column
+% float (figure*) at the top of the page it is cited near, instead of
+% deferring it to a separate float page later in the document.
+\renewcommand{\dbltopfraction}{0.9}
+\renewcommand{\dblfloatpagefraction}{0.85}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -400,7 +407,7 @@ RQ3: urban coverage & 38.8\% $\rightarrow$ 71.4\% & 6.1\% $\rightarrow$ 6.1\% \\
 \end{tabular}
 \end{table}
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig_coverage_before_after.png}
 \caption{PM$_{2.5}$ national coverage before (left) and after (right) 20
@@ -410,6 +417,7 @@ urban fabric. Circles mark existing stations; triangles mark recommended
 sensor locations. Grid resolution 10~km.}
 \label{fig:coverage}
 \end{figure*}
+\FloatBarrier
 
 \section{Discussion}
 \label{sec:discussion}
