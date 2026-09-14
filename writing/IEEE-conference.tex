@@ -23,6 +23,11 @@
 % deferring it to a separate float page later in the document.
 \renewcommand{\dbltopfraction}{0.9}
 \renewcommand{\dblfloatpagefraction}{0.85}
+% added: same loosening for single-column floats (figure/table), which
+% otherwise defer past \topfraction=0.7 of a column and can drift far
+% from where they are cited (e.g. the 20-row placement table).
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\floatpagefraction}{0.7}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -302,7 +307,7 @@ R$^2$ is frequently negative under this protocol, because a model trained on
 geographically distinct stations must reproduce a held-out station's
 day-to-day series; RMSE and MAE are therefore the primary metrics.
 
-\begin{table}[t]
+\begin{table}[!ht]
 \caption{Mean estimation error under buffered SLOO across the 11 validation
 stations. Units $\mu$g\,m$^{-3}$; best estimator per pollutant in bold.}
 \label{tab:accuracy}
@@ -322,6 +327,7 @@ PM$_{2.5}$ & LUR          & 5.87  & 4.91  \\
 \bottomrule
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 \subsection{Accuracy versus Distance (RQ2)}
 \label{sec:results-rq2}
@@ -335,6 +341,15 @@ corresponding relationship for NO$_2$: the IDW curve follows a logarithmic
 rise, while the aggregate NO$_2$ RF curve is inverted by the two rural
 stations, whose near-zero concentrations suppress absolute error regardless
 of distance.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\columnwidth]{fig_decay_pm25.png}
+\caption{PM$_{2.5}$ error-distance decay under buffered SLOO for Random Forest,
+LUR, and IDW. Points are per-station RMSE; the curve is the AIC-selected form.
+The near-flat LUR fit reflects uniformly high error, not distance robustness.}
+\label{fig:decay-pm25}
+\end{figure}
 
 Solving the fitted IDW curves at the 50~percent criterion, where expected RMSE
 equals half the sample mean concentration (2.63~$\mu$g\,m$^{-3}$ for
@@ -358,16 +373,7 @@ two rural stations in the sample, and is best read as an indication that
 NO$_2$ estimation degrades rapidly beyond the immediate vicinity of a
 reference station.
 
-\begin{figure}[!t]
-\centering
-\includegraphics[width=\columnwidth]{fig_decay_pm25.png}
-\caption{PM$_{2.5}$ error-distance decay under buffered SLOO for Random Forest,
-LUR, and IDW. Points are per-station RMSE; the curve is the AIC-selected form.
-The near-flat LUR fit reflects uniformly high error, not distance robustness.}
-\label{fig:decay-pm25}
-\end{figure}
-
-\begin{figure}[!t]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=\columnwidth]{fig_decay_no2.png}
 \caption{NO$_2$ error-distance decay under buffered SLOO for Random Forest,
@@ -386,10 +392,50 @@ greedy algorithm places 20 sensors, distributed across G\"otaland (ranks
 1--5), Svealand (ranks 6--11), and Norrland (ranks 12--20); each placement
 adds the full 12{,}900~km$^{2}$ theoretical footprint, indicating no overlap
 within the 20-sensor horizon. Coverage rises to 67.2~percent of land area and
-71.4~percent of urban area, and population-weighted PM$_{2.5}$ coverage rises
+71.4~percent of urban area (Fig.~\ref{fig:coverage}), and population-weighted
+PM$_{2.5}$ coverage rises
 from 45.0 to 77.1~percent. Four of the seven administrative regions currently
 without a concurrent-passing station are served: J\"onk\"oping, \"Orebro,
-Dalarna, and Norrbotten.
+Dalarna, and Norrbotten. Table~\ref{tab:placement-coords} lists the 20
+recommended locations in priority order.
+
+\begin{table}[!ht]
+\caption{Greedy sequential sensor placement: 20 recommended locations in
+priority order. Coordinates represent the centre of the selected 10~km grid
+cell. Cumulative PM$_{2.5}$ coverage is the percentage of Swedish land cells
+within the 64~km reliable estimation threshold after each placement
+(baseline: 10.9\%).}
+\label{tab:placement-coords}
+\centering
+\footnotesize
+\begin{tabular}{@{}rrrrl@{}}
+\toprule
+\textbf{Rank} & \textbf{Lat. ($^\circ$N)} & \textbf{Lon. ($^\circ$E)} & \textbf{PM$_{2.5}$ cov.\ (\%)} & \textbf{Zone} \\
+\midrule
+1  & 56.55 & 14.23 & 13.7 & G\"otaland \\
+2  & 57.31 & 12.82 & 16.5 & G\"otaland \\
+3  & 57.60 & 15.18 & 19.4 & G\"otaland \\
+4  & 58.36 & 13.75 & 22.2 & G\"otaland \\
+5  & 58.74 & 15.87 & 25.0 & G\"otaland \\
+6  & 59.29 & 12.63 & 27.8 & Svealand \\
+7  & 59.68 & 14.79 & 30.6 & Svealand \\
+8  & 60.45 & 13.08 & 33.4 & Svealand \\
+9  & 60.63 & 16.02 & 36.2 & Svealand \\
+10 & 61.41 & 14.29 & 39.0 & Svealand \\
+11 & 62.52 & 13.48 & 41.9 & Svealand \\
+12 & 63.53 & 17.82 & 44.7 & Norrland \\
+13 & 64.45 & 19.32 & 47.5 & Norrland \\
+14 & 64.85 & 16.71 & 50.3 & Norrland \\
+15 & 65.58 & 18.63 & 53.1 & Norrland \\
+16 & 65.98 & 21.19 & 55.9 & Norrland \\
+17 & 66.39 & 16.89 & 58.7 & Norrland \\
+18 & 66.81 & 19.51 & 61.5 & Norrland \\
+19 & 67.29 & 22.03 & 64.3 & Norrland \\
+20 & 68.02 & 19.03 & 67.2 & Norrland \\
+\bottomrule
+\end{tabular}
+\end{table}
+\FloatBarrier
 
 Evaluated against the 6~km NO$_2$ threshold, the same 20 sensors raise NO$_2$
 land coverage only from 0.2 to 0.6~percent and leave urban coverage unchanged
@@ -419,7 +465,7 @@ RQ3: urban coverage & 38.8\% $\rightarrow$ 71.4\% & 6.1\% $\rightarrow$ 6.1\% \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[t]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=\columnwidth]{fig_coverage_before_after_ieee.png}
 \caption{PM$_{2.5}$ national coverage before (left) and after (right) 20
