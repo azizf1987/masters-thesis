@@ -399,7 +399,7 @@ threshold in RQ2, which sets the sensor budget required for national coverage
 in RQ3, so a placement sized for PM$_{2.5}$ is by construction inadequate for
 NO$_2$ at comparable cost.
 
-\begin{table}[t]
+\begin{table}[!ht]
 \caption{Integrated results across the three research questions. Mean RMSE in
 $\mu$g\,m$^{-3}$; coverage as land area / urban area, before $\rightarrow$
 after the 20-sensor placement.}
@@ -418,16 +418,16 @@ RQ3: urban coverage & 38.8\% $\rightarrow$ 71.4\% & 6.1\% $\rightarrow$ 6.1\% \\
 \end{tabular}
 \end{table}
 
-\begin{figure*}[!t]
+\begin{figure}[t]
 \centering
-\includegraphics[width=0.68\textwidth]{fig_coverage_before_after_ieee.png}
+\includegraphics[width=\columnwidth]{fig_coverage_before_after_ieee.png}
 \caption{PM$_{2.5}$ national coverage before (left) and after (right) 20
 greedy placements, at the 64~km reliable prediction threshold. Grey cells are
 beyond threshold; blue cells are covered land, with darker blue for covered
 urban fabric. Circles mark existing stations; triangles mark recommended
 sensor locations. Grid resolution 10~km.}
 \label{fig:coverage}
-\end{figure*}
+\end{figure}
 \FloatBarrier
 
 \section{Discussion}
