@@ -326,13 +326,15 @@ PM$_{2.5}$ & LUR          & 5.87  & 4.91  \\
 \subsection{Accuracy versus Distance (RQ2)}
 \label{sec:results-rq2}
 
-Fig.~\ref{fig:decay} shows per-station PM$_{2.5}$ RMSE against distance to the
-nearest retained training station, with the AIC-selected curve for each
-estimator. The exponential form is selected for both RF and IDW: IDW error
-rises from below 1.3~$\mu$g\,m$^{-3}$ within 10~km to about 5.5~$\mu$g\,m$^{-3}$
-at 82~km. For NO$_2$ (not shown) the IDW curve follows a logarithmic rise,
-while the aggregate NO$_2$ RF curve is inverted by the two rural stations,
-whose near-zero concentrations suppress absolute error regardless of distance.
+Fig.~\ref{fig:decay-pm25} shows per-station PM$_{2.5}$ RMSE against distance
+to the nearest retained training station, with the AIC-selected curve for
+each estimator. The exponential form is selected for both RF and IDW: IDW
+error rises from below 1.3~$\mu$g\,m$^{-3}$ within 10~km to about
+5.5~$\mu$g\,m$^{-3}$ at 82~km. Fig.~\ref{fig:decay-no2} shows the
+corresponding relationship for NO$_2$: the IDW curve follows a logarithmic
+rise, while the aggregate NO$_2$ RF curve is inverted by the two rural
+stations, whose near-zero concentrations suppress absolute error regardless
+of distance.
 
 Solving the fitted IDW curves at the 50~percent criterion, where expected RMSE
 equals half the sample mean concentration (2.63~$\mu$g\,m$^{-3}$ for
@@ -362,7 +364,16 @@ reference station.
 \caption{PM$_{2.5}$ error-distance decay under buffered SLOO for Random Forest,
 LUR, and IDW. Points are per-station RMSE; the curve is the AIC-selected form.
 The near-flat LUR fit reflects uniformly high error, not distance robustness.}
-\label{fig:decay}
+\label{fig:decay-pm25}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_decay_no2.png}
+\caption{NO$_2$ error-distance decay under buffered SLOO for Random Forest,
+LUR, and IDW. Points are per-station RMSE; the curve is the AIC-selected form.
+The near-flat LUR fit reflects uniformly high error, not distance robustness.}
+\label{fig:decay-no2}
 \end{figure}
 
 \subsection{Sensor Placement (RQ3)}
