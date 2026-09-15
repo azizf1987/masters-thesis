@@ -69,13 +69,13 @@ sequential placement algorithm applied to the PM2.5 threshold identified 20
 candidate sensor locations, raising national land coverage from 10.9 to 67.2
 percent and extending coverage to four of Sweden's seven unmonitored regions.
 The contribution is a reproducible artefact translating spatial estimation
-accuracy into prioritised sensor placement guidance for Swedish municipal air
-quality planning.
+accuracy into prioritised sensor placement guidance for Swedish municipal and
+smart-city air quality planning.
 \end{abstract}
 
 \begin{IEEEkeywords}
 air quality, spatial estimation, machine learning, IoT sensor placement,
-spatial cross-validation, land-use regression, Sweden
+smart cities, spatial cross-validation, land-use regression, Sweden
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -148,10 +148,12 @@ and high-resolution dispersion modelling confirms that intra-urban exposure
 gradients in contemporary Swedish cities are large
 \cite{sweden_dispersion_2024}. Reference stations are sited to represent broad
 background zones rather than local conditions, so the areas between them have
-no direct measurement record. Munera et al.
-\cite{munera_iot_aq_smart_cities_2021} find in a systematic mapping study that
-monitoring capability in IoT air quality projects often outpaces its use in
-actual planning.
+no direct measurement record. This gap is increasingly discussed within the
+broader smart city paradigm, where air quality is one of several
+environmental parameters a city is expected to sense and act on
+continuously: Munera et al. \cite{munera_iot_aq_smart_cities_2021} find in a
+systematic mapping study of IoT air quality proposals that monitoring
+capability often outpaces its use in actual planning.
 
 \textit{Spatial estimation methods.} Inverse distance weighting (IDW)
 estimates a concentration as a distance-weighted average of nearby
