@@ -264,13 +264,17 @@ distance to the nearest retained training station. Because the distance range
 here is far wider than the 1 to 6~km over which a linear fit was found
 sufficient in comparable work \cite{zhivkov_fidanova_2026}, three non-linear
 forms are fitted to the 11 resulting pairs per estimator: logarithmic
-($a + b\ln d$), power ($a\,d^{b}$), and exponential ($a\,e^{bd}$). The form is
-selected by the Akaike Information Criterion (AIC) \cite{akaike_1974}, which is
-appropriate because the fitted curve is later evaluated at thousands of
-grid-cell distances outside the fitted sample. The reliable prediction distance $d^{*}$
-is defined as the distance at which expected RMSE reaches 50 percent of the
-sample mean concentration; this working criterion is swept from 20 to 80
-percent in a sensitivity analysis.
+($a + b\ln d$), power ($a\,d^{b}$), and exponential ($a\,e^{bd}$). Parameters
+are estimated by ordinary least squares, regressing RMSE directly for the
+logarithmic form and $\ln(\mathrm{RMSE})$ on the transformed distance term
+for the power and exponential forms. The form is selected by the Akaike
+Information Criterion (AIC) \cite{akaike_1974}, computed from each curve's
+residuals in RMSE units so all three forms are compared on a common footing;
+this is appropriate because the fitted curve is later evaluated at thousands
+of grid-cell distances outside the fitted sample. The reliable prediction
+distance $d^{*}$ is defined as the distance at which expected RMSE reaches 50
+percent of the sample mean concentration; this working criterion is swept
+from 20 to 80 percent in a sensitivity analysis.
 
 \subsection{Sensor Placement}
 
