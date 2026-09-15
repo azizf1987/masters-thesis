@@ -338,13 +338,15 @@ PM$_{2.5}$ & LUR          & 5.87  & 4.91  \\
 
 Fig.~\ref{fig:decay-pm25} shows per-station PM$_{2.5}$ RMSE against distance
 to the nearest retained training station, with the AIC-selected curve for
-each estimator. The exponential form is selected for both RF and IDW: IDW
-error rises from below 1.3~$\mu$g\,m$^{-3}$ within 10~km to about
-5.5~$\mu$g\,m$^{-3}$ at 82~km. Fig.~\ref{fig:decay-no2} shows the
-corresponding relationship for NO$_2$: the IDW curve follows a logarithmic
-rise, while the aggregate NO$_2$ RF curve is inverted by the two rural
-stations, whose near-zero concentrations suppress absolute error regardless
-of distance.
+each estimator. The exponential form is selected for both RF
+(AIC~$=25.33$) and IDW (AIC~$=38.55$): IDW error rises from below
+1.3~$\mu$g\,m$^{-3}$ within 10~km to about 5.5~$\mu$g\,m$^{-3}$ at 82~km.
+Fig.~\ref{fig:decay-no2} shows the corresponding relationship for NO$_2$: the
+IDW curve follows a logarithmic rise (AIC~$=63.38$), while the aggregate
+NO$_2$ RF curve, also best fit by the logarithmic form (AIC~$=60.68$, only
+0.65 ahead of the exponential alternative, a weak-evidence margin), is
+inverted by the two rural stations, whose near-zero concentrations suppress
+absolute error regardless of distance.
 
 \begin{figure}[!ht]
 \centering
